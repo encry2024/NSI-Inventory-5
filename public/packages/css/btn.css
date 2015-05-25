@@ -1,0 +1,21 @@
+.btn:active, .btn:focus {
+    outline: none !important;
+}
+
+.lgn-btn-1-6 {
+    width: 15%;
+}
+
+.btn-default:focus {
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    color: white
+}
+
+.rm-hvr {
+    color: #337ab7 !important;
+}
+
+.rm-hvr:hover {
+    color: white !important;
+}

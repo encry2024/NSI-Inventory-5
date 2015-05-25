@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <style>
+      body { font-family: helvetica, arial, sans-serif; font-size:16px;}
+      .container { width:80%; margin:20px auto;}
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="../source/css/multilist.css">
+  <title>jQuery multilist plugin demos</title>
+  </head>
+
+  <body><div id="jquery-script-menu">
+<div class="jquery-script-center">
+<ul>
+<li><a href="http://www.jqueryscript.net/form/Searchable-Combobox-Plugin-with-jQuery-multilist.html">Download This Plugin</a></li>
+<li><a href="http://www.jqueryscript.net/">Back To jQueryScript.Net</a></li>
+</ul>
+<div class="jquery-script-ads"><script type="text/javascript"><!--
+google_ad_client = "ca-pub-2783044520727903";
+/* jQuery_demo */
+google_ad_slot = "2780937993";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></div>
+<div class="jquery-script-clear"></div>
+</div>
+</div>
+  <h1 style="margin-top:150px;">jQuery multilist plugin demos</h1>
+    <div class="container">
+      <div id="multi" name="multi"></div>
+      <div id="two" name="two"></div>
+      <div id="single" name="single"></div>
+      <div id="removable" name="removable"></div>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="jquery.tmpl.min.js"></script>
+
+    <script src="../source/js/multilist.js"></script>
+
+    <script>
+
+      var onChange = function (value, text, toggle, $this) {};
+
+      var onRemove = function ($this, value) {};
+
+      var datalist = [
+        {value: 1, text: 'foo'},
+        {value: 2, text: 'bar'},
+        {value: 3, text: 'baz'},
+        {value: 4, text: 'qux'},
+        {value: 5, text: 'quux'},
+        {value: 6, text: 'corge'},
+        {value: 7, text: 'grault'},
+        {value: 8, text: 'garply'},
+        {value: 9, text: 'waldo'},
+        {value: 10, text: 'fred'},
+        {value: 11, text: 'plugh'},
+        {value: 12, text: 'xyzzy'},
+        {value: 13, text: 'thud'},
+        {value: 14, text: 'foobar'}
+      ];
+
+      $('#multi').multilist({
+        enableSearch : true,
+        canRemove : false,
+        onChange : onChange,
+        onRemove : onRemove,
+        labelText : 'Select Some Items',
+        datalist : datalist
+      });
+
+      $('#two').multilist({
+        maxSelected: 2,
+        closeOnMax: true,
+        labelText: 'Select Two Items',
+        datalist: datalist
+      });
+
+      $('#single').multilist({
+        single: true,
+        labelText: 'Select One Item',
+        datalist: datalist
+      });
+
+      $('#removable').multilist({
+        labelText: 'This Is Removable',
+        canRemove: true,
+        datalist: datalist
+      });
+    </script>
+  <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36251023-1']);
+  _gaq.push(['_setDomainName', 'jqueryscript.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </body>
+</html>

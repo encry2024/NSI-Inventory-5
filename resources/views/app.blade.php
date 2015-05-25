@@ -1,0 +1,53 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>NSI :: Inventory `5</title>
+
+	<link rel="stylesheet" href="{!! URL::to('/') !!}/packages/css/btn.css"/>
+        <link rel="stylesheet" href="{!! URL::to('/') !!}/packages/css/links.css"/>
+        <link rel="stylesheet" href="{!! URL::to('/') !!}/packages/css/fonts.css"/>
+        <link rel="stylesheet" href="{!! URL::to('/') !!}/packages/css/input.css"/>
+        <link rel="stylesheet" href="{!! URL::to('/') !!}/packages/css/location.css"/>
+        <link rel="stylesheet" href="{!! URL::to('/') !!}/packages/css/panel.css"/>
+        <link rel="stylesheet" href="{!! URL::to('/') !!}/packages/css/separators.css"/>
+        <link rel="stylesheet" href="{!! URL::to('/') !!}/packages/jquery-dropdown/source/css/multilist.css"/>
+        <link href="{{ asset('packages/css/app.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="{{ URL::to('/') }}/bootstrap/bootstrap-3.3.4/css/bootstrap.css"/>
+        <link rel="stylesheet" href="{{ URL::to('/') }}/packages/DataTables-1.10.4/media/css/jquery.dataTables.min.css"/>
+    	<link rel="stylesheet" href="{{ URL::to('/') }}/packages/autocomplete/css/jquery.tagit.css"/>
+    	<link rel="stylesheet" href="{{ URL::to('/') }}/packages/autocomplete/css/tagit.ui-zendesk.css"/>
+    @yield('header')
+</head>
+<body>
+    	<script src="{{ URL::to('/') }}/bootstrap/bootstrap-3.3.4/js/jquery-1.11.2.min.js"></script>
+    	<script src="{{ URL::to('/') }}/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+        <script>
+            $(document).off('.data-api');
+        </script>
+
+        <script src="{{ URL::to('/') }}/packages/DataTables-1.10.4/media/js/jquery.dataTables.min.js"></script>
+        <script src="{{ URL::to('/') }}/bootstrap/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    	<script src="{{ URL::to('/') }}/packages/jquery-dropdown/demo/jquery.tmpl.min.js"></script>
+    	<script src="{{ URL::to('/') }}/packages/jquery-dropdown/source/js/multilist.js"></script>
+    	<script src="{{ URL::to('/') }}/packages/autocomplete/js/tag-it.min.js"></script>
+
+
+    	@yield('content')
+        @yield('script')
+        @yield('style')
+
+        <style>
+            body {
+            background-color: #ddd;
+            	/*background: no-repeat center center fixed;
+            	background: linear-gradient(0deg, #5d2203, #de661d) no-repeat center center fixed;*/
+             	/*background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#c6651f), to(#9b1f03)) no-repeat;*/
+                -webkit-font-smoothing: antialiased;
+                font-family:Trebuchet MS, Arial, 'Segoe UI', sans-serif;
+            }
+        </style>
+</body>
+</html>

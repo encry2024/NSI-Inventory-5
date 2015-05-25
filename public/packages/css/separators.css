@@ -1,0 +1,21 @@
+.sprtr {
+    border-bottom-style: solid;
+    border-bottom-color: #e7e7e7;
+    border-bottom-width: 1px;
+}
+
+.sep-1 {
+    height: 1px;
+    margin: 9px 0;
+    overflow: hidden;
+    background-color: #e5e5e5;
+}
+
+
+.sep-vertical {
+    position: static;
+    border-right: 1px solid #e5e5e5;
+    top: 0;
+    bottom: 0;
+}
+

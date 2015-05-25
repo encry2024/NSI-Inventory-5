@@ -1,0 +1,83 @@
+.size-10 {
+    font-size: 10px;
+}
+
+.size-12 {
+    font-size: 12px;
+}
+
+.size-14 {
+    font-size: 14px;
+}
+
+.size-16 {
+    font-size: 16px;
+}
+
+.size-18 {
+    font-size: 18px;
+}
+
+.size-20 {
+    font-size: 20px;
+}
+
+.size-22 {
+    font-size: 22px;
+}
+
+.size-24 {
+    font-size: 24px;
+}
+
+.size-26 {
+    font-size: 26px;
+}
+
+.size-28 {
+    font-size: 28px !important;
+}
+
+.size-30 {
+    font-size: 30px;
+}
+
+.size-32 {
+    font-size: 32px;
+}
+
+.size-34 {
+    font-size: 34px;
+}
+
+.size-36 {
+    font-size: 36px;
+}
+
+.size-38 {
+    font-size: 38px;
+}
+
+.size-40 {
+    font-size: 40px;
+}
+
+.black {
+    color: black;
+}
+
+.white {
+    color: White;
+}
+
+
+/* LOGIN LABEL SETUP */
+
+.nsi-lbl {
+    margin-left: 6rem;
+}
+
+.sgnin-lbl {
+    margin-bottom: -3rem;
+    margin-right: 2rem;
+}
