@@ -4,6 +4,8 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Cviebrock\EloquentSluggable\SluggableTrait;
 use Cviebrock\EloquentSluggable\SluggableInterface;
+use Illuminate\Support\Facades\Input;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Category extends Eloquent implements SluggableInterface {
 
@@ -86,6 +88,22 @@ class Category extends Eloquent implements SluggableInterface {
 	}
 
 	public static function importCategory() {
-		
+
+
+		$file = Input::file( 'xl' );
+
+		//move the file to storage/uploads folder with its original file name
+		$file->move(storage_path() . '/uploads', $file->getClientOriginalName());
+
+		//Load the sheet and convert it into array
+		$sheet = Excel::load( storage_path() . '/uploads/' . $file->getClientOriginalName())->toArray();
+
+		foreach ($sheet as $row) {
+			$new_category = new Category();
+			$new_category->name = $row['name'];
+			$new_category->save();
+		}
+
+		return redirect()->back()->with('success_msg', 'Files has been successfully imported.');
 	}
 }

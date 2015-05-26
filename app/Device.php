@@ -4,6 +4,8 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 use Cviebrock\EloquentSluggable\SluggableTrait;
 use Cviebrock\EloquentSluggable\SluggableInterface;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Input;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Device extends Eloquent implements SluggableInterface {
 
@@ -210,5 +212,31 @@ class Device extends Eloquent implements SluggableInterface {
 			}
 		}
 		return json_encode($json);
+	}
+
+	public static function importDevice( $category_id ) {
+		set_time_limit(0);
+
+		$file = Input::file( 'xl' );
+
+		//move the file to storage/uploads folder with its original file name
+		$file->move(storage_path() . '/uploads', $file->getClientOriginalName());
+
+		//Load the sheet and convert it into array
+		$sheet = Excel::load( storage_path() . '/uploads/' . $file->getClientOriginalName())->toArray();
+
+		foreach ($sheet as $row) {
+			if ($row['category_id'] == $category_id) {
+				$new_device = new Device();
+				$new_device->name = $row['name'];
+				$new_device->category_id = $category_id;
+				$new_device->owner_id = $row['location_id'];
+				$new_device->status_id = $row['status_id'];
+				$new_device->availability = $row['availability'];
+				$new_device->save();
+			}
+		}
+
+		return redirect()->back()->with('success_msg', 'Files has been successfully imported.');
 	}
 }

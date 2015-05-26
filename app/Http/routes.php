@@ -56,4 +56,7 @@ Route::controllers([
 get('/', ['as' => 'home' , 'uses' => 'HomeController@index']);
 get('associates', ['as' => 'assoc', 'uses' => 'DeviceController@allAssoc']);
 get('associates/all', ['as' => 'all_assoc', 'uses' => 'DeviceController@viewAssoc']);
-get('import_excel', ['as' => 'ie', 'uses' => 'ExcelController@index']);
+get('import_excel', ['as' => 'category_excel', 'uses' => 'CategoryController@excelIndex']);
+get('import_device/{category_slug}', ['as' => 'device_excel', 'uses' => 'DeviceController@deviceIndex']);
+post('open_excel', ['as' => 'openFile', 'uses' => 'CategoryController@openExcel']);
+post('import_devices/{category_id}', ['as' => 'importDevice', 'uses' => 'DeviceController@openExcel']);
