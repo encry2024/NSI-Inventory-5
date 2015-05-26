@@ -38,6 +38,10 @@ class Device extends Eloquent implements SluggableInterface {
 		return $this->belongsTo('App\Status');
 	}
 
+	public function delete() {
+		$this->information()->delete();
+	}
+
 	public function owner() {
 		return $this->belongsTo('App\Owner');
 	}

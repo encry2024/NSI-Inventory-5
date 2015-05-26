@@ -95,9 +95,10 @@ class CategoryController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
-	{
-		//
+	public function destroy($slug) {
+		$slug->delete();
+
+		return redirect('/')->with('success_msg', 'Category was successfully deleted');
 	}
 
 }

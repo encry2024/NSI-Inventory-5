@@ -20,8 +20,8 @@
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('create_device', [$category->slug])  }}"><span class="glyphicon glyphicon-plus"></span> Create {{ $category->name }}</a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('category.show', [$category->slug])  }}"><span class="glyphicon glyphicon-info-sign"></span> {{$category->name}} Profile</a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="#"><span class="glyphicon glyphicon-book"></span> {{$category->name}} History <span class="badge right">0</span></a>
-			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('category.destroy', [$category->slug])  }}"><span class="glyphicon glyphicon-trash"></span> Deleted {{$category->name}}s <span class="badge right">0</span></a>
-			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('category.destroy', [$category->slug])  }}"><span class="glyphicon glyphicon-remove"></span> Delete {{$category->name}}</a>
+			<a role="button" class="btn btn-default col-lg-12 text-left" href="#"><span class="glyphicon glyphicon-trash"></span> Deleted {{$category->name}}s <span class="badge right">0</span></a>
+			<a role="button" class="btn btn-default col-lg-12 text-left" href="#" data-toggle="modal" data-target="#deleteCategory"><span class="glyphicon glyphicon-remove"></span> Delete {{ $category->name }}</a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('home')  }}"><span class="glyphicon glyphicon-chevron-left"></span> Return to home</a>
 		</div>
 	</div>
@@ -36,6 +36,37 @@
         </div>
     </div>
  </div>
+
+
+<!-- Delete Contact Modal -->
+<div class="modal fade" name="deleteCategory" id="deleteCategory" tabindex="-1" role="dialog" aria-labelledby="myModalLabels" aria-hidden="true">
+	{!! Form::open(['method'=>'DELETE', 'route'=>['category.destroy', $category->slug]]) !!}
+	<div class="modal-dialog">
+		<div class="modal-content ">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabels">Delete {{ $category->name }}</h4>
+			</div>
+			<div class="modal-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-12 center col-lg-offset-1">
+							<div class="form-group">
+								<label class="col-md-12 control-label">Are you sure you want to delete [ Category :: {{ $category->name }} ]</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br/>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="submit" class="btn btn-danger">Delete</button>
+			</div>
+		</div>
+	</div>
+	{!! Form::close() !!}
+</div>
 @stop
 
 @section('script')

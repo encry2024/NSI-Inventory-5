@@ -1,12 +1,15 @@
 <?php namespace App;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class Information extends Eloquent {
 
 	//
+	use SoftDeletes;
 	protected $fillable = ['value'];
 	protected $touches = ['field', 'device'];
+
+	protected $softDelete = true;
 
 	public function field() {
 		return $this->belongsTo('App\Field');

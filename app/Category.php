@@ -28,8 +28,25 @@ class Category extends Eloquent implements SluggableInterface {
     }
 
     public function devices() {
-        return $this->hasMany('Device');
+        return $this->hasMany('App\Device');
     }
+
+	public function delete()
+	{
+		// delete all associated photos
+		// $device_info = $this->devices;
+		foreach ($this->devices as $cat_dev) {
+			$cat_dev->delete();
+			foreach ($cat_dev->information as $info) {
+				$info->delete();
+			}
+		}
+		$this->fields()->delete();
+
+
+		// delete the user
+		return parent::delete();
+	}
 
     public function audit() {
         return $this->hasMany('Audit');
