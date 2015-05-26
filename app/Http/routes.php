@@ -56,3 +56,4 @@ Route::controllers([
 get('/', ['as' => 'home' , 'uses' => 'HomeController@index']);
 get('associates', ['as' => 'assoc', 'uses' => 'DeviceController@allAssoc']);
 get('associates/all', ['as' => 'all_assoc', 'uses' => 'DeviceController@viewAssoc']);
+get('import_excel', ['as' => 'ie', 'uses' => 'ExcelController@index']);

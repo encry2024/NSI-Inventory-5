@@ -31,9 +31,7 @@ class Category extends Eloquent implements SluggableInterface {
         return $this->hasMany('App\Device');
     }
 
-	public function delete()
-	{
-		// delete all associated photos
+	public function delete() {
 		// $device_info = $this->devices;
 		foreach ($this->devices as $cat_dev) {
 			$cat_dev->delete();
@@ -43,8 +41,7 @@ class Category extends Eloquent implements SluggableInterface {
 		}
 		$this->fields()->delete();
 
-
-		// delete the user
+		// Delete this model
 		return parent::delete();
 	}
 
@@ -86,5 +83,9 @@ class Category extends Eloquent implements SluggableInterface {
 			);
 		}
 		return json_encode($json);
+	}
+
+	public static function importCategory() {
+		
 	}
 }
