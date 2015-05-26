@@ -69,6 +69,7 @@
 			[
 				//FORMAT THE VALUES THAT IS DISPLAYED ON mDataProp
 				//ID
+
 				{ "bSortable": false, "aTargets": [ 0 ] },
 				{
 					"aTargets": [ 0 ], // Column to target

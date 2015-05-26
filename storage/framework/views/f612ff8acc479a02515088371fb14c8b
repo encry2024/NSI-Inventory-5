@@ -48,13 +48,13 @@
 			[
 				{"sTitle": "#", "mDataProp": "id", "sWidth": "100px","sClass": "size-14"},
 				{"sTitle": "Category", "sWidth": "100px", "mDataProp": "name"},
-				{"sTitle": "Recent Update", "sWidth": "100px","mDataProp": "updated_at"}
-
+				{"sTitle": "Recent Update", "sWidth": "100px","mDataProp": "updated_at", "sType": "string"}
 			],
 			"aoColumnDefs":
 			[
 				//FORMAT THE VALUES THAT IS DISPLAYED ON mDataProp
 				//ID
+
 				{ "bSortable": false, "aTargets": [ 0 ] },
 				{
 					"aTargets": [ 0 ], // Column to target
@@ -81,7 +81,7 @@
 					"mRender": function ( data, type, full ) {
 					// 'full' is the row's data object, and 'data' is this column's data
 					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return '<label class="text-center size-14"> ' + full["updated_at"] + ' </label>';
+					return '<label class="text-center size-14"> ' + "<!-- " + full["updated_at_2"]  + " -->" +  full["updated_at"] + ' </label>';
 					}
 				},
 			],

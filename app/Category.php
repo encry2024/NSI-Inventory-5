@@ -65,6 +65,7 @@ class Category extends Eloquent implements SluggableInterface {
 				'slug'              => $category->slug,
 				'name' 				=> $category->name,
 				'updated_at' 		=> date('F d, Y [ h:i A D ]', strtotime($category->updated_at)),
+				'updated_at_2'		=> date('Ymdhis', strtotime($category->updated_at))
 			);
 		}
 		return json_encode($json);
