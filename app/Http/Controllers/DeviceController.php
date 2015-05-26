@@ -148,4 +148,17 @@ class DeviceController extends Controller {
 
 		return $return_change_status;
 	}
+
+	public function openExcel($category_id) {
+		//return $category_id;
+		$import_excel = Device::importDevice($category_id);
+
+		return $import_excel;
+	}
+
+	public function deviceIndex($category_id) {
+		$category = Category::whereSlug($category_id)->first();
+
+		return view('import.device', compact('category'));
+	}
 }

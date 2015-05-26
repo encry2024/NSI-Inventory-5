@@ -18,6 +18,7 @@
     <div class="col-lg-3">
 		<div class="btn-group-vertical col-lg-12" role="group">
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('create_device', [$category->slug])  }}"><span class="glyphicon glyphicon-plus"></span> Create {{ $category->name }}</a>
+			<a href="{{ route('device_excel', [$category->slug]) }}" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-share-alt"></span> Import {{ $category->name }} Devices</a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('category.show', [$category->slug])  }}"><span class="glyphicon glyphicon-info-sign"></span> {{$category->name}} Profile</a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="#"><span class="glyphicon glyphicon-book"></span> {{$category->name}} History <span class="badge right">0</span></a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="#"><span class="glyphicon glyphicon-trash"></span> Deleted {{$category->name}}s <span class="badge right">0</span></a>

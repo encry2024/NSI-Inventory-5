@@ -4,7 +4,9 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 use Cviebrock\EloquentSluggable\SluggableTrait;
 use Cviebrock\EloquentSluggable\SluggableInterface;
 use Illuminate\Database\Eloquent\SoftDeletes;
-#-----------------------------------------------------------
+use Illuminate\Support\Facades\Input;
+use Maatwebsite\Excel\Facades\Excel;
+
 class Owner extends Eloquent implements SluggableInterface{
 
 	//
@@ -33,6 +35,28 @@ class Owner extends Eloquent implements SluggableInterface{
 
 	public function fullName() {
 		return $this->firstName . ' ' . $this->lastName;
+	}
+
+	public static function importOwner() {
+		set_time_limit(0);
+
+		$file = Input::file( 'xl' );
+
+		//move the file to storage/uploads folder with its original file name
+		$file->move(storage_path() . '/uploads', $file->getClientOriginalName());
+
+		//Load the sheet and convert it into array
+		$sheet = Excel::load( storage_path() . '/uploads/' . $file->getClientOriginalName())->toArray();
+
+		foreach ($sheet as $row) {
+			$new_owner = new Owner();
+			$new_owner->firstName = $row['firstname'];
+			$new_owner->lastName = $row['lastname'];
+			$new_owner->location = $row['campaign'];
+			$new_owner->save();
+		}
+
+		return redirect()->back()->with('success_msg', 'Files has been successfully imported.');
 	}
 
 }

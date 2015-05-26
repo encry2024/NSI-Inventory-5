@@ -160,4 +160,15 @@ class OwnerController extends Controller {
 		return json_encode($json);
 	}
 
+	public function openExcel() {
+		//return $category_id;
+		$import_excel = Owner::importOwner();
+
+		return $import_excel;
+	}
+
+	public function ownerIndex() {
+		return view('import.owner');
+	}
+
 }

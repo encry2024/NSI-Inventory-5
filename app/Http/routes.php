@@ -60,3 +60,5 @@ get('import_excel', ['as' => 'category_excel', 'uses' => 'CategoryController@exc
 get('import_device/{category_slug}', ['as' => 'device_excel', 'uses' => 'DeviceController@deviceIndex']);
 post('open_excel', ['as' => 'openFile', 'uses' => 'CategoryController@openExcel']);
 post('import_devices/{category_id}', ['as' => 'importDevice', 'uses' => 'DeviceController@openExcel']);
+get('import_owner', ['as' => 'owner_excel', 'uses' => 'OwnerController@ownerIndex']);
+post('open_owner', ['as' => 'importOwner', 'uses' => 'OwnerController@openExcel']);

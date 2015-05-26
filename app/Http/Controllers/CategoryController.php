@@ -12,6 +12,8 @@ use App\Field;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Http\Requests\CreateFieldRequest;
 
+use Illuminate\Support\Facades\Input;
+
 class CategoryController extends Controller {
 
 	/**
@@ -99,6 +101,16 @@ class CategoryController extends Controller {
 		$slug->delete();
 
 		return redirect('/')->with('success_msg', 'Category was successfully deleted');
+	}
+
+	public function openExcel() {
+		$import_excel = Category::importCategory();
+
+		return $import_excel;
+	}
+
+	public function excelIndex() {
+		return view('import.excel');
 	}
 
 }

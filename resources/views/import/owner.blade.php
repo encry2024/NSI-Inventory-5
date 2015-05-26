@@ -24,12 +24,12 @@
      <div class="col-lg-9 col-md-offset-center-2">
         <div class="panel panel-default col-lg-12" style="border-color: #ccc;">
            <div class="page-header">
-                <h3>Import Categories/Devices</h3>
+                <h3>Import Owners</h3>
            </div>
-           {!! Form::open(['route' => ['openFile'], 'files' => true]) !!}
+           {!! Form::open(['route' => ['importOwner'], 'files' => true]) !!}
            {!! Form::file('xl', null) !!}
            <br/>
-           {!! Form::submit('Upload Excel', ['class'=>'Form-control btn btn-primary']) !!}
+           {!! Form::submit('Import to Database', ['class'=>'Form-control btn btn-primary']) !!}
            {!! Form::close() !!}
            <table id="devices" class="table"></table>
            <br/><br/>

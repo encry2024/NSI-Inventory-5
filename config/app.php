@@ -113,6 +113,7 @@ return [
 		/*
 		 * Laravel Framework Service Providers...
 		 */
+		'Maatwebsite\Excel\ExcelServiceProvider',
 		'Illuminate\Foundation\Providers\ArtisanServiceProvider',
 		'Illuminate\Auth\AuthServiceProvider',
 		'Illuminate\Bus\BusServiceProvider',
@@ -161,6 +162,7 @@ return [
 	*/
 
 	'aliases' => [
+		'Excel' 	=> 'Maatwebsite\Excel\Facades\Excel',
         'Form'		=> 'Illuminate\Html\FormFacade',
         'App'       => 'Illuminate\Support\Facades\App',
 		'Artisan'   => 'Illuminate\Support\Facades\Artisan',
