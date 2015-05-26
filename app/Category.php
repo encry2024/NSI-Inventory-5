@@ -4,7 +4,6 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Cviebrock\EloquentSluggable\SluggableTrait;
 use Cviebrock\EloquentSluggable\SluggableInterface;
-use Illuminate\Support\Facades\Validator;
 
 class Category extends Eloquent implements SluggableInterface {
 
@@ -17,9 +16,7 @@ class Category extends Eloquent implements SluggableInterface {
 
     protected $fillable = ['name', 'slug'];
 
-    protected $sluggable = array(
-        'build_from' => 'name',
-    );
+    protected $sluggable = array( 'build_from' => 'name' );
 
     public function getFullnameAttribute()
     {
@@ -39,7 +36,7 @@ class Category extends Eloquent implements SluggableInterface {
     }
 
     public function devicelogs() {
-        return $this->hasManyThrough('DeviceLog', 'Device', 'item_id', 'device_id')->orderBy('created_at', 'desc');
+        return $this->hasManyThrough('DeviceLog', 'Device', 'item_id', 'device_id');
     }
 
 	public static function storeCategory( $f_requests, $request , $category) {
