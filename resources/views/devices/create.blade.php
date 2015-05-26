@@ -11,7 +11,7 @@
 				<li><label>Create {{ $category->name }}</label>
 			</ol>
 			@if (Session::has('success_msg'))
-				<div class="alert alert-success" role="alert">
+				<div class="alert alert-success" role="alert" style=" margin-left: 1.5rem; ">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					{{ Session::get('success_msg')  }}
 				</div>
