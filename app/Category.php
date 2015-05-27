@@ -36,13 +36,14 @@ class Category extends Eloquent implements SluggableInterface {
 	public function delete() {
 		// $device_info = $this->devices;
 		foreach ($this->devices as $cat_dev) {
-			$cat_dev->delete();
-			foreach ($cat_dev->information as $info) {
-				$info->delete();
-			}
+			$cat_dev->category_id = 0;
+			$cat_dev->save();
 		}
-		$this->fields()->delete();
 
+		foreach ($this->fields as $category_fields) {
+			$category_fields->category_id = 0;
+			$category_fields->save();
+		}
 		// Delete this model
 		return parent::delete();
 	}
@@ -88,8 +89,6 @@ class Category extends Eloquent implements SluggableInterface {
 	}
 
 	public static function importCategory() {
-
-
 		$file = Input::file( 'xl' );
 
 		//move the file to storage/uploads folder with its original file name
