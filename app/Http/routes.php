@@ -17,6 +17,7 @@ get('fetch/devices/{category_id}', ['as' => 'fetch_devices', 'uses' => 'DeviceCo
 get('category/{category_slug}/create', ['as' => 'create_device', 'uses' => 'DeviceController@create']);
 get('device/status/{device_id}', ['as' => 'fetch_device_statuses', 'uses' => 'DeviceController@fetchStatus']);
 get('getDeviceHistory/{device_id}', ['as' => 'device_assoc_history' ,'uses' => 'DeviceController@assocHistory']);
+get('device_information', ['as' => 'fetch_devices_information', 'uses' => 'DeviceController@deviceInformation']);
 post('device/associate/{device_id}', ['as' => 'device_associate', 'uses' => 'DeviceController@associateDevice']);
 post('device/disassociate/{device_id}', ['as' => 'device_disassociate', 'uses' => 'DeviceController@disassociateDevice']);
 post('change/status/{device_id}', ['as' => 'change_status', 'uses' => 'DeviceController@changeStatus']);
@@ -44,6 +45,8 @@ Route::resource('note', 'NoteController', ['only'=>['store', 'show', 'fetchNotes
 
 # INFORMATION RESOURCE
 post('information/update', ['as' => 'information/update', 'uses' => 'InformationController@updateInfo']);
+get('import_excel/information', ['as' => 'import_information', 'uses' => 'InformationController@showinformation']);
+post('import_field/information', ['as' => 'importInformation', 'uses' => 'InformationController@importInformation']);
 Route::resource('information', 'InformationController');
 
 # AUTH CONTROLLERS
@@ -56,9 +59,14 @@ Route::controllers([
 get('/', ['as' => 'home' , 'uses' => 'HomeController@index']);
 get('associates', ['as' => 'assoc', 'uses' => 'DeviceController@allAssoc']);
 get('associates/all', ['as' => 'all_assoc', 'uses' => 'DeviceController@viewAssoc']);
+
+# IMPORT EXCELS
 get('import_excel', ['as' => 'category_excel', 'uses' => 'CategoryController@excelIndex']);
-get('import_device/{category_slug}', ['as' => 'device_excel', 'uses' => 'DeviceController@deviceIndex']);
 post('open_excel', ['as' => 'openFile', 'uses' => 'CategoryController@openExcel']);
-post('import_devices/{category_id}', ['as' => 'importDevice', 'uses' => 'DeviceController@openExcel']);
+get('import_device/{category_slug}', ['as' => 'device_excel', 'uses' => 'DeviceController@deviceIndex']);
+post('import_devices', ['as' => 'importDevice', 'uses' => 'DeviceController@openExcel']);
 get('import_owner', ['as' => 'owner_excel', 'uses' => 'OwnerController@ownerIndex']);
 post('open_owner', ['as' => 'importOwner', 'uses' => 'OwnerController@openExcel']);
+get('fields', ['as' => 'field_excel', 'uses' => 'FieldController@index']);
+get('import_excel/fields', ['as' => 'import_field', 'uses' => 'FieldController@showImport']);
+post('import_fields', ['as' => 'importField', 'uses' => 'FieldController@importFields']);

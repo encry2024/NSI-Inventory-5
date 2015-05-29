@@ -2,7 +2,7 @@
 
 use App\Owner;
 use App\User;
-use App\Field;
+use App\Information;
 use App\Status;
 use App\Device;
 use App\Category;
@@ -39,14 +39,14 @@ class HomeController extends Controller {
 	{
         $owners = Owner::all();
         $users = User::where('type', 'user')->get();
-        $fields = Field::all();
+        $information = Information::all();
 		$status = Status::all();
 		$assoc = Device::where('owner_id', '!=', '')->get();
 		$available_devices = Device::where('owner_id', 0)->get();
 		$deleted_categories = Category::onlyTrashed()->get();
 		$defective_devices = Device::where('status_id', '!=', 1)->get();
 
-		return view('home', compact('owners', 'users', 'fields', 'status', 'assoc', 'available_devices', 'deleted_categories', 'defective_devices'));
+		return view('home', compact('owners', 'users', 'information', 'status', 'assoc', 'available_devices', 'deleted_categories', 'defective_devices'));
 	}
 
 }

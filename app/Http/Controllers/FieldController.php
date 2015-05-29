@@ -2,20 +2,19 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Field;
 
 use Illuminate\Http\Request;
-use App\Information;
 
-class InformationController extends Controller {
+class FieldController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response
 	 */
-	public function index()
-	{
-		//
+	public function index() {
+		return view('field.index');
 	}
 
 	/**
@@ -82,20 +81,13 @@ class InformationController extends Controller {
 		//
 	}
 
-	public function updateInfo(Request $request){
-		$update_info = Information::update_information($request);
-
-		return $update_info;
+	public function showImport() {
+		return view('import.field');
 	}
 
-	public function showInformation() {
-		return view('import.information');
+	public function importFields() {
+		$import_fields = Field::importField();
+
+		return $import_fields;
 	}
-
-	public function importInformation() {
-		$import_information = Information::importInformation();
-
-		return $import_information;
-	}
-
 }

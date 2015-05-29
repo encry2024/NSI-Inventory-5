@@ -214,7 +214,7 @@ class Device extends Eloquent implements SluggableInterface {
 		return json_encode($json);
 	}
 
-	public static function importDevice( $category_id ) {
+	public static function importDevice() {
 		set_time_limit(0);
 
 		$file = Input::file( 'xl' );
@@ -226,17 +226,37 @@ class Device extends Eloquent implements SluggableInterface {
 		$sheet = Excel::load( storage_path() . '/uploads/' . $file->getClientOriginalName())->toArray();
 
 		foreach ($sheet as $row) {
-			if ($row['category_id'] == $category_id) {
-				$new_device = new Device();
-				$new_device->name = $row['name'];
-				$new_device->category_id = $category_id;
-				$new_device->owner_id = $row['location_id'];
-				$new_device->status_id = $row['status_id'];
-				$new_device->availability = $row['availability'];
-				$new_device->save();
-			}
+			$new_device = Device::firstOrNew([
+				'name' => $row['name'],
+				'category_id' => $row['category_id'],
+				'owner_id' => $row['owner_id'],
+				'status_id' => $row['status_id'],
+				'availability' => $row['availability']
+			]);
+			$new_device->save();
 		}
 
 		return redirect()->back()->with('success_msg', 'Files has been successfully imported.');
+	}
+
+	public static function getInformation() {
+		$json = array();
+		$ctr = 0;
+		$devices = Device::with('information')->get();
+
+		foreach ($devices as $device) {
+			foreach ($device->information as $device_information) {
+				$json[] = [
+					'id'	=> ++$ctr,
+					'device_id' => $device->id,
+					'device_name' => $device->name,
+					'device_slug' => $device->slug,
+					'information' => $device_information->value,
+					'field' => $device_information->field->category_label
+				];
+			}
+		}
+
+		return json_encode($json);
 	}
 }

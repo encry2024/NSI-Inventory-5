@@ -52,11 +52,23 @@ class Owner extends Eloquent implements SluggableInterface{
 			$new_owner = new Owner();
 			$new_owner->firstName = $row['firstname'];
 			$new_owner->lastName = $row['lastname'];
-			$new_owner->location = $row['campaign'];
+			$new_owner->location = $row['name'];
 			$new_owner->save();
 		}
 
 		return redirect()->back()->with('success_msg', 'Files has been successfully imported.');
+	}
+
+	public static function editOwner($slug) {
+		//return $slug;
+
+		Owner::find($slug->id)->update
+			(['firstName' => Input::get('firstName'), 'lastName' => Input::get('lastName'),
+				'location' => Input::get('campaign')
+			]);
+
+		return redirect('owner')->with('success_msg', 'Owner has been updated');
+
 	}
 
 }

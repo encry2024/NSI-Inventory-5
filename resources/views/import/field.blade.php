@@ -24,31 +24,16 @@
      <div class="col-lg-9 col-md-offset-center-2">
         <div class="panel panel-default col-lg-12" style="border-color: #ccc;">
            <div class="page-header">
-                <h3>Import Categories</h3>
+                <h3>Import Fields</h3>
            </div>
-           {!! Form::open(['route' => ['openFile'], 'files' => true]) !!}
+           {!! Form::open(['route' => ['importField'], 'files' => true]) !!}
            {!! Form::file('xl', null) !!}
            <br/>
-           {!! Form::submit('Import to Database', ['class'=>'Form-control btn btn-primary']) !!}
+           {!! Form::submit('Import to Database', ['class'=>'form-control btn btn-primary']) !!}
            {!! Form::close() !!}
            <table id="devices" class="table"></table>
            <br/><br/>
         </div>
-
-        <div class="panel panel-default col-lg-12" style="border-color: #ccc;">
-		   <div class="page-header">
-				<h3>Import Devices</h3>
-		   </div>
-		   {!! Form::open(['route' => ['importDevice'], 'files' => true]) !!}
-		   {!! Form::file('xl', null) !!}
-		   <br/>
-		   {!! Form::submit('Import to Database', ['class'=>'Form-control btn btn-primary']) !!}
-		   {!! Form::close() !!}
-		   <table id="devices" class="table"></table>
-		   <br/><br/>
-		</div>
     </div>
-
-
  </div>
 @stop

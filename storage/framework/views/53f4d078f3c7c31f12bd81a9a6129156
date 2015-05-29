@@ -2,7 +2,7 @@
 	<div class="btn-group-vertical col-lg-12" role="group">
 		<a href="<?php echo e(route('category.create')); ?>" class="btn btn-default col-lg-12 text-left" role="button"><span class="glyphicon glyphicon-plus"></span> Create Categories</a>
 		<a href="<?php echo e(route('category_excel')); ?>" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-share-alt"></span> Import Excel</a>
-		<a href="" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-search"></span> Search Information <span class="badge right"><?php echo e(count($fields)); ?></span></a>
+		<a href="<?php echo e(route('field_excel')); ?>" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-search"></span> Search Information <span class="badge right"><?php echo e(count($information)); ?></span></a>
 		<a href="" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-user"></span> Manage Users <span class="badge right"><?php echo e(count($users)); ?></span></a>
 		<a href="<?php echo e(route('owner.index')); ?>" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-map-marker"></span> Create Owners <span class="badge right"><?php echo e(count($owners)); ?></span></a>
 		<a href="<?php echo e(route('status.index')); ?>" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-exclamation-sign"></span> Statuses <span class="badge right"><?php echo e(count($status)); ?></span></a>

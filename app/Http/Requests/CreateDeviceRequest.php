@@ -22,15 +22,14 @@ class CreateDeviceRequest extends Request {
 	public function rules()
 	{
 		return [
-			'name'  =>  'required|unique:devices,name'
+			'name'  =>  'required'
 		];
 	}
 
 	public function messages()
 	{
 		return [
-			'name.required' => "Device Description is Required.",
-			'name.unique' => "The device you are trying to add is already in the database"
+			'name.required' => "Device Description is Required."
 		];
 	}
 

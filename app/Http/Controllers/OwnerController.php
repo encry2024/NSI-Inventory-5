@@ -89,9 +89,10 @@ class OwnerController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
-	{
-		//
+	public function update($slug) {
+		$edit_owner = Owner::editOwner($slug);
+
+		return $edit_owner;
 	}
 
 	/**
@@ -169,6 +170,10 @@ class OwnerController extends Controller {
 
 	public function ownerIndex() {
 		return view('import.owner');
+	}
+
+	public function editOwner( $id, Request $request ) {
+
 	}
 
 }
