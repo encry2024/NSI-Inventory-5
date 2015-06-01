@@ -7,7 +7,7 @@
 			<ol class="breadcrumb" style=" margin-left: 1.5rem; ">
 				<li><label>Inventory</label>
 				<li><a href="{{ route('home') }}" class="active">Home</a></li>
-				<li><label>Import Excel's</label>
+				<li><label>Import Devices</label>
 			</ol>
 		</div>
 	</div>
@@ -24,9 +24,9 @@
      <div class="col-lg-9 col-md-offset-center-2">
         <div class="panel panel-default col-lg-12" style="border-color: #ccc;">
            <div class="page-header">
-                <h3>Import {{ $category->name }}s</h3>
+                <h3>Import Devices</h3>
            </div>
-           {!! Form::open(['route' => ['importDevice', $category->id], 'files' => true]) !!}
+           {!! Form::open(['route' => ['importDevice'], 'files' => true]) !!}
            {!! Form::file('xl', null) !!}
            <br/>
            {!! Form::submit('Import to Database', ['class'=>'Form-control btn btn-primary']) !!}

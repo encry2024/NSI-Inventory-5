@@ -31,7 +31,7 @@
 				<a role="button" id="grp" class="btn btn-default col-lg-12 text-left cli" data-toggle='modal' data-target='#associate_device' href="#"><span class="glyphicon glyphicon-tag"></span> Associate</a>
 			@endif
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="#" data-toggle='modal' data-target='#change_status'><span class="glyphicon glyphicon-repeat"></span> Change Status</a>
-			<a role="button" class="btn btn-default col-lg-12 text-left" href="#"><span class="glyphicon glyphicon-trash"></span> Delete {{ $device->name }}</a>
+			<a role="button" class="btn btn-default col-lg-12 text-left" href="#" data-toggle="modal" data-target="#deleteDevice"><span class="glyphicon glyphicon-trash"></span> Delete {{ $device->name }}</a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('category.show', [$device->category->slug])  }}"><span class="glyphicon glyphicon-chevron-left"></span> Return to {{ $device->category->name }}</a>
 		</div>
 
@@ -276,6 +276,37 @@
 			<br/>
 			<div class="modal-footer">
 				<button type="submit" class="btn btn-primary">Change Status</button>
+			</div>
+		</div>
+	</div>
+	{!! Form::close() !!}
+</div>
+
+
+<!-- Delete Contact Modal -->
+<div class="modal fade" name="deleteDevice" id="deleteDevice" tabindex="-1" role="dialog" aria-labelledby="myModalLabels" aria-hidden="true">
+	{!! Form::open(['method'=>'DELETE', 'route'=>['device.destroy', $device->slug]]) !!}
+	<div class="modal-dialog">
+		<div class="modal-content ">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabels">Delete {{ $device->name }}</h4>
+			</div>
+			<div class="modal-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-12 center col-lg-offset-1">
+							<div class="form-group">
+								<label class="col-md-12 control-label">Are you sure you want to delete [ Device :: {{ $device->name }} ]</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br/>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="submit" class="btn btn-danger">Delete</button>
 			</div>
 		</div>
 	</div>

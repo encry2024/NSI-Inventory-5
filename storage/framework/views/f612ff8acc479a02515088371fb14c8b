@@ -27,11 +27,35 @@
 
 <?php $__env->startSection('script'); ?>
 <script type="text/javascript">
+	var originalLeave = $.fn.popover.Constructor.prototype.leave;
+	$.fn.popover.Constructor.prototype.leave = function(obj){
+		var self = obj instanceof this.constructor ?
+		obj : $(obj.currentTarget)[this.type](this.getDelegateOptions()).data('bs.' + this.type)
+		var container, timeout;
+
+		originalLeave.call(this, obj);
+
+		if(obj.currentTarget) {
+			container = $(obj.currentTarget).siblings('.popover')
+			timeout = self.timeout;
+			container.one('mouseenter', function(){
+				//We entered the actual popover – call off the dogs
+				clearTimeout(timeout);
+				//Let's monitor popover content instead
+				container.one('mouseleave', function(){
+					$.fn.popover.Constructor.prototype.leave.call(self, self);
+				});
+			})
+		}
+	};
+
+	$('body').popover({ selector: '[data-popover]', trigger: 'hover', placement: 'right', delay: {show: 50, hide: 50}});
+
 	$.getJSON("category", function(data) {
 		$('#ctgy').dataTable({
 			"aaData": data,
 			"lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
-			"aaSorting": [[ 2, 'asc' ]],
+			"aaSorting": [[ 2, 'desc' ]],
 			"oLanguage": {
 				"sLengthMenu": "No. of Items _MENU_",
 				"oPaginate": {
@@ -72,7 +96,7 @@
 					    url = url.replace(':slug', full["slug"]);
 						// 'full' is the row's data object, and 'data' is this column's data
 						// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-						return "<a href='" + url + "' class='size-14 text-left'>" + full["name"] + "</a>";
+						return "<a href='" + url + "' class='size-14 text-left'>" + full["name"] + " (" + full['total_devices'] + ")" + "</a>";
 					}
 				},
                 //CATEGORY RECENT UPDATE
@@ -81,7 +105,7 @@
 					"mRender": function ( data, type, full ) {
 					// 'full' is the row's data object, and 'data' is this column's data
 					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return '<label class="text-center size-14"> ' + "<!-- " + full["updated_at_2"]  + " -->" +  full["updated_at"] + ' </label>';
+					return '<label class="text-center size-14"> ' + full["updated_at"] + ' </label>';
 					}
 				},
 			],

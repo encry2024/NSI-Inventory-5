@@ -156,10 +156,8 @@ class DeviceController extends Controller {
 		return $import_excel;
 	}
 
-	public function deviceIndex($category_id) {
-		$category = Category::whereSlug($category_id)->first();
-
-		return view('import.device', compact('category'));
+	public function deviceIndex() {
+		return view('import.device');
 	}
 
 	public function deviceInformation() {

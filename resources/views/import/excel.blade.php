@@ -7,7 +7,7 @@
 			<ol class="breadcrumb" style=" margin-left: 1.5rem; ">
 				<li><label>Inventory</label>
 				<li><a href="{{ route('home') }}" class="active">Home</a></li>
-				<li><label>Import Excel's</label>
+				<li><label>Import Categories</label>
 			</ol>
 		</div>
 	</div>
@@ -21,34 +21,19 @@
 		</div>
 	</div>
 
-     <div class="col-lg-9 col-md-offset-center-2">
-        <div class="panel panel-default col-lg-12" style="border-color: #ccc;">
-           <div class="page-header">
-                <h3>Import Categories</h3>
-           </div>
-           {!! Form::open(['route' => ['openFile'], 'files' => true]) !!}
-           {!! Form::file('xl', null) !!}
-           <br/>
-           {!! Form::submit('Import to Database', ['class'=>'Form-control btn btn-primary']) !!}
-           {!! Form::close() !!}
-           <table id="devices" class="table"></table>
-           <br/><br/>
-        </div>
-
-        <div class="panel panel-default col-lg-12" style="border-color: #ccc;">
-		   <div class="page-header">
-				<h3>Import Devices</h3>
-		   </div>
-		   {!! Form::open(['route' => ['importDevice'], 'files' => true]) !!}
-		   {!! Form::file('xl', null) !!}
-		   <br/>
-		   {!! Form::submit('Import to Database', ['class'=>'Form-control btn btn-primary']) !!}
-		   {!! Form::close() !!}
-		   <table id="devices" class="table"></table>
-		   <br/><br/>
+	<div class="col-lg-9 col-md-offset-center-2">
+		<div class="panel panel-default col-lg-12" style="border-color: #ccc;">
+			<div class="page-header">
+				<h3>Import Categories</h3>
+			</div>
+			{!! Form::open(['route' => ['openFile'], 'files' => true]) !!}
+			{!! Form::file('xl', null) !!}
+			<br/>
+			{!! Form::submit('Import to Database', ['class'=>'Form-control btn btn-primary']) !!}
+			{!! Form::close() !!}
+			<table id="devices" class="table"></table>
+			<br/><br/>
 		</div>
-    </div>
-
-
+	</div>
  </div>
 @stop

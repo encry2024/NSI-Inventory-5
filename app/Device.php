@@ -131,8 +131,8 @@ class Device extends Eloquent implements SluggableInterface {
 
 		foreach ($device_log as $dLog) {
 			$json[] = [
-				'name' => str_limit($dLog->owner->firstName . ' ' . $dLog->owner->lastName, $limit=14, $end='...'),
-				'fullname' => $dLog->owner->firstName . ' ' . $dLog->owner->lastName,
+				'name' => str_limit($dLog->owner->fullName(), $limit=14, $end='...'),
+				'fullname' => $dLog->owner->fullName(),
 				'slug' => $dLog->owner->slug,
 				'user_type' => $dLog->user->type,
 				'campaign' => $dLog->owner->location,
@@ -154,17 +154,17 @@ class Device extends Eloquent implements SluggableInterface {
 		foreach ($device_logs as $device_log) {
 			foreach ($device_log->deviceOwner as $d_o) {
 				$json[] = [
-					'name' 			=> $d_o->owner->fullName(),
-					'fullname' 		=> $d_o->owner->fullName(),
-					'owner_slug' 	=> $d_o->owner->slug,
-					'device_slug' 	=> $device_log->device->slug,
-					'user_slug' 	=> $device_log->user->slug,
-					'campaign' 		=> $d_o->owner->location,
-					'user_id' 		=> $device_log->user->id,
-					'device_name' 	=> $device_log->device->name,
-					'user_name' 	=> $device_log->user->name,
-					'action' 		=> $device_log->action,
-					'created_at' 	=> date('m/d/Y h:i A', strtotime($device_log->created_at))
+					'name' => $d_o->owner->fullName(),
+					'fullname' => $d_o->owner->fullName(),
+					'owner_slug' => $d_o->owner->slug,
+					'device_slug' => $device_log->device->slug,
+					'user_slug' => $device_log->user->slug,
+					'campaign' => $d_o->owner->location,
+					'user_id' => $device_log->user->id,
+					'device_name' => $device_log->device->name,
+					'user_name' => $device_log->user->name,
+					'action' => $device_log->action,
+					'created_at' => date('m/d/Y h:i A', strtotime($device_log->created_at))
 				];
 			}
 		}
@@ -191,10 +191,11 @@ class Device extends Eloquent implements SluggableInterface {
 				$json[] = array(
 					'id' 				=> $device->id,
 					'brand'				=> $brand,
-					'owner'				=> $device->owner->fullName(),
+					'owner'				=> str_limit($device->owner->fullName(), $limit='10', $end='...'),
 					'status'			=> $device->status->status,
-					'tag'				=> $tag,
+					'tag'				=> str_limit($tag, $limit = '10', $end = '...'),
 					'slug'              => $device->slug,
+					'owner_slug'		=> $device->owner->slug,
 					'name' 				=> $device->name,
 					'updated_at' 		=> date('m/d/Y h:i A', strtotime($device->updated_at)),
 				);
@@ -204,7 +205,7 @@ class Device extends Eloquent implements SluggableInterface {
 					'brand'				=> $brand,
 					'owner'				=> 'No Owner',
 					'status'			=> $device->status->status,
-					'tag'				=> $tag,
+					'tag'				=> str_limit($tag, $limit = '10', $end = '...'),
 					'slug'              => $device->slug,
 					'name' 				=> $device->name,
 					'updated_at' 		=> date('m/d/Y h:i A', strtotime($device->updated_at)),

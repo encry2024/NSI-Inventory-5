@@ -7,7 +7,7 @@
 			<ol class="breadcrumb" style=" margin-left: 1.5rem; ">
 				<li><label>Inventory</label>
 				<li><a href="{{ route('home') }}" class="active">Home</a></li>
-				<li><label>Import Excel's</label>
+				<li><label>Import Information</label>
 			</ol>
 		</div>
 	</div>

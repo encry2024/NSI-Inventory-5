@@ -32,7 +32,9 @@
            <div class="page-header">
                 <h3>{{ $category->name  }} Category</h3>
            </div>
-           <table id="devices" class="table"></table>
+           <table id="devices" class="table">
+
+           </table>
            <br/><br/>
         </div>
     </div>
@@ -76,7 +78,7 @@
 		$('#devices').dataTable({
 			"aaData": data,
 			"lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
-			"aaSorting": [[ 2, 'asc' ]],
+			"aaSorting": [[ 5, 'desc' ]],
 			"oLanguage": {
 				"sLengthMenu": "No. of Devices _MENU_",
 				"oPaginate": {
@@ -108,9 +110,11 @@
 				{
 					"aTargets": [ 0 ], // Column to target
 					"mRender": function ( data, type, full ) {
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return '<label class="text-center size-14">' + data + '</label>';
+					var url = '{{ route('owner.show', ":slug") }}';
+						url = url.replace(':slug', full["owner_slug"]);
+						// 'full' is the row's data object, and 'data' is this column's data
+						// e.g. 'full[0]' is the comic id, and 'data' is the comic title
+						return "<a href='"+url+"' class='size-14 text-left'>" + data + "</a>";
 					}
 				},
 				//CATEGORY SLUG
@@ -157,6 +161,14 @@
 					return '<label class="text-center size-14"> ' + data + ' </label>';
 					}
 				},
+				{
+					"aTargets": [ 5 ], // Column to target
+					"mRender": function ( data, type, full ) {
+					// 'full' is the row's data object, and 'data' is this column's data
+					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
+					return '<label class="text-center size-14"> <!--' + full["updated_at_2"]  + '-->' + data + ' </label>';
+					}
+				}
 			]
 		});
 	$('div.dataTables_filter input').attr('placeholder', 'Filter Devices');

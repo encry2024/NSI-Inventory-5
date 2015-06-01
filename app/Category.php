@@ -81,6 +81,7 @@ class Category extends Eloquent implements SluggableInterface {
 				'id' 				=> $category->id,
 				'slug'              => $category->slug,
 				'name' 				=> $category->name,
+				'total_devices'		=> count($category->devices),
 				'updated_at' 		=> date('F d, Y [ h:i A D ]', strtotime($category->updated_at)),
 				'updated_at_2'		=> date('Ymdhis', strtotime($category->updated_at))
 			);
