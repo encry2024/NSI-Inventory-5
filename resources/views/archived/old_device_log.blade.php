@@ -1,42 +1,32 @@
-@extends('...app')
+@extends('app')
 
 @section('header')
 	@include('util.m-topbar')
-	<div class="container">
-		<div class="col-lg-12">
-			<ol class="breadcrumb" style=" margin-left: 1.5rem; ">
-				<li><label>Inventory</label>
-				<li><a href="{{ route('home') }}" class="active">Home</a></li>
-				<li><label>Current Associates</label>
-			</ol>
-		</div>
-	</div>
 @stop
 
 @section('content')
 <div class="container">
-	<div class="col-lg-3">
+    <div class="col-lg-3">
 		<div class="btn-group-vertical col-lg-12" role="group">
-			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('home')  }}"><span class="glyphicon glyphicon-chevron-left"></span> Return to Home</a>
+			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('home')  }}"><span class="glyphicon glyphicon-chevron-left"></span> Return to home</a>
 		</div>
 	</div>
-	<div class="col-lg-9 col-md-offset-center-2" >
+
+	<div class="col-lg-9 col-md-offset-center-2">
 		<div class="panel panel-default col-lg-12" style="border-color: #ccc;">
 			<div class="page-header">
-				<h3>Current Associates</h3>
+				<h3>Device Logs (Old)</h3>
 			</div>
-			<br/>
-			<table id="current_assoc"></table>
-			<br/>
+			<table id="old_device_log" class="table"></table>
 		</div>
 	</div>
-</div>
+ </div>
 @stop
 
 @section('script')
 <script>
-$.getJSON("{{ route('assoc') }}", function(data) {
-	$('#current_assoc').dataTable({
+$.getJSON("{{ route('o_d_l') }}", function(data) {
+	$('#old_device_log').dataTable({
 		"aaData": data,
 		"lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
 		"oLanguage": {
@@ -54,18 +44,16 @@ $.getJSON("{{ route('assoc') }}", function(data) {
 		//MDATAPROP - TBODY
 		"aoColumns":
 		[
-			{"sTitle": "Category", "mDataProp": "category_name", "sClass": "size-14"},
+			{"sTitle": "Category", "width":"10%","mDataProp": "category_name", "sClass": "size-14"},
 			{"sTitle": "Device", "mDataProp": "device_name", "sClass": "size-14"},
-			{"sTitle": "Owner", "mDataProp": "name"},
-			{"sTitle": "Assigned By", "mDataProp": "user_name"},
-			{"sTitle": "Date Assigned", "width":"20%", "mDataProp": "created_at"}
+			{"sTitle": "Owner", "mDataProp": "owner_name"},
+			{"sTitle": "Date Assigned", "mDataProp": "created_at"}
 
 		],
 		"aoColumnDefs":
 		[
 			//FORMAT THE VALUES THAT IS DISPLAYED ON mDataProp
 			//ID
-			{ "bSortable": false, "aTargets": [ 0 ] },
 			{
 				"aTargets": [ 0 ], // Column to target
 				"mRender": function ( data, type, full ) {
@@ -83,7 +71,7 @@ $.getJSON("{{ route('assoc') }}", function(data) {
 				url = url.replace(':slug', full["device_slug"]);
 				// 'full' is the row's data object, and 'data' is this column's data
 				// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-				return "<a href='"+url+"' class='size-14 text-left'  data-popover='true' data-html='true' data-trigger='hover' data-content='Name: <a>" + full['fullname'] + "</a> <br/> Campaign: <a>" + full['campaign'] + "</a>'>" + data + "</a>";
+				return "<a href='"+url+"' class='size-14 text-left'  >" + data + "</a>";
 				}
 			},
 			//CATEGORY SLUG
@@ -94,7 +82,7 @@ $.getJSON("{{ route('assoc') }}", function(data) {
 					url = url.replace(':slug', full["owner_slug"]);
 					// 'full' is the row's data object, and 'data' is this column's data
 					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return "<a href='"+url+"' class='size-14 text-left'  >" + data + "</a>";
+					return "<a href='"+url+"' class='size-14 text-left'  data-popover='true' data-html='true' data-trigger='hover' data-content='Name: <a>" + full['fullname'] + "</a> <br/> Campaign: <a>" + full['campaign'] + "</a>'>" + data + "</a>";
 				}
 			},
 			//CATEGORY RECENT UPDATE
@@ -105,21 +93,10 @@ $.getJSON("{{ route('assoc') }}", function(data) {
 				// e.g. 'full[0]' is the comic id, and 'data' is the comic title
 				return '<label class="text-center size-14"> ' + data + ' </label>';
 				}
-			},
-			{
-				"aTargets": [ 4 ], // Column to target
-				"mRender": function ( data, type, full ) {
-				// 'full' is the row's data object, and 'data' is this column's data
-				// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-				return '<label class="text-center size-14"> ' + data + ' </label>';
-				}
-			},
+			}
 		]
 	});
 $('div.dataTables_filter input').attr('placeholder', 'Filter Associate/Dissociate');
 });
 </script>
-@stop
-
-@section('style')
 @stop

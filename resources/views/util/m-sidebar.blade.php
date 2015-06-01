@@ -8,6 +8,10 @@
 			<a href='{{ route("import_information") }}'><span class='glyphicon glyphicon-info-sign'></span> Information</a>
 			<a href='{{ route("import_field") }}'><span class='glyphicon glyphicon-tag'></span> Fields</a>
 		"><span class="glyphicon glyphicon-share-alt"></span> Import Excel</a>
+		<a class="btn btn-default col-lg-12 text-left" role="button" data-popover="true" tabindex="2" data-html="true" data-trigger="focus" data-content="
+			<a href='{{ route('category_excel') }}'><span class='glyphicon glyphicon-list-alt'></span> History</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href='{{ route('odl') }}'><span class='glyphicon glyphicon-hdd'></span> Device Log</a>
+		"><span class="glyphicon glyphicon-folder-close"></span> Archived Logs</a>
 		<a href="{{ route('field_excel') }}" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-search"></span> Search Information <span class="badge right">{{ count($information)  }}</span></a>
 		<a href="" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-user"></span> Manage Users <span class="badge right">{{ count($users)  }}</span></a>
 		<a href="{{ route('owner.index') }}" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-map-marker"></span> Create Owners <span class="badge right">{{ count($owners)  }}</span></a>

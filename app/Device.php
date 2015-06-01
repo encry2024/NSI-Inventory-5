@@ -44,8 +44,8 @@ class Device extends Eloquent implements SluggableInterface {
 		return $this->belongsTo('App\Owner');
 	}
 
-	public function device_log() {
-		return $this->hasMany('App\DeviceLog');
+	public function devicelog() {
+		return $this->hasManyThrough('DeviceLog', 'Device', 'item_id', 'device_id');
 	}
 
 	# FUNCTIONS
@@ -160,6 +160,8 @@ class Device extends Eloquent implements SluggableInterface {
 					'device_slug' => $device_log->device->slug,
 					'user_slug' => $device_log->user->slug,
 					'campaign' => $d_o->owner->location,
+					'category_name' => $d_o->category->name,
+
 					'user_id' => $device_log->user->id,
 					'device_name' => $device_log->device->name,
 					'user_name' => $device_log->user->name,

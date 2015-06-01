@@ -49,11 +49,19 @@ class Owner extends Eloquent implements SluggableInterface{
 		$sheet = Excel::load( storage_path() . '/uploads/' . $file->getClientOriginalName())->toArray();
 
 		foreach ($sheet as $row) {
-			$new_owner = new Owner();
-			$new_owner->firstName = $row['firstname'];
-			$new_owner->lastName = $row['lastname'];
-			$new_owner->location = $row['name'];
-			$new_owner->save();
+			if ($row['firstname'] === "") {
+				$new_owner = new Owner();
+				$new_owner->firstName = "-";
+				$new_owner->lastName = "-";
+				$new_owner->location = "-";
+				$new_owner->save();
+			} else {
+				$new_owner = new Owner();
+				$new_owner->firstName = $row['firstname'];
+				$new_owner->lastName = $row['lastname'];
+				$new_owner->location = $row['name'];
+				$new_owner->save();
+			}
 		}
 
 		return redirect()->back()->with('success_msg', 'Files has been successfully imported.');

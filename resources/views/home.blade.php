@@ -98,7 +98,7 @@
 					    url = url.replace(':slug', full["slug"]);
 						// 'full' is the row's data object, and 'data' is this column's data
 						// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-						return "<a href='" + url + "' class='size-14 text-left'>" + full["name"] + " (" + full['total_devices'] + ")" + "</a>";
+						return "<a href='" + url + "' class='size-14 text-left'>" + full["name"] + "</a>";
 					}
 				},
                 //CATEGORY RECENT UPDATE

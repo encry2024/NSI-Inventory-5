@@ -59,6 +59,9 @@ Route::controllers([
 get('/', ['as' => 'home' , 'uses' => 'HomeController@index']);
 get('associates', ['as' => 'assoc', 'uses' => 'DeviceController@allAssoc']);
 get('associates/all', ['as' => 'all_assoc', 'uses' => 'DeviceController@viewAssoc']);
+get('archived_data', ['as' => 'a_d', 'uses' => 'AuditController@viewOld']);
+get('device_logs/old', ['as' => 'o_d_l', 'uses' => 'OldDeviceLogController@oldDeviceLog']);
+get('old_device_logs', ['as' => 'odl', 'uses' => 'OldDeviceLogController@index']);
 
 # IMPORT EXCELS
 get('import_excel/categories', ['as' => 'category_excel', 'uses' => 'CategoryController@excelIndex']);
