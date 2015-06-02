@@ -14,7 +14,7 @@
 			<a href='{{ route('odl') }}'><span class='glyphicon glyphicon-hdd'></span> Device Log</a>">
 			<span class="glyphicon glyphicon-folder-close"></span> Archived Logs
 		</a>
-		<a href="{{ route('field_excel') }}" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-search"></span> Search Information <span class="badge right">{{ count($information)  }}</span></a>
+		<a href="{{ route('information.index') }}" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-search"></span> Search Information <span class="badge right">{{ count($information)  }}</span></a>
 		<a href="" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-user"></span> Manage Users <span class="badge right">{{ count($users)  }}</span></a>
 		<a href="{{ route('owner.index') }}" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-map-marker"></span> Create Owners <span class="badge right">{{ count($owners)  }}</span></a>
 		<a href="{{ route('status.index') }}" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-exclamation-sign"></span> Statuses <span class="badge right">{{ count($status) }}</span></a>

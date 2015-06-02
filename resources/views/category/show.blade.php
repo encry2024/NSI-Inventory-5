@@ -7,7 +7,7 @@
 			<ol class="breadcrumb" style=" margin-left: 1.5rem; ">
 				<li><label>Inventory</label>
 				<li><a href="{{ route('home') }}" class="active">Home</a></li>
-				<li><label>{{ $category->name }}</label>
+				<li><label>{{ $category->name }}</label></li>
 			</ol>
 		</div>
 	</div>
@@ -20,7 +20,7 @@
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('create_device', [$category->slug])  }}"><span class="glyphicon glyphicon-plus"></span> Create {{ str_limit($category->name, $limit='10', $end='...') }}</a>
 			<a href="{{ route('device_excel', [$category->slug]) }}" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-share-alt"></span> Import {{ str_limit($category->name, $limit='10', $end='...') }} Devices</a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('category.show', [$category->slug])  }}"><span class="glyphicon glyphicon-info-sign"></span> {{str_limit($category->name, $limit='10', $end='...')}} Profile</a>
-			<a role="button" class="btn btn-default col-lg-12 text-left" href="#"><span class="glyphicon glyphicon-book"></span> {{str_limit($category->name, $limit='10', $end='...')}} History <span class="badge right">0</span></a>
+			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('ch', [$category->slug]) }}"><span class="glyphicon glyphicon-book"></span> {{str_limit($category->name, $limit='10', $end='...')}} History</a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="#"><span class="glyphicon glyphicon-trash"></span> Deleted {{str_limit($category->name, $limit='10', $end='...')}}s <span class="badge right">0</span></a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="#" data-toggle="modal" data-target="#deleteCategory"><span class="glyphicon glyphicon-remove"></span> Delete {{ str_limit($category->name, $limit='10', $end='...') }}</a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('home')  }}"><span class="glyphicon glyphicon-chevron-left"></span> Return to home</a>

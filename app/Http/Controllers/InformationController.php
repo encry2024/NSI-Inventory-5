@@ -15,7 +15,7 @@ class InformationController extends Controller {
 	 */
 	public function index()
 	{
-		//
+		return view('field.index');
 	}
 
 	/**

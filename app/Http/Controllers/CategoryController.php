@@ -4,11 +4,13 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use App\Category;
-use App\Field;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Http\Requests\CreateFieldRequest;
 use Illuminate\Support\Facades\Input;
+use App\Category;
+use App\Field;
+use App\DeviceLog;
+use App\Device;
 
 class CategoryController extends Controller {
 
@@ -107,6 +109,18 @@ class CategoryController extends Controller {
 
 	public function excelIndex() {
 		return view('import.excel');
+	}
+
+	public function categoryHistory( $category_slug ) {
+		$category_history = Category::fetch_history( $category_slug );
+
+		return $category_history;
+	}
+
+	public function viewCategoryHistory( $category_slug ) {
+		$category = Category::whereSlug( $category_slug )->first();
+
+		return view('category.history', compact('category'));
 	}
 
 }

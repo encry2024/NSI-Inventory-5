@@ -114,6 +114,31 @@ class Category extends Eloquent implements SluggableInterface {
 		return json_encode($json);
 	}
 
+	public static function fetch_history( $category_slug ) {
+		$json = [];
+		$category = Category::whereSlug($category_slug)->first();
+		$device_logs = DeviceLog::all();
+
+		foreach($device_logs as $device_log) {
+			if ($device_log->device->category_id == $category->id) {
+				$json[] = [
+					'device_slug' => $device_log->device->slug,
+					'device_name' => $device_log->device->name,
+					'owner_slug' => $device_log->owner->slug,
+					'owner_name' => $device_log->owner->fullName(),
+					'user_slug' => $device_log->user->slug,
+					'assigned_by' => $device_log->user->name,
+					'action' => $device_log->action,
+					'date_assigned' => date('m/d/Y h:i A', strtotime($device_log->created_at)),
+				];
+			}
+		}
+
+		return json_encode($json);
+	}
+
+
+
 	public function associated_devices() {
 		return $this->devices()->where('owner_id', '!=', '0')->get();
 	}

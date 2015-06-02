@@ -11,9 +11,10 @@ Route::bind('information', 	function( $id )  	{ return App\Information::find($id
 
 # ROUTE RESOURCE
 Route::resource('category', 'CategoryController');
-
+// GET
+get('{category_slug}/category_history', ['as' => 'c_h', 'uses' => 'CategoryController@categoryHistory']);
+get('{category_slug}/history', ['as' => 'ch', 'uses' => 'CategoryController@viewCategoryHistory']);
 # DEVICE RESOURCE
-
 Route::resource('device', 'DeviceController');
 // GET
 get('fetch/devices/{category_id}', ['as' => 'fetch_devices', 'uses' => 'DeviceController@fetch']);
@@ -74,12 +75,15 @@ get('device_logs/old', ['as' => 'o_d_l', 'uses' => 'OldDeviceLogController@oldDe
 get('old_device_logs', ['as' => 'odl', 'uses' => 'OldDeviceLogController@index']);
 
 # IMPORT EXCELS
+// CATEGORIES
 get('import_excel/categories', ['as' => 'category_excel', 'uses' => 'CategoryController@excelIndex']);
 post('open_excel', ['as' => 'openFile', 'uses' => 'CategoryController@openExcel']);
+// DEVICES
 get('import_excel/devices', ['as' => 'device_excel', 'uses' => 'DeviceController@deviceIndex']);
 post('import_devices', ['as' => 'importDevice', 'uses' => 'DeviceController@openExcel']);
-get('import_owner', ['as' => 'owner_excel', 'uses' => 'OwnerController@ownerIndex']);
+// OWNERS
+get('import_excel/owner', ['as' => 'owner_excel', 'uses' => 'OwnerController@ownerIndex']);
 post('open_owner', ['as' => 'importOwner', 'uses' => 'OwnerController@openExcel']);
-get('fields', ['as' => 'field_excel', 'uses' => 'FieldController@index']);
+// FIELDS
 get('import_excel/fields', ['as' => 'import_field', 'uses' => 'FieldController@showImport']);
 post('import_fields', ['as' => 'importField', 'uses' => 'FieldController@importFields']);
