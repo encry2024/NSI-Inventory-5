@@ -5944,7 +5944,6 @@ button.close {
   border-bottom-color: #000;
 }
 .popover {
-  width: 50%;
   position: absolute;
   top: 0;
   left: 0;

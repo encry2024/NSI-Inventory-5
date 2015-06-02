@@ -13,7 +13,7 @@ Route::bind('information', 	function( $id )  	{ return App\Information::find($id
 Route::resource('category', 'CategoryController');
 // GET
 get('{category_slug}/category_history', ['as' => 'c_h', 'uses' => 'CategoryController@categoryHistory']);
-get('{category_slug}/history', ['as' => 'ch', 'uses' => 'CategoryController@viewCategoryHistory']);
+get('{category_slug}/associate-dissociate-history', ['as' => 'ch', 'uses' => 'CategoryController@viewCategoryHistory']);
 # DEVICE RESOURCE
 Route::resource('device', 'DeviceController');
 // GET
