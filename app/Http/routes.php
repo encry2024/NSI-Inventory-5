@@ -13,15 +13,25 @@ Route::bind('information', 	function( $id )  	{ return App\Information::find($id
 Route::resource('category', 'CategoryController');
 
 # DEVICE RESOURCE
+
+Route::resource('device', 'DeviceController');
+// GET
 get('fetch/devices/{category_id}', ['as' => 'fetch_devices', 'uses' => 'DeviceController@fetch']);
 get('category/{category_slug}/create', ['as' => 'create_device', 'uses' => 'DeviceController@create']);
 get('device/status/{device_id}', ['as' => 'fetch_device_statuses', 'uses' => 'DeviceController@fetchStatus']);
 get('getDeviceHistory/{device_id}', ['as' => 'device_assoc_history' ,'uses' => 'DeviceController@assocHistory']);
 get('device_information', ['as' => 'fetch_devices_information', 'uses' => 'DeviceController@deviceInformation']);
+get('category/{category_slug}/associated_devices', ['as' => 'assocdev', 'uses' => 'DeviceController@assocDev']);
+get('{category_slug}/associated_devices', ['as' => 'assoc_dev', 'uses' => 'DeviceController@showAssocDev']);
+get('category/{category_slug}/available_devices', ['as' => 'availdev', 'uses' => 'DeviceController@availDev']);
+get('{category_slug}/available_devices', ['as' => 'avail_device', 'uses' => 'DeviceController@showAvailDev']);
+get('category/{category_slug}/defective_devices', ['as' => 'defectdev', 'uses' => 'DeviceController@defectDev']);
+get('{category_slug}/defective_devices', ['as' => 'defect_device', 'uses' => 'DeviceController@showDefectDev']);
+
+// POST
 post('device/associate/{device_id}', ['as' => 'device_associate', 'uses' => 'DeviceController@associateDevice']);
 post('device/disassociate/{device_id}', ['as' => 'device_disassociate', 'uses' => 'DeviceController@disassociateDevice']);
 post('change/status/{device_id}', ['as' => 'change_status', 'uses' => 'DeviceController@changeStatus']);
-Route::resource('device', 'DeviceController');
 
 # STATUS RESOURCE
 post('status/delete', ['as' => 'delete_status', 'uses' => 'StatusController@deleteStatus']);

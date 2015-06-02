@@ -73,22 +73,6 @@ class Category extends Eloquent implements SluggableInterface {
 		return redirect()->route('category.create')->with('success_msg', 'Category :: '.$ctg_name.' is successfully saved.');
 	}
 
-	public static function fetchCategories() {
-		$json = array();
-		$categories = Category::all();
-		foreach ($categories as $category) {
-			$json[] = array(
-				'id' 				=> $category->id,
-				'slug'              => $category->slug,
-				'name' 				=> $category->name,
-				'total_devices'		=> count($category->devices),
-				'updated_at' 		=> date('F d, Y [ h:i A D ]', strtotime($category->updated_at)),
-				'updated_at_2'		=> date('Ymdhis', strtotime($category->updated_at))
-			);
-		}
-		return json_encode($json);
-	}
-
 	public static function importCategory() {
 		$file = Input::file( 'xl' );
 
@@ -105,5 +89,40 @@ class Category extends Eloquent implements SluggableInterface {
 		}
 
 		return redirect()->back()->with('success_msg', 'Files has been successfully imported.');
+	}
+
+	//total_device
+	/*assoc_device
+	av_device
+	def_device*/
+	public static function fetchCategories() {
+		$json = array();
+		$categories = Category::all();
+		foreach ($categories as $category) {
+			$json[] = array(
+				'id' 				=> $category->id,
+				'slug'              => $category->slug,
+				'name' 				=> $category->name,
+				'assoc_device'		=> count($category->associated_devices()),
+				'av_device'			=> count($category->av_device()),
+				'total_devices'		=> count($category->devices),
+				'def_device'		=> count($category->def_device()),
+				'updated_at' 		=> date('F d, Y', strtotime($category->updated_at)),
+				'time_updated'		=> date('[ h:i A D ]', strtotime($category->updated_at))
+			);
+		}
+		return json_encode($json);
+	}
+
+	public function associated_devices() {
+		return $this->devices()->where('owner_id', '!=', '0')->get();
+	}
+
+	public function av_device() {
+		return $this->devices()->where('availability', 'Available')->get();
+	}
+
+	public function def_device() {
+		return $this->devices()->where('status_id', '!=', 1)->get();
 	}
 }

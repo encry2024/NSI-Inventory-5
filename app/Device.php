@@ -262,4 +262,56 @@ class Device extends Eloquent implements SluggableInterface {
 
 		return json_encode($json);
 	}
+
+	public static function assoc_device($category_slug) {
+		$json = [];
+		$category = Category::whereSlug($category_slug)->first();
+		$devices = Device::where('category_id', $category->id)->where('owner_id','!=','0')->get();
+
+		foreach ($devices as $device) {
+			$json[] = [
+				'device_slug' => $device->slug,
+				'device_name' => $device->name,
+				'owner_slug' => $device->owner->slug,
+				'owner_name' => $device->owner->fullName(),
+			];
+		}
+
+		return json_encode($json);
+	}
+
+	public static function avail_device($category_slug) {
+		$json = [];
+		$category = Category::whereSlug($category_slug)->first();
+		$devices = Device::where('availability', 'Available')->where('category_id', $category->id)->get();
+
+		foreach ($devices as $device) {
+			$json[] = [
+				'id' => $device->id,
+				'device_slug' => $device->slug,
+				'device_name' => $device->name,
+			];
+		}
+
+		return json_encode($json);
+	}
+
+	public static function defect_device($category_slug) {
+		$json = [];
+		$category = Category::whereSlug($category_slug)->first();
+		$devices = Device::where('status_id', '!=', 1)->where('category_id', $category->id)->get();
+
+		foreach ($devices as $device) {
+			$json[] = [
+				'id' => $device->id,
+				'device_slug' => $device->slug,
+				'device_name' => $device->name,
+				'status_value' => $device->status->status,
+				'status_desc' => $device->status->description,
+				'status_slug' => $device->status->slug
+			];
+		}
+
+		return json_encode($json);
+	}
 }

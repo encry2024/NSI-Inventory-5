@@ -165,4 +165,40 @@ class DeviceController extends Controller {
 
 		return $device_info;
 	}
+
+	public function assocDev( $category_slug ) {
+		$associted_devices = Device::assoc_device( $category_slug );
+
+		return $associted_devices;
+	}
+
+	public function showAssocDev($category_slug) {
+		$category = Category::whereSlug($category_slug)->first();
+
+		return view('devices.associated_devices', compact('category'));
+	}
+
+	public function availDev( $category_slug ) {
+		$available_devices = Device::avail_device( $category_slug );
+
+		return $available_devices;
+	}
+
+	public function showAvailDev($category_slug) {
+		$category = Category::whereSlug($category_slug)->first();
+
+		return view('devices.available_devices', compact('category'));
+	}
+
+	public function showDefectDev($category_slug) {
+		$category = Category::whereSlug($category_slug)->first();
+
+		return view('devices.defective_devices', compact('category'));
+	}
+
+	public function defectDev( $category_slug ) {
+		$defect_devices = Device::defect_device( $category_slug );
+
+		return $defect_devices;
+	}
 }

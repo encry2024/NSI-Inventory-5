@@ -32,6 +32,7 @@
            <div class="page-header">
                 <h3>{{ $category->name  }} Category</h3>
            </div>
+           <br>
            <table id="devices" class="table">
 
            </table>

@@ -81,3 +81,8 @@
     margin-bottom: -3rem;
     margin-right: 2rem;
 }
+
+#ctgy_filter, #devices_filter, #assoc_dev_table_filter, #avail_dev_table {
+    margin-top: -2.3rem;
+    margin-bottom: 3rem;
+}

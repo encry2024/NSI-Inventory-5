@@ -20,6 +20,7 @@
            <div class="page-header">
                 <h3>Categories</h3>
            </div>
+           <br><br>
            <table id="ctgy" class="table"></table>
            <br/><br/>
         </div>
@@ -57,9 +58,9 @@
 		$('#ctgy').dataTable({
 			"aaData": data,
 			"lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
-			"aaSorting": [[ 2, 'desc' ]],
+			"aaSorting": [[ 5, 'desc' ]],
 			"oLanguage": {
-				"sLengthMenu": "No. of Items _MENU_",
+				"sLengthMenu": "Display no. of Categories _MENU_",
 				"oPaginate": {
 				"sFirst": "First ", // This is the link to the first
 				"sPrevious": "&#8592; Previous", // This is the link to the previous
@@ -72,56 +73,76 @@
 			//MDATAPROP - TBODY
 			"aoColumns":
 			[
-				{"sTitle": "#", "mDataProp": "id", "sWidth": "100px","sClass": "size-14"},
-				{"sTitle": "Category", "sWidth": "100px", "mDataProp": "name"},
-				{"sTitle": "Recent Update", "sWidth": "100px","mDataProp": "updated_at", "sType": "string"}
+				{"sTitle": "Category", "mDataProp": "name"},
+				{"sTitle": "# Devices", "mDataProp": "total_devices"},
+				{"sTitle": "# Associated", "mDataProp": "assoc_device"},
+				{"sTitle": "# Available", "mDataProp": "av_device"},
+				{"sTitle": "# Defective", "mDataProp": "def_device"},
+				{"sTitle": "Recent Update","mDataProp": "updated_at", "sType": "string"}
 			],
 			"aoColumnDefs":
 			[
-				//FORMAT THE VALUES THAT IS DISPLAYED ON mDataProp
-				//ID
-
-				{ "bSortable": false, "aTargets": [ 0 ] },
+				// REDIRECT TO HEADSET PROFILE
 				{
 					"aTargets": [ 0 ], // Column to target
-					"mRender": function ( data, type, full ) {
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return '<label class="text-center size-14">' + data + '</label>';
-					}
-				},
-				//CATEGORY SLUG
-				{
-					"aTargets": [ 1 ], // Column to target
 					"mRender": function ( data, type, full ) {
 					    var url = '{{ route('category.show', ":slug") }}';
 					    url = url.replace(':slug', full["slug"]);
 						// 'full' is the row's data object, and 'data' is this column's data
 						// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-						return "<a href='" + url + "' class='size-14 text-left'>" + full["name"] + "</a>";
+						return "<a href='" + url + "' class='size-14 text-left'>" + data + "</a>";
 					}
 				},
-                //CATEGORY RECENT UPDATE
+				{
+					"aTargets": [ 1 ], // Column to target
+					"mRender": function ( data, type, full ) {
+					    
+						// 'full' is the row's data object, and 'data' is this column's data
+						// e.g. 'full[0]' is the comic id, and 'data' is the comic title
+						return "<label class='size-14 text-left'>" + data + "</label>";
+					}
+				},
 				{
 					"aTargets": [ 2 ], // Column to target
 					"mRender": function ( data, type, full ) {
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return '<label class="text-center size-14"> ' + full["updated_at"] + ' </label>';
+						var url = '{{ route('assoc_dev', ":slug") }}';
+						url = url.replace(':slug', full['slug']);
+						// 'full' is the row's data object, and 'data' is this column's data
+						// e.g. 'full[0]' is the comic id, and 'data' is the comic title
+						return "<a href='" + url + "' class='size-14 text-left'>" + data + "</a>";
 					}
 				},
-			],
-
-			"fnDrawCallback": function( oSettings ) {
-				/* Need to redo the counters if filtered or sorted */
-				if ( oSettings.bSorted || oSettings.bFiltered )
 				{
-					for ( var i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ )
-					{
-						$('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( "<label>" + (i+1) + "</label>" );
+					"aTargets": [ 3 ], // Column to target
+					"mRender": function ( data, type, full ) {
+					    var url = '{{ route('avail_device', ":slug") }}';
+						url = url.replace(':slug', full['slug']);
+						// 'full' is the row's data object, and 'data' is this column's data
+						// e.g. 'full[0]' is the comic id, and 'data' is the comic title
+						return "<a href='" + url + "' class='size-14 text-left'>" + data + "</a>";
 					}
-				}
-			}
+				},
+				{
+					"aTargets": [ 4 ], // Column to target
+					"mRender": function ( data, type, full ) {
+					    var url = '{{ route('defect_device', ":slug") }}';
+						url = url.replace(':slug', full['slug']);
+						// 'full' is the row's data object, and 'data' is this column's data
+						// e.g. 'full[0]' is the comic id, and 'data' is the comic title
+						return "<a href='" + url + "' class='size-14 text-left'>" + data + "</a>";
+					}
+				},
+				
+                //CATEGORY RECENT UPDATE
+				{
+					"aTargets": [ 5 ], // Column to target
+					"mRender": function ( data, type, full ) {
+					// 'full' is the row's data object, and 'data' is this column's data
+					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
+					return '<label class="text-center size-14"> ' + data + '</br>' + full['time_updated'] + ' </label>';
+					}
+				},
+			]
 		});
 	$('div.dataTables_filter input').attr('placeholder', 'Filter Categories');
 });

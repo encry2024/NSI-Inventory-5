@@ -119,7 +119,6 @@
 				{"sTitle": "Device Name", "mDataProp": "device_name"},
 				{"sTitle": "Action", "mDataProp": "action"},
 				{"sTitle": "Assigned By", "mDataProp": "user"},
-
 				{"sTitle": "Date Associated/Disassociated", "mDataProp": "created_at"}
 
 			],
@@ -160,7 +159,7 @@
 				},
 				//CATEGORY RECENT UPDATE
 				{
-					"aTargets": [ 2 ], // Column to target
+					"aTargets": [ 3 ], // Column to target
 					"mRender": function ( data, type, full ) {
 					// 'full' is the row's data object, and 'data' is this column's data
 					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
