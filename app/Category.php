@@ -6,12 +6,15 @@ use Cviebrock\EloquentSluggable\SluggableTrait;
 use Cviebrock\EloquentSluggable\SluggableInterface;
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Commands\ImportCategoryCommand;
+use Illuminate\Foundation\Bus\DispatchesCommands;
 
 class Category extends Eloquent implements SluggableInterface {
 
 	//
     use SoftDeletes;
     use SluggableTrait;
+    use DispatchesCommands;
 
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
@@ -20,8 +23,7 @@ class Category extends Eloquent implements SluggableInterface {
 
     protected $sluggable = array( 'build_from' => 'name' );
 
-    public function getFullnameAttribute()
-    {
+    public function getFullnameAttribute() {
         return $this->name;
     }
 
@@ -73,22 +75,16 @@ class Category extends Eloquent implements SluggableInterface {
 		return redirect()->route('category.create')->with('success_msg', 'Category :: '.$ctg_name.' is successfully saved.');
 	}
 
-	public static function importCategory() {
+	public function importCategory() {
+		# Get the file
 		$file = Input::file( 'xl' );
-
-		//move the file to storage/uploads folder with its original file name
+		# Send the file to the dispatcher
 		$file->move(storage_path() . '/uploads', $file->getClientOriginalName());
 
 		//Load the sheet and convert it into array
 		$sheet = Excel::load( storage_path() . '/uploads/' . $file->getClientOriginalName())->toArray();
-
-		foreach ($sheet as $row) {
-			$new_category = new Category();
-			$new_category->name = $row['name'];
-			$new_category->save();
-		}
-
-		return redirect()->back()->with('success_msg', 'Files has been successfully imported.');
+		//
+		$this->dispatch(new ImportCategoryCommand($sheet));
 	}
 
 	//total_device
@@ -126,10 +122,32 @@ class Category extends Eloquent implements SluggableInterface {
 					'device_name' => $device_log->device->name,
 					'owner_slug' => $device_log->owner->slug,
 					'owner_name' => $device_log->owner->fullName(),
-					'user_slug' => $device_log->user->slug,
+					'user_slug' => $device_log->user->id,
 					'assigned_by' => $device_log->user->name,
 					'action' => $device_log->action,
 					'date_assigned' => date('m/d/Y h:i A', strtotime($device_log->created_at)),
+				];
+			}
+		}
+
+		return json_encode($json);
+	}
+
+	public static function fetch_status_history( $category_slug ) {
+		$json = [];
+		$category = Category::whereSlug($category_slug)->first();
+		$device_statuses = DeviceStatus::all();
+
+		foreach ($device_statuses as $device_status) {
+			if ($device_status->device->category_id == $category->id) {
+				$json[] = [
+					'device_slug' => $device_status->device->slug,
+					'device_name' => $device_status->device->name,
+					'user_slug' => $device_status->user->id,
+					'user_name' => $device_status->user->name,
+					'status_label' => $device_status->status->status,
+					'status_descrip' => $device_status->status->description,
+					'created_at' => date('m/d/Y h:i A', strtotime($device_status->created_at))
 				];
 			}
 		}

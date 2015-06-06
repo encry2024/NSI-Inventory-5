@@ -4,6 +4,8 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Commands\ImportInformationCommand;
+use Illuminate\Foundation\Bus\DispatchesCommands;
 
 class Information extends Eloquent {
 
@@ -11,7 +13,8 @@ class Information extends Eloquent {
 	use SoftDeletes;
 	protected $fillable = ['value'];
 	protected $touches = ['field', 'device'];
-
+	use DispatchesCommands;
+	
 	protected $softDelete = true;
 
 	public function field() {
@@ -33,10 +36,17 @@ class Information extends Eloquent {
 		return redirect()->back();
 	}
 
-	public static function importInformation() {
+	public function importInformation() {
 		set_time_limit(0);
-
 		$file = Input::file( 'xl' );
+		# Send the file to the dispatcher
+		$file->move(storage_path() . '/uploads', $file->getClientOriginalName());
+
+		//Load the sheet and convert it into array
+		$sheet = Excel::load( storage_path() . '/uploads/' . $file->getClientOriginalName())->toArray();
+		//
+		$this->dispatch(new ImportInformationCommand($sheet));
+		/*$file = Input::file( 'xl' );
 
 		//move the file to storage/uploads folder with its original file name
 		$file->move(storage_path() . '/uploads', $file->getClientOriginalName());
@@ -52,6 +62,6 @@ class Information extends Eloquent {
 			$new_information->save();
 		}
 
-		return redirect()->back()->with('success_msg', 'Files has been successfully imported.');
+		return redirect()->back()->with('success_msg', 'Files has been successfully imported.');*/
 	}
 }

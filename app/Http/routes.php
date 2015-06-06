@@ -14,6 +14,9 @@ Route::resource('category', 'CategoryController');
 // GET
 get('{category_slug}/category_history', ['as' => 'c_h', 'uses' => 'CategoryController@categoryHistory']);
 get('{category_slug}/associate-dissociate-history', ['as' => 'ch', 'uses' => 'CategoryController@viewCategoryHistory']);
+get('{category_slug}/statuses', ['as' => 'sh', 'uses' => 'CategoryController@viewCategoryStatusesHistory']);
+get('{category_slug}/statuses_history', ['as' => 'c_s_h', 'uses' => 'CategoryController@categoryStatusHistory']);
+
 # DEVICE RESOURCE
 Route::resource('device', 'DeviceController');
 // GET
@@ -28,7 +31,6 @@ get('category/{category_slug}/available_devices', ['as' => 'availdev', 'uses' =>
 get('{category_slug}/available_devices', ['as' => 'avail_device', 'uses' => 'DeviceController@showAvailDev']);
 get('category/{category_slug}/defective_devices', ['as' => 'defectdev', 'uses' => 'DeviceController@defectDev']);
 get('{category_slug}/defective_devices', ['as' => 'defect_device', 'uses' => 'DeviceController@showDefectDev']);
-
 // POST
 post('device/associate/{device_id}', ['as' => 'device_associate', 'uses' => 'DeviceController@associateDevice']);
 post('device/disassociate/{device_id}', ['as' => 'device_disassociate', 'uses' => 'DeviceController@disassociateDevice']);

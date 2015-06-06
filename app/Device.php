@@ -161,7 +161,6 @@ class Device extends Eloquent implements SluggableInterface {
 					'user_slug' => $device_log->user->slug,
 					'campaign' => $d_o->owner->location,
 					'category_name' => $d_o->category->name,
-
 					'user_id' => $device_log->user->id,
 					'device_name' => $device_log->device->name,
 					'user_name' => $device_log->user->name,

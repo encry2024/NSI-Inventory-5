@@ -19,15 +19,15 @@ class CategoryController extends Controller {
 	 *
 	 * @return Response
 	 */
-    public function __construct(Category $category) {
-        $this->category = $category;
-    }
+	public function __construct(Category $category) {
+		$this->category = $category;
+	}
 
 
 	public function index()
 	{
 		//
-       $fetch_categories = Category::fetchCategories();
+	   $fetch_categories = Category::fetchCategories();
 
 		return $fetch_categories;
 	}
@@ -40,7 +40,7 @@ class CategoryController extends Controller {
 	public function create()
 	{
 		//
-        return view('category.create');
+		return view('category.create');
 	}
 
 	/**
@@ -51,7 +51,7 @@ class CategoryController extends Controller {
 	public function store(CreateFieldRequest $f_requests, CreateCategoryRequest $request, Category $category )
 	{
 		//
-        $store_category = Category::storeCategory($f_requests, $request, $category);
+		$store_category = Category::storeCategory($f_requests, $request, $category);
 
 		return $store_category;
 	}
@@ -64,7 +64,9 @@ class CategoryController extends Controller {
 	 */
 	public function show(Category $category)
 	{
-        return view('category.show', compact('category'));
+		$deleted_device = Device::onlyTrashed()->where('category_id', $category->id)->get();
+		
+		return view('category.show', compact('category', 'deleted_device'));
 	}
 
 	/**
@@ -121,6 +123,17 @@ class CategoryController extends Controller {
 		$category = Category::whereSlug( $category_slug )->first();
 
 		return view('category.history', compact('category'));
+	}
+
+	public function categoryStatusHistory( $category_slug ) {
+		$category_status_history = Category::fetch_status_history( $category_slug );
+
+		return $category_status_history;
+	}
+
+	public function viewCategoryStatusesHistory($category_slug) {
+		$category = Category::whereSlug($category_slug)->first();
+		return view('category.device_statuses', compact('category'));
 	}
 
 }

@@ -26,18 +26,17 @@
 			</div>
 			<?php echo Form::open(['route' => ['openFile'], 'files' => true]); ?>
 
-			<?php echo Form::file('xl', null); ?>
-
+			<input type="file" name="xl" id="xl">
 			<br/>
-			<?php echo Form::submit('Import to Database', ['class'=>'Form-control btn btn-primary']); ?>
-
+			<input class="btn btn-primary" type="submit" value="Upload XLS""></input>
 			<?php echo Form::close(); ?>
 
-			<table id="devices" class="table"></table>
 			<br/><br/>
 		</div>
 	</div>
  </div>
 <?php $__env->stopSection(); ?>
 
+<?php $__env->startSection('script'); ?>
+<?php $__env->stopSection(); ?>
 <?php echo $__env->make('app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

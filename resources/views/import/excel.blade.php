@@ -27,13 +27,15 @@
 				<h3>Import Categories</h3>
 			</div>
 			{!! Form::open(['route' => ['openFile'], 'files' => true]) !!}
-			{!! Form::file('xl', null) !!}
+			<input type="file" name="xl" id="xl">
 			<br/>
-			{!! Form::submit('Import to Database', ['class'=>'Form-control btn btn-primary']) !!}
+			<input class="btn btn-primary" type="submit" value="Upload XLS""></input>
 			{!! Form::close() !!}
-			<table id="devices" class="table"></table>
 			<br/><br/>
 		</div>
 	</div>
  </div>
+@stop
+
+@section('script')
 @stop

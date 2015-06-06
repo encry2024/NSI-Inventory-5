@@ -92,8 +92,8 @@ class InformationController extends Controller {
 		return view('import.information');
 	}
 
-	public function importInformation() {
-		$import_information = Information::importInformation();
+	public function importInformation(Information $information) {
+		$import_information = $information->importInformation();
 
 		return $import_information;
 	}
