@@ -103,14 +103,16 @@ class CategoryController extends Controller {
 		return redirect('/')->with('success_msg', 'Category was successfully deleted');
 	}
 
-	public function openExcel() {
-		$import_excel = Category::importCategory();
+	public function openExcel(Category $category) {
+		$import_excel = $category->importCategory();
 
 		return $import_excel;
 	}
 
 	public function excelIndex() {
-		return view('import.excel');
+		$ctr = 0;
+
+		return view('import.excel', compact('ctr'));
 	}
 
 	public function categoryHistory( $category_slug ) {

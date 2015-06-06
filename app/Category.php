@@ -118,13 +118,13 @@ class Category extends Eloquent implements SluggableInterface {
 		foreach($device_logs as $device_log) {
 			if ($device_log->device->category_id == $category->id) {
 				$json[] = [
-					'device_slug' => $device_log->device->slug,
-					'device_name' => $device_log->device->name,
-					'owner_slug' => $device_log->owner->slug,
-					'owner_name' => $device_log->owner->fullName(),
-					'user_slug' => $device_log->user->id,
-					'assigned_by' => $device_log->user->name,
-					'action' => $device_log->action,
+					'device_slug' 	=> $device_log->device->slug,
+					'device_name' 	=> $device_log->device->name,
+					'owner_slug' 	=> $device_log->owner->slug,
+					'owner_name' 	=> $device_log->owner->fullName(),
+					'user_slug' 	=> $device_log->user->id,
+					'assigned_by' 	=> $device_log->user->name,
+					'action' 		=> $device_log->action,
 					'date_assigned' => date('m/d/Y h:i A', strtotime($device_log->created_at)),
 				];
 			}
@@ -141,13 +141,13 @@ class Category extends Eloquent implements SluggableInterface {
 		foreach ($device_statuses as $device_status) {
 			if ($device_status->device->category_id == $category->id) {
 				$json[] = [
-					'device_slug' => $device_status->device->slug,
-					'device_name' => $device_status->device->name,
-					'user_slug' => $device_status->user->id,
-					'user_name' => $device_status->user->name,
-					'status_label' => $device_status->status->status,
-					'status_descrip' => $device_status->status->description,
-					'created_at' => date('m/d/Y h:i A', strtotime($device_status->created_at))
+					'device_slug' 		=> $device_status->device->slug,
+					'device_name' 		=> $device_status->device->name,
+					'user_slug' 		=> $device_status->user->id,
+					'user_name' 		=> $device_status->user->name,
+					'status_label' 		=> $device_status->status->status,
+					'status_descrip' 	=> $device_status->status->description,
+					'created_at' 		=> date('m/d/Y h:i A', strtotime($device_status->created_at))
 				];
 			}
 		}
