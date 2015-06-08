@@ -37,6 +37,7 @@ class Category extends Eloquent implements SluggableInterface {
 		foreach ($devices as $cat_dev) {
 			$cat_dev->category_id = 0;
 			$cat_dev->save();
+			$cat_dev->touch();
 		}
 
 		foreach ($this->fields as $category_fields) {

@@ -313,4 +313,19 @@ class Device extends Eloquent implements SluggableInterface {
 
 		return json_encode($json);
 	}
+
+	public static function fetch_uncategorizedDevices() {
+		$json = [];
+		$devices = Device::where('category_id' , 0)->withTrashed()->get();
+
+		foreach ($devices as $device) {
+			$json[] = [
+				'device_slug' => $device->slug,
+				'device_name' => $device->name,
+				'category' => 'Uncategorized Device'
+			];
+		}
+
+		return json_encode($json);
+	}
 }

@@ -209,4 +209,14 @@ class DeviceController extends Controller {
 
 		return $defect_devices;
 	}
+
+	public function view_uncategorizedDevices() {
+		return view('devices.uncategorized_devices');
+	}
+
+	public function fetch_uncategorized_devices() {
+		$fetch_u_d = Device::fetch_uncategorizedDevices();
+
+		return $fetch_u_d;
+	}
 }

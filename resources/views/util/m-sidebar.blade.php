@@ -22,7 +22,7 @@
 		<a href="#" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-ban-circle"></span> Defective Devices <span class="badge right">{{ count($defective_devices) }}</span></a>
 		<a href="{{ route('dC') }}" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-trash"></span> Deleted Categories <span class="badge right">{{ count($deleted_categories) }}</span></a>
 		<a href="" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-ok"></span> Available Devices <span class="badge right">{{ count($available_devices) }}</span></a>
-		<a href="" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-calendar"></span> Uncategorized Devices <span class="badge right">{{ count($uncategorized_devices) }}</span></a>
+		<a href="{{ route('') }}" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-calendar"></span> Uncategorized Devices <span class="badge right">{{ count($uncategorized_devices) }}</span></a>
 		</a>
 	</div>
 </div>
