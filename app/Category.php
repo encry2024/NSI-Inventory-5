@@ -6,38 +6,35 @@ use Cviebrock\EloquentSluggable\SluggableTrait;
 use Cviebrock\EloquentSluggable\SluggableInterface;
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Commands\ImportCategoryCommand;
-use Illuminate\Foundation\Bus\DispatchesCommands;
 
 class Category extends Eloquent implements SluggableInterface {
 
 	//
-    use SoftDeletes;
-    use SluggableTrait;
-    use DispatchesCommands;
+	use SoftDeletes;
+	use SluggableTrait;
 
-    protected $softDelete = true;
-    protected $dates = ['deleted_at'];
+	protected $softDelete = true;
+	protected $dates = ['deleted_at'];
 
-    protected $fillable = ['name', 'slug'];
+	protected $fillable = ['name', 'slug'];
 
-    protected $sluggable = array( 'build_from' => 'name' );
+	protected $sluggable = array( 'build_from' => 'name' );
 
-    public function getFullnameAttribute() {
-        return $this->name;
-    }
+	public function getFullnameAttribute() {
+		return $this->name;
+	}
 
-    public function fields() {
-        return $this->hasMany('App\Field');
-    }
+	public function fields() {
+		return $this->hasMany('App\Field');
+	}
 
-    public function devices() {
-        return $this->hasMany('App\Device');
-    }
+	public function devices() {
+		return $this->hasMany('App\Device');
+	}
 
 	public function delete() {
-		// $device_info = $this->devices;
-		foreach ($this->devices as $cat_dev) {
+		$devices = $this->devices()->withTrashed()->get();
+		foreach ($devices as $cat_dev) {
 			$cat_dev->category_id = 0;
 			$cat_dev->save();
 		}
@@ -50,13 +47,13 @@ class Category extends Eloquent implements SluggableInterface {
 		return parent::delete();
 	}
 
-    public function audit() {
-        return $this->hasMany('Audit');
-    }
+	public function audit() {
+		return $this->hasMany('Audit');
+	}
 
-    public function devicelogs() {
-        return $this->hasManyThrough('DeviceLog', 'Device', 'item_id', 'device_id');
-    }
+	public function devicelogs() {
+		return $this->hasManyThrough('DeviceLog', 'Device', 'item_id', 'device_id');
+	}
 
 	public static function storeCategory( $f_requests, $request , $category) {
 		$category->name = $request['name'];
@@ -71,33 +68,34 @@ class Category extends Eloquent implements SluggableInterface {
 			$field->category_label = $ctg_label;
 			$field->save();
 		}
-
 		return redirect()->route('category.create')->with('success_msg', 'Category :: '.$ctg_name.' is successfully saved.');
 	}
 
 	public function importCategory() {
-		# Get the file
 		$file = Input::file( 'xl' );
-		# Send the file to the dispatcher
+
 		$file->move(storage_path() . '/uploads', $file->getClientOriginalName());
 
-		//Load the sheet and convert it into array
 		$sheet = Excel::load( storage_path() . '/uploads/' . $file->getClientOriginalName())->toArray();
-		//
-		$this->dispatch(new ImportCategoryCommand($sheet));
+
+		foreach ($sheet as $row) {
+			$new_information = new Information();
+			$new_information->device_id = $row['device_id'];
+			$new_information->field_id = $row['field_id'];
+			$new_information->value = $row['value'];
+			$new_information->save();
+		}
+
+		return redirect()->back();
 	}
 
-	//total_device
-	/*assoc_device
-	av_device
-	def_device*/
 	public static function fetchCategories() {
 		$json = array();
 		$categories = Category::all();
 		foreach ($categories as $category) {
 			$json[] = array(
 				'id' 				=> $category->id,
-				'slug'              => $category->slug,
+				'slug'				=> $category->slug,
 				'name' 				=> $category->name,
 				'assoc_device'		=> count($category->associated_devices()),
 				'av_device'			=> count($category->av_device()),
@@ -150,6 +148,22 @@ class Category extends Eloquent implements SluggableInterface {
 					'created_at' 		=> date('m/d/Y h:i A', strtotime($device_status->created_at))
 				];
 			}
+		}
+
+		return json_encode($json);
+	}
+
+	public static function fetch_del_cat() {
+		$json = [];
+		$categories = Category::onlyTrashed()->get();
+
+		foreach ($categories as $category) {
+			$json[] = [
+				'category_id' => $category->id,
+				'category_slug' => $category->slug,
+				'category_name' => $category->name,
+				'deleted_at' => date('F d, Y h:i A', strtotime($category->deleted_at))
+			];
 		}
 
 		return json_encode($json);

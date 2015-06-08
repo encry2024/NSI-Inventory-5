@@ -48,7 +48,8 @@ class CategoryController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(CreateFieldRequest $f_requests, CreateCategoryRequest $request, Category $category )
+	public function store(CreateFieldRequest $f_requests, CreateCategoryRequest $request,
+						  Category $category )
 	{
 		//
 		$store_category = Category::storeCategory($f_requests, $request, $category);
@@ -110,9 +111,7 @@ class CategoryController extends Controller {
 	}
 
 	public function excelIndex() {
-		$ctr = 0;
-
-		return view('import.excel', compact('ctr'));
+		return view('import.excel');
 	}
 
 	public function categoryHistory( $category_slug ) {
@@ -135,7 +134,18 @@ class CategoryController extends Controller {
 
 	public function viewCategoryStatusesHistory($category_slug) {
 		$category = Category::whereSlug($category_slug)->first();
+		
 		return view('category.device_statuses', compact('category'));
+	}
+
+	public function view_deletedCategory() {
+		return view('category.deleted_category');
+	}
+
+	public function fetch_deleted_categories() {
+		$fetchDeletedCategories = Category::fetch_del_cat();
+
+		return $fetchDeletedCategories;
 	}
 
 }

@@ -10,12 +10,16 @@ Route::bind('note', 		function( $id )		{ return App\Note::find($id); });
 Route::bind('information', 	function( $id )  	{ return App\Information::find($id); });
 
 # ROUTE RESOURCE
+
+# CATEGORY RESOURCE
 Route::resource('category', 'CategoryController');
 // GET
 get('{category_slug}/category_history', ['as' => 'c_h', 'uses' => 'CategoryController@categoryHistory']);
 get('{category_slug}/associate-dissociate-history', ['as' => 'ch', 'uses' => 'CategoryController@viewCategoryHistory']);
 get('{category_slug}/statuses', ['as' => 'sh', 'uses' => 'CategoryController@viewCategoryStatusesHistory']);
 get('{category_slug}/statuses_history', ['as' => 'c_s_h', 'uses' => 'CategoryController@categoryStatusHistory']);
+get('deleted_categories', ['as' => 'dC', 'uses' => 'CategoryController@view_deletedCategory']);
+get('deletedCategories', ['as' => 'd_c', 'uses' => 'CategoryController@fetch_deleted_categories']);
 
 # DEVICE RESOURCE
 Route::resource('device', 'DeviceController');

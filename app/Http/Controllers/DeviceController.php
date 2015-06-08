@@ -96,9 +96,17 @@ class DeviceController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy($device, Request $request)
 	{
 		//
+
+		$return_device = Device::find($device->id);
+		$device = $return_device->name;
+		$return_device->delete();
+
+		$category_slug = $request->get('category_slug');
+
+		return redirect(route('category.show', [$category_slug]))->with('success_msg', 'Device :: ' .$device.' was successfully deleted');
 	}
 
 	public function fetch( $category_id ) {

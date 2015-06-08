@@ -3,7 +3,7 @@
 }
 
 .right {
-    float: right;
+    float: right !important;
 }
 
 .text-left {

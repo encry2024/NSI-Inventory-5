@@ -7,6 +7,13 @@
 				<li><a href="<?php echo e(route('home')); ?>" class="active">Home</a></li>
 				<li><label><?php echo e($category->name); ?></label></li>
 			</ol>
+			<?php if(Session::has('success_msg')): ?>
+				<div class="alert alert-success" role="alert" style=" margin-left: 1.5rem; ">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<?php echo e(Session::get('success_msg')); ?>
+
+				</div>
+			<?php endif; ?>
 		</div>
 	</div>
 <?php $__env->stopSection(); ?>
@@ -106,8 +113,6 @@
 			[
 				//FORMAT THE VALUES THAT IS DISPLAYED ON mDataProp
 				//ID
-
-				{ "bSortable": false, "aTargets": [ 0 ] },
 				{
 					"aTargets": [ 0 ], // Column to target
 					"mRender": function ( data, type, full ) {

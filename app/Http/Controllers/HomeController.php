@@ -45,8 +45,9 @@ class HomeController extends Controller {
 		$available_devices = Device::where('owner_id', 0)->get();
 		$deleted_categories = Category::onlyTrashed()->get();
 		$defective_devices = Device::where('status_id', '!=', 1)->get();
+		$uncategorized_devices = Device::where('category_id', 0)->withTrashed()->get();
 
-		return view('home', compact('owners', 'users', 'information', 'status', 'assoc', 'available_devices', 'deleted_categories', 'defective_devices'));
+		return view('home', compact('owners', 'users', 'information', 'status', 'assoc', 'available_devices', 'deleted_categories', 'defective_devices', 'uncategorized_devices'));
 	}
 
 }

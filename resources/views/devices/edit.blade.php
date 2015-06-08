@@ -282,8 +282,7 @@
 	{!! Form::close() !!}
 </div>
 
-
-<!-- Delete Contact Modal -->
+<!-- DELETE DEVICE MODAL -->
 <div class="modal fade" name="deleteDevice" id="deleteDevice" tabindex="-1" role="dialog" aria-labelledby="myModalLabels" aria-hidden="true">
 	{!! Form::open(['method'=>'DELETE', 'route'=>['device.destroy', $device->slug]]) !!}
 	<div class="modal-dialog">
@@ -305,6 +304,7 @@
 			</div>
 			<br/>
 			<div class="modal-footer">
+				{!! Form::hidden('category_slug', $device->category->slug) !!}
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				<button type="submit" class="btn btn-danger">Delete</button>
 			</div>

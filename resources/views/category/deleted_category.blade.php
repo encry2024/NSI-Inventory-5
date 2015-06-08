@@ -7,8 +7,7 @@
 			<ol class="breadcrumb" style=" margin-left: 1.5rem; ">
 				<li><label>Inventory</label>
 				<li><a href="{{ route('home') }}" class="active">Home</a></li>
-				<li><a href="{{ route('category.show', [$category->slug])  }}" class="active">{{ $category->name }}</a></li>
-				<li><label>{{ $category->name }} Status History</label>
+				<li><label>Deleted Categories</label>
 			</ol>
 		</div>
 	</div>
@@ -25,12 +24,19 @@
 	<div class="col-lg-9 col-md-offset-center-2" >
 		<div class="panel panel-default col-lg-12" style="border-color: #ccc;">
 			<div class="page-header">
-				<h3>{{ $category->name }} Status History</h3>
+				<h3>Deleted Categories</h3>
 			</div>
 			<br>
-			<table id="deleted_category"></table>
+			<div class="col-lg-4 left">
+				
+			</div>
+			<div class="col-lg-8 right">
+				<table id="deleted_category"></table>
+				<br><br>
+			</div>
 			<br>
 		</div>
+
 	</div>
 </div>
 @stop
@@ -42,7 +48,7 @@ $.getJSON("{{ route('d_c') }}", function(data) {
 		"aaData": data,
 		"lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
 		"oLanguage": {
-			"sLengthMenu": "Display no. of Devices _MENU_",
+			"sLengthMenu": "# of Delete Category _MENU_",
 			"oPaginate": {
 			"sFirst": "First ", // This is the link to the first
 			"sPrevious": "&#8592; Previous", // This is the link to the previous
@@ -55,9 +61,8 @@ $.getJSON("{{ route('d_c') }}", function(data) {
 		//MDATAPROP - TBODY
 		"aoColumns":
 		[
-			{"sTitle": "Category", "width":"15%" ,"mDataProp": "category_name"},
-			{"sTitle": "Deleted by", "width":"15%" ,"mDataProp": "user_name"},
-			{"sTitle": "Date Deleted", "width":"25%" ,"mDataProp": "created_at"}
+			{"sTitle": "Category", "mDataProp": "category_name"},
+			{"sTitle": "Date Deleted", "mDataProp": "deleted_at"}
 		],
 		"aoColumnDefs":
 		[
@@ -65,45 +70,15 @@ $.getJSON("{{ route('d_c') }}", function(data) {
 			{
 				"aTargets": [ 0 ], // Column to target
 				"mRender": function ( data, type, full ) {
-					var url = '{{ route('device.edit', ":slug") }}';
-					url = url.replace(':slug', full["device_slug"]);
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return "<a href='" + url + "' class='size-14 text-left'>" + data + "</a>";
+					return "<label class='size-14 text-left'>" + data + "</label>";
 				}
 			},
 			{
 				"aTargets": [ 1 ], // Column to target
 				"mRender": function ( data, type, full ) {
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return "<a href='{{ route('status.index') }}' class='size-14 text-left'>" + data + "</a>";
-				}
-			},
-			{
-				"aTargets": [ 2 ], // Column to target
-				"mRender": function ( data, type, full ) {
 					return "<label class='size-14 text-left'>" + data + "</label>";
 				}
-			},
-			{
-				"aTargets": [ 3 ], // Column to target
-				"mRender": function ( data, type, full ) {
-					var url = '{{ route('user.edit', ":slug") }}';
-					url = url.replace(':slug', full["slug"]);
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return '<a href="'+url+'" class="size-14 text-left">' + data + '</a>';
-				}
-			},
-			{
-				"aTargets": [ 4 ], // Column to target
-				"mRender": function ( data, type, full ) {
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return '<label class="text-center size-14"> ' + data + ' </label>';
-				}
-			},
+			}
 		]
 	});
 	$('div.dataTables_filter input').attr('placeholder', 'Filter Devices');
