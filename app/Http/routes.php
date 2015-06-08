@@ -21,7 +21,7 @@ get('{category_slug}/statuses_history', ['as' => 'c_s_h', 'uses' => 'CategoryCon
 get('deleted_categories', ['as' => 'dC', 'uses' => 'CategoryController@view_deletedCategory']);
 get('fetch/deleted_categories', ['as' => 'd_c', 'uses' => 'CategoryController@fetch_deleted_categories']);
 get('uncategorized_devices', ['as' => 'u_d', 'uses' => 'DeviceController@view_uncategorizedDevices']);
-get('fetch/uncategorized_devices', ['as' => 'f_u_d', 'uses' => 'DeviceController@fetch_uncategorzed_devices']);
+get('fetch/uncategorized_devices', ['as' => 'f_u_d', 'uses' => 'DeviceController@fetch_uncategorized_devices']);
 
 # DEVICE RESOURCE
 Route::resource('device', 'DeviceController');
