@@ -17,8 +17,6 @@
 <div class="container">
     <div class="col-lg-3">
 		<div class="btn-group-vertical col-lg-12" role="group">
-			<a href="{{ route('import_field') }}" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-share-alt"></span> Import Fields</a>
-			<a href="{{ route('import_information') }}" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-share-alt"></span> Import Information</a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('home')  }}"><span class="glyphicon glyphicon-chevron-left"></span> Return to home</a>
 		</div>
 	</div>

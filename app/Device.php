@@ -339,19 +339,19 @@ class Device extends Eloquent implements SluggableInterface {
 					'slug'              => $device->slug,
 					'owner_slug'		=> $device->owner->slug,
 					'name' 				=> $device->name,
-					'category'			=> 'Uncategorized Device',
+					'category'			=> 'N/A',
 					'updated_at' 		=> date('m/d/Y h:i A', strtotime($device->updated_at)),
 				);
 			} else {
 				$json[] = array(
 					'id' 				=> $device->id,
 					'brand'				=> $brand,
-					'owner'				=> 'No Owner',
+					'owner'				=> 'N/A',
 					'status'			=> $device->status->status,
 					'tag'				=> str_limit($tag, $limit = '10', $end = '...'),
 					'slug'              => $device->slug,
 					'name' 				=> $device->name,
-					'category'			=> 'Uncategorized Device',
+					'category'			=> 'N/A',
 					'updated_at' 		=> date('m/d/Y h:i A', strtotime($device->updated_at)),
 				);
 			}

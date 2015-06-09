@@ -518,9 +518,10 @@
 					"mRender": function ( data, type, full ) {
 						var url = '{{ route('owner.show', ":slug") }}';
 						url = url.replace(':slug', full["slug"]);
+
 						// 'full' is the row's data object, and 'data' is this column's data
 						// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-						return "<a href='"+url+"' class='size-14 text-left'  data-popover='true' data-html='true' data-trigger='hover' data-content='Name: <a>" + full['fullname'] + "</a> <br/> Campaign: <a>" + full['campaign'] + "</a>'>" + data + "</a>";
+						return "<a href='"+url+"' class='size-14 text-left' data-popover='true' data-html='true' data-trigger='hover' data-content='Name: <a>" + full['fullname'] + "</a> <br/> Campaign: <a>" + full['campaign'] + "</a>'>" + data + "</a>";
 					}
 				},
 				// ASSIGNED BY
@@ -613,7 +614,7 @@
 						url = url.replace(':id', full["user_id"]);
 						// 'full' is the row's data object, and 'data' is this column's data
 						// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-						return "<a href='"+url+"' class='size-14 text-left'  data-popover='true' data-html='true' data-trigger='hover' data-content='Name: <a>" + full['name'] + "</a> <br/> User Type: <a>" + full['user_type'] + "</a>'>" + data + "</a>";
+						return "<a href='"+url+"' class='size-14 text-left' data-popover='true' data-html='true' data-trigger='hover' data-content='Name: <a>" + full['name'] + "</a> <br/> User Type: <a>" + full['user_type'] + "</a>'>" + data + "</a>";
 					}
 				},
 				//CATEGORY RECENT UPDATE

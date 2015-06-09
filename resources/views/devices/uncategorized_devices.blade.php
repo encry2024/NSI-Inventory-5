@@ -30,7 +30,6 @@
 				<table id="uncategorized_category"></table>
 			<br>
 		</div>
-
 	</div>
 </div>
 @stop

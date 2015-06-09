@@ -27,13 +27,8 @@
 				<h3>Deleted Categories</h3>
 			</div>
 			<br>
-			<div class="col-lg-4 left">
-				
-			</div>
-			<div class="col-lg-8 right">
-				<table id="deleted_category"></table>
-				<br><br>
-			</div>
+			<table id="deleted_category"></table>
+			<br><br>
 			<br>
 		</div>
 
@@ -43,6 +38,31 @@
 
 @section('script')
 <script type="text/javascript">
+var originalLeave = $.fn.popover.Constructor.prototype.leave;
+$.fn.popover.Constructor.prototype.leave = function(obj){
+	var self = obj instanceof this.constructor ?
+	obj : $(obj.currentTarget)[this.type](this.getDelegateOptions()).data('bs.' + this.type)
+	var container, timeout;
+
+	originalLeave.call(this, obj);
+
+	if(obj.currentTarget) {
+		container = $(obj.currentTarget).siblings('.popover')
+		timeout = self.timeout;
+		container.one('mouseenter', function(){
+			//We entered the actual popover – call off the dogs
+			clearTimeout(timeout);
+			//Let's monitor popover content instead
+			container.one('mouseleave', function(){
+				$.fn.popover.Constructor.prototype.leave.call(self, self);
+			});
+		})
+	}
+};
+
+$('body').popover({ selector: '[data-popover]', trigger: 'hover', placement: 'left', delay: {show: 50, hide: 50}});
+
+
 $.getJSON("{{ route('d_c') }}", function(data) {
 	$('#deleted_category').dataTable({
 		"aaData": data,
@@ -70,7 +90,8 @@ $.getJSON("{{ route('d_c') }}", function(data) {
 			{
 				"aTargets": [ 0 ], // Column to target
 				"mRender": function ( data, type, full ) {
-					return "<label class='size-14 text-left'>" + data + "</label>";
+					var icon = "";
+					return "<a href='#' class='size-14 text-left' data-popover='true' data-html='true' data-trigger='hover' data-content='<a title=&apos;Restore " + data + "&apos;><span class=&quot;glyphicon glyphicon-import&quot;></span></a>'>" + data + "</a>";
 				}
 			},
 			{

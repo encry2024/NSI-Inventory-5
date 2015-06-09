@@ -83,6 +83,7 @@ get('device_logs/old', ['as' => 'o_d_l', 'uses' => 'OldDeviceLogController@oldDe
 get('old_device_logs', ['as' => 'odl', 'uses' => 'OldDeviceLogController@index']);
 
 # IMPORT EXCELS
+
 // CATEGORIES
 get('import_excel/categories', ['as' => 'category_excel', 'uses' => 'CategoryController@excelIndex']);
 post('open_excel', ['as' => 'openFile', 'uses' => 'CategoryController@openExcel']);

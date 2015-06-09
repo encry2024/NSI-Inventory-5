@@ -36,7 +36,7 @@
 	</div>
  </div>
 
-{{-- ADD STATUS MODAL --}}
+<!-- ADD STATUS MODAL -->
 <div class="modal fade" id="addStatus" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	{!! Form::open(['route'=>['status.store']]) !!}
 	<div class="modal-dialog">
