@@ -69,6 +69,7 @@ class InformationController extends Controller {
 	public function update($id)
 	{
 		//
+		return $id;
 	}
 
 	/**

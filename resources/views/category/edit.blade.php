@@ -1,0 +1,146 @@
+@extends('app')
+
+@section('header')
+	@include('util.m-topbar')
+	<div class="container">
+		<div class="col-lg-12">
+			<ol class="breadcrumb" style=" margin-left: 1.5rem; ">
+				<li><label>Inventory</label>
+				<li><a href="{{ route('home') }}" class="active col-lg-p">Home</a></li>
+				<li><a href="{{ route('category.show', [$category->slug]) }}" class="active">{{ $category->name }}</a></li>
+				<li><label>Profile</label></li>
+			</ol>
+		</div>
+	</div>
+@stop
+
+@section('content')
+<div class="container">
+	<div class="col-lg-3">
+    	<div class="btn-group-vertical col-lg-12" style="width: 100%;" role="group">
+    		<a href="" class="text-left btn btn-default col-lg-12">Update</a>
+    		<a href="" class="text-left btn btn-default col-lg-12">View Fields</a>
+    		<a href="" class="text-left btn btn-default col-lg-12">Back</a>
+    	</div>
+    </div>
+
+	<div class="col-lg-9">
+		<div class="panel panel-default col-lg-12" style="border-color: #ccc;">
+			<div class="panel-header">
+				<h3>{{ $category->name }}</h3>
+			</div>
+		</div>
+
+		<div class="panel panel-default col-lg-12" style="border-color: #ccc;">
+			<div class="page-header">
+				<h3><span class="glyphicon glyphicon-tag"></span> Fields</h3>
+			</div>
+			<form class="form-inline">
+
+			@foreach ($category->fields as $key=>$category_field)
+			<div class="form-group" style="margin-left: -1.5rem;">
+				<div class="col-lg-12">
+					<div class="alert alert-success col-lg-12" style="width: 105%; height: 5rem;" role="alert">
+						<button tabindex="{{ ++$key }}" type="button" class="close" data-toggle="popover" data-container='body' data-title="<label style=' margin-bottom: 0rem; '>Delete {{ $category_field->category_label }}</label>" data-html="true" data-trigger="click" data-content="
+
+						<form style='width:100%;' method='POST' action=&quot;{{ route('field.destroy', [$category_field->id]) }}&quot;>
+							<input type='hidden' name='_method' value='delete'>
+							<input name='_token' type='hidden' value='{{ csrf_token() }}'>
+
+							<input type='hidden' name='field_id' value='{{ $category_field->id }}'>
+							<label>Are you sure you want to delete <span style='color: #c9302c;'>Field :: {{ $category_field->category_label }}</span>?</label>
+							<div class='sep-1'></div>
+							<button type='button' class='btn btn-default right' data-dismiss='popover'>Close</button>
+							<button type='submit' style='margin-right:0.3rem;' class='btn btn-danger right'>Delete</button>
+
+							<br><br>
+						</form>
+						"> <span class="glyphicon glyphicon-trash size-12" aria-hidden="true" style="margin-left: 0.5rem;"> </span></button>
+						<button tabindex="{{ ++$key }}" type="button" class="close" data-container="body" data-toggle="popover" data-title="<label style=' margin-bottom: 0rem; '>Update Field</label>" data-html="true" data-trigger="click" data-content="
+						<body>
+						<form method='POST' action=&quot;{{ route('field.update', [$category_field->id]) }}&quot;>
+						<input type='hidden' name='_method' value='PATCH'>
+						<input name='_token' type='hidden' value='{{ csrf_token() }}'>
+
+						<label for='info_value' style=' margin-top: 1rem; '>Field:</label><input type='string' style='width: 25rem;margin-left: 5rem;margin-top: -3rem; margin-bottom: 2.3rem;' class='form-control' id='info_value' name='field' value='{{ $category_field->category_label }}'>
+						<div class='sep-1'></div>
+						<button type='button' class='btn btn-default right' data-dismiss='popover'>Close</button>
+						<button class='right btn btn-success' style='margin-right:0.3rem;' type='submit'>Update</button>
+
+						<br><br>
+						</form>
+						</body>
+						"
+						> <span class="glyphicon glyphicon-pencil size-12" aria-hidden="true" style="margin-left: 0.5rem;"> </span></button>
+						<label style=" margin-top: 0.2rem; ">{{ $category_field->category_label }}</label>
+					</div>
+				</div>
+			</div>
+			@endforeach
+
+			</form>
+		</div>
+	</div>
+</div>
+
+{{-- UNUSED FUNCTIONS --}}
+{{--onclick="untagRecipient({{$category_field->id }}, '{{ $category_field->category_label }}')"--}}
+@stop
+
+
+@section('script')
+<script>
+	var originalLeave = $.fn.popover.Constructor.prototype.leave;
+	$.fn.popover.Constructor.prototype.leave = function(obj){
+		var self = obj instanceof this.constructor ?
+		obj : $(obj.currentTarget)[this.type](this.getDelegateOptions()).data('bs.' + this.type)
+		var container, timeout;
+
+		originalLeave.call(this, obj);
+
+		if(obj.currentTarget) {
+			container = $(obj.currentTarget).siblings('.popover')
+			timeout = self.timeout;
+			container.one('mouseenter', function(){
+				//We entered the actual popover – call off the dogs
+				clearTimeout(timeout);
+				//Let's monitor popover content instead
+				container.one('mouseleave', function(){
+					$.fn.popover.Constructor.prototype.leave.call(self, self);
+				});
+			})
+		}
+	};
+
+	$('[data-toggle="popover"]').popover({trigger: 'click', placement: 'top', delay: {show: 50, hide: 50}});
+	$.fn.extend({
+        popoverClosable: function (options) {
+            var defaults = {
+                template:
+                    '	<div class="popover">\
+						<div class="arrow" style="left: 61.307692%; !important"></div>\
+						<div class="popover-header">\
+						<button type="button" class="close col-lg-push-1" data-dismiss="popover" aria-hidden="true">&times;</button>\
+						<h3 class="popover-title"></h3>\
+						</div>\
+						<div class="popover-content"></div>\
+						</div>\
+					'
+            };
+            options = $.extend({}, defaults, options);
+            var $popover_togglers = this;
+            $popover_togglers.popover(options);
+            $popover_togglers.on('click', function (e) {
+                e.preventDefault();
+                $popover_togglers.not(this).popover('hide');
+            });
+            $('html').on('click', '[data-dismiss="popover"]', function (e) {
+                $popover_togglers.popover('hide');
+            });
+        }
+    });
+    $(function () {
+        $('[data-toggle="popover"]').popoverClosable();
+    });
+</script>
+@stop

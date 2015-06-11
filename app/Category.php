@@ -32,22 +32,6 @@ class Category extends Eloquent implements SluggableInterface {
 		return $this->hasMany('App\Device');
 	}
 
-	public function delete() {
-		$devices = $this->devices()->withTrashed()->get();
-		foreach ($devices as $cat_dev) {
-			$cat_dev->category_id = 0;
-			$cat_dev->save();
-			$cat_dev->touch();
-		}
-
-		foreach ($this->fields as $category_fields) {
-			$category_fields->category_id = 0;
-			$category_fields->save();
-		}
-		// Delete this model
-		return parent::delete();
-	}
-
 	public function audit() {
 		return $this->hasMany('Audit');
 	}
@@ -166,7 +150,24 @@ class Category extends Eloquent implements SluggableInterface {
 				'deleted_at' => date('F d, Y h:i A', strtotime($category->deleted_at))
 			];
 		}
+		return json_encode($json);
+	}
 
+	public static function fetch_devices_info_value( $info_id, $category_id) {
+		$json = [];
+		$info = "";
+		$devices = Device::where('category_id', $category_id)->get();
+
+		foreach ($devices as $device) {
+			foreach ($device->information as $dev_info) {
+				if ($dev_info->field_id == $info_id) {
+					$json[] =[
+						'inf_value' => $dev_info->value,
+						'device_name' => $device->name
+					];
+				}
+			}
+		}
 		return json_encode($json);
 	}
 
@@ -183,4 +184,5 @@ class Category extends Eloquent implements SluggableInterface {
 	public function def_device() {
 		return $this->devices()->where('status_id', '!=', 1)->get();
 	}
+	
 }

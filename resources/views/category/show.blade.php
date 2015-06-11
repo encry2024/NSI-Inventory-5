@@ -25,7 +25,7 @@
 		<div class="btn-group-vertical col-lg-12" role="group" id="btnGrp">
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('create_device', [$category->slug])  }}"><span class="glyphicon glyphicon-plus"></span> Create {{ str_limit($category->name, $limit='10', $end='...') }}</a>
 			<a href="{{ route('device_excel', [$category->slug]) }}" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-share-alt"></span> Import {{ str_limit($category->name, $limit='10', $end='...') }} Devices</a>
-			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('category.show', [$category->slug])  }}"><span class="glyphicon glyphicon-info-sign"></span> {{str_limit($category->name, $limit='10', $end='...')}} Profile</a>
+			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('category.edit', [$category->slug])  }}"><span class="glyphicon glyphicon-info-sign"></span> {{str_limit($category->name, $limit='10', $end='...')}} Profile</a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="#"><span class="glyphicon glyphicon-trash"></span> Deleted {{str_limit($category->name, $limit='10', $end='...')}}s <span class="badge right"> {{ count($deleted_device)}} </span></a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="#" data-toggle="modal" data-target="#deleteCategory"><span class="glyphicon glyphicon-remove"></span> Delete {{ str_limit($category->name, $limit='10', $end='...') }}</a>
 			<a href="{{ route('ch', [$category->slug]) }}" class="btn btn-default col-lg-12 text-left" role="button"><span class="glyphicon glyphicon-book"></span> Associate & Dissociate Log</a>
@@ -47,7 +47,7 @@
  </div>
 
 
-<!-- Delete Contact Modal -->
+{{-- Delete Contact Modal --}}
 <div class="modal fade" name="deleteCategory" id="deleteCategory" tabindex="-1" role="dialog" aria-labelledby="myModalLabels" aria-hidden="true">
 	{!! Form::open(['method'=>'DELETE', 'route'=>['category.destroy', $category->slug]]) !!}
 	<div class="modal-dialog">

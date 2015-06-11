@@ -8,7 +8,7 @@ Route::bind('owner', 		function( $slug )	{ return App\Owner::whereSlug($slug)->f
 Route::bind('user', 		function( $id )		{ return App\User::find($id); });
 Route::bind('note', 		function( $id )		{ return App\Note::find($id); });
 Route::bind('information', 	function( $id )  	{ return App\Information::find($id); });
-
+Route::bind('field',		function( $id )		{ return App\Field::find($id); });
 # ROUTE RESOURCE
 
 # CATEGORY RESOURCE
@@ -22,6 +22,7 @@ get('deleted_categories', ['as' => 'dC', 'uses' => 'CategoryController@view_dele
 get('fetch/deleted_categories', ['as' => 'd_c', 'uses' => 'CategoryController@fetch_deleted_categories']);
 get('uncategorized_devices', ['as' => 'u_d', 'uses' => 'DeviceController@view_uncategorizedDevices']);
 get('fetch/uncategorized_devices', ['as' => 'f_u_d', 'uses' => 'DeviceController@fetch_uncategorized_devices']);
+get('fetch/devices/{info_id}/{category_id}', ['as' => 'f_d_i', 'uses' => 'CategoryController@fetch_devices_infoValue']);
 
 # DEVICE RESOURCE
 Route::resource('device', 'DeviceController');
@@ -68,6 +69,9 @@ get('import_excel/information', ['as' => 'import_information', 'uses' => 'Inform
 post('import_field/information', ['as' => 'importInformation', 'uses' => 'InformationController@importInformation']);
 Route::resource('information', 'InformationController');
 
+# FIELD RESOURCE
+post('field/{field_id}', ['as' => 'f_update', 'uses' => 'FieldController@update']);
+Route::resource('field', 'FieldController', ['only'=>['update', 'store', 'destroy']]);
 # AUTH CONTROLLERS
 Route::controllers([
     'auth' => 'Auth\AuthController',

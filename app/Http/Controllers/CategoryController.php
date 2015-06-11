@@ -76,9 +76,8 @@ class CategoryController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit($id)
-	{
-		//
+	public function edit($category) {
+		return view('category.edit', compact('category'));
 	}
 
 	/**
@@ -146,6 +145,12 @@ class CategoryController extends Controller {
 		$fetchDeletedCategories = Category::fetch_del_cat();
 
 		return $fetchDeletedCategories;
+	}
+
+	public function fetch_devices_infoValue( $info_id, $category_id ) {
+		$return_fetch = Category::fetch_devices_info_value($info_id, $category_id);
+
+		return $return_fetch;
 	}
 
 }

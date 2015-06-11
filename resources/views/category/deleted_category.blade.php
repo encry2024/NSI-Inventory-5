@@ -31,7 +31,6 @@
 			<br><br>
 			<br>
 		</div>
-
 	</div>
 </div>
 @stop

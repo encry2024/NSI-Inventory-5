@@ -3,8 +3,8 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Field;
-
 use Illuminate\Http\Request;
+
 
 class FieldController extends Controller {
 
@@ -65,9 +65,13 @@ class FieldController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update($field, Request $request)
 	{
-		//
+		$field = Field::find($field->id);
+		$field->category_label = $request->get('field');
+		$field->save();
+		$field->touch();
+		return redirect()->back();
 	}
 
 	/**
@@ -79,6 +83,7 @@ class FieldController extends Controller {
 	public function destroy($id)
 	{
 		//
+		return $id;
 	}
 
 	public function showImport() {
