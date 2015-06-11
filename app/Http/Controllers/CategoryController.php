@@ -86,9 +86,29 @@ class CategoryController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update($id, Request $request)
 	{
 		//
+		//return $id;;
+		//return $request->get('category_name');
+		$category = Category::whereSlug($id->slug)->first();
+		$category->name = $request->get('category_name');
+		//if success
+		if($category->save()){
+			return 1;
+		}
+		//if not success
+		else{
+			return 0;
+		}
+
+
+	}
+
+	public function fetchCatName($category) {
+		$category = Category::whereSlug($category)->first();
+
+		return $category->name;
 	}
 
 	/**

@@ -23,7 +23,7 @@ get('fetch/deleted_categories', ['as' => 'd_c', 'uses' => 'CategoryController@fe
 get('uncategorized_devices', ['as' => 'u_d', 'uses' => 'DeviceController@view_uncategorizedDevices']);
 get('fetch/uncategorized_devices', ['as' => 'f_u_d', 'uses' => 'DeviceController@fetch_uncategorized_devices']);
 get('fetch/devices/{info_id}/{category_id}', ['as' => 'f_d_i', 'uses' => 'CategoryController@fetch_devices_infoValue']);
-
+get('fetch/category/{category_slug}', ['as' => 'f_c_cs', 'uses' => 'CategoryController@fetchCatName']);
 # DEVICE RESOURCE
 Route::resource('device', 'DeviceController');
 // GET
@@ -100,3 +100,9 @@ post('open_owner', ['as' => 'importOwner', 'uses' => 'OwnerController@openExcel'
 // FIELDS
 get('import_excel/fields', ['as' => 'import_field', 'uses' => 'FieldController@showImport']);
 post('import_fields', ['as' => 'importField', 'uses' => 'FieldController@importFields']);
+
+Route::filter('csrf', function() {
+	$token = Request::ajax() ? Request::header('X-CSRF-Token') : Input::get('_token');
+	if (Session::token() != $token)
+		throw new Illuminate\Session\TokenMismatchException;
+});
