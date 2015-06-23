@@ -38,6 +38,6 @@
 
 @section('script')
 <script>
-
+	// Get inserted data in excel
 </script>
 @stop
