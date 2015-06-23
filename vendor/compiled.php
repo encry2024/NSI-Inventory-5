@@ -2055,7 +2055,7 @@ trait AuthenticatesAndRegistersUsers
         if (property_exists($this, 'redirectPath')) {
             return $this->redirectPath;
         }
-        return property_exists($this, 'redirectTo') ? $this->redirectTo : '/home';
+        return property_exists($this, 'redirectTo') ? $this->redirectTo : route('home');
     }
     public function loginPath()
     {
@@ -2121,7 +2121,7 @@ trait ResetsPasswords
         if (property_exists($this, 'redirectPath')) {
             return $this->redirectPath;
         }
-        return property_exists($this, 'redirectTo') ? $this->redirectTo : '/home';
+        return property_exists($this, 'redirectTo') ? $this->redirectTo : 'home';
     }
 }
 namespace Illuminate\Http;
@@ -12916,7 +12916,8 @@ class LineFormatter extends NormalizerFormatter
             return $str;
         }
         return strtr($str, array('
-' => ' ', '' => ' ', '
+' => ' ', '
+' => ' ', '
 ' => ' '));
     }
 }

@@ -8,7 +8,7 @@
 				<li><label>Inventory</label>
 				<li><a href="{{ route('home') }}" class="active">Home</a></li>
 				<li><a href="{{ route('category.show', [$category->slug])  }}" class="active">{{ $category->name }}</a></li>
-				<li><label>{{ $category->name }} History</label>
+				<li><label>History</label>
 			</ol>
 		</div>
 	</div>

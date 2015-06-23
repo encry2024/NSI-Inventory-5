@@ -17,7 +17,10 @@ class StatusController extends Controller {
 
 	public function __construct( Status $status ) {
 		$this->status = $status;
+		$this->middleware('auth');
 	}
+
+
 
 	public function index()
 	{

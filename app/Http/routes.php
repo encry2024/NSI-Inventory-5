@@ -18,10 +18,6 @@ get('{category_slug}/category_history', ['as' => 'c_h', 'uses' => 'CategoryContr
 get('{category_slug}/associate-dissociate-history', ['as' => 'ch', 'uses' => 'CategoryController@viewCategoryHistory']);
 get('{category_slug}/statuses', ['as' => 'sh', 'uses' => 'CategoryController@viewCategoryStatusesHistory']);
 get('{category_slug}/statuses_history', ['as' => 'c_s_h', 'uses' => 'CategoryController@categoryStatusHistory']);
-get('deleted_categories', ['as' => 'dC', 'uses' => 'CategoryController@view_deletedCategory']);
-get('fetch/deleted_categories', ['as' => 'd_c', 'uses' => 'CategoryController@fetch_deleted_categories']);
-get('uncategorized_devices', ['as' => 'u_d', 'uses' => 'DeviceController@view_uncategorizedDevices']);
-get('fetch/uncategorized_devices', ['as' => 'f_u_d', 'uses' => 'DeviceController@fetch_uncategorized_devices']);
 get('fetch/devices/{info_id}/{category_id}', ['as' => 'f_d_i', 'uses' => 'CategoryController@fetch_devices_infoValue']);
 get('fetch/category/{category_slug}', ['as' => 'f_c_cs', 'uses' => 'CategoryController@fetchCatName']);
 # DEVICE RESOURCE
@@ -101,6 +97,7 @@ post('open_owner', ['as' => 'importOwner', 'uses' => 'OwnerController@openExcel'
 get('import_excel/fields', ['as' => 'import_field', 'uses' => 'FieldController@showImport']);
 post('import_fields', ['as' => 'importField', 'uses' => 'FieldController@importFields']);
 
+# ROUTE FILTERING
 Route::filter('csrf', function() {
 	$token = Request::ajax() ? Request::header('X-CSRF-Token') : Input::get('_token');
 	if (Session::token() != $token)

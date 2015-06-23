@@ -23,6 +23,7 @@ class DeviceController extends Controller {
 	 */
     public function __construct( Device $device ) {
         $this->device = $device;
+		$this->middleware('auth');
     }
 
 
@@ -214,9 +215,4 @@ class DeviceController extends Controller {
 		return view('devices.uncategorized_devices');
 	}
 
-	public function fetch_uncategorized_devices() {
-		$fetch_u_d = Device::fetch_uncategorizedDevices();
-
-		return $fetch_u_d;
-	}
 }

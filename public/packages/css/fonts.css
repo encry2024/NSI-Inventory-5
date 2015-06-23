@@ -82,7 +82,8 @@
     margin-right: 2rem;
 }
 
-#ctgy_filter, #devices_filter, #assoc_dev_table_filter, #avail_dev_table_filter, #deleted_category_filter, #uncategorized_category_filter {
+#ctgy_filter, #devices_filter, #assoc_dev_table_filter, #avail_dev_table_filter, 
+#deleted_category_filter, #uncategorized_category_filter, #category_history_filter {
     margin-top: -2.3rem;
     margin-bottom: 3rem;
 }

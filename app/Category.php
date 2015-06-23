@@ -138,21 +138,6 @@ class Category extends Eloquent implements SluggableInterface {
 		return json_encode($json);
 	}
 
-	public static function fetch_del_cat() {
-		$json = [];
-		$categories = Category::onlyTrashed()->get();
-
-		foreach ($categories as $category) {
-			$json[] = [
-				'category_id' => $category->id,
-				'category_slug' => $category->slug,
-				'category_name' => $category->name,
-				'deleted_at' => date('F d, Y h:i A', strtotime($category->deleted_at))
-			];
-		}
-		return json_encode($json);
-	}
-
 	public static function fetch_devices_info_value( $info_id, $category_id) {
 		$json = [];
 		$info = "";

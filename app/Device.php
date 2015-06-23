@@ -314,48 +314,4 @@ class Device extends Eloquent implements SluggableInterface {
 		return json_encode($json);
 	}
 
-	public static function fetch_uncategorizedDevices() {
-		$tag = "";
-		$brand = "";
-		$json = array();
-		$devices = Device::where('category_id', 0)->withTrashed()->get();
-		foreach ($devices as $device) {;
-			foreach ($device->information as $dev_info) {
-				if ($dev_info->field->category_label == "Brand") {
-					$brand 	= $dev_info->value;
-				}
-
-				if ($dev_info->field->category_label == "NSI Tag") {
-					$tag = $dev_info->value;
-				}
-			}
-			if ($device->owner_id != 0) {
-				$json[] = array(
-					'id' 				=> $device->id,
-					'brand'				=> $brand,
-					'owner'				=> str_limit($device->owner->fullName(), $limit='10', $end='...'),
-					'status'			=> $device->status->status,
-					'tag'				=> str_limit($tag, $limit = '10', $end = '...'),
-					'slug'              => $device->slug,
-					'owner_slug'		=> $device->owner->slug,
-					'name' 				=> $device->name,
-					'category'			=> 'N/A',
-					'updated_at' 		=> date('m/d/Y h:i A', strtotime($device->updated_at)),
-				);
-			} else {
-				$json[] = array(
-					'id' 				=> $device->id,
-					'brand'				=> $brand,
-					'owner'				=> 'N/A',
-					'status'			=> $device->status->status,
-					'tag'				=> str_limit($tag, $limit = '10', $end = '...'),
-					'slug'              => $device->slug,
-					'name' 				=> $device->name,
-					'category'			=> 'N/A',
-					'updated_at' 		=> date('m/d/Y h:i A', strtotime($device->updated_at)),
-				);
-			}
-		}
-		return json_encode($json);
-	}
 }

@@ -4594,10 +4594,14 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   color: #444;
 }
 .breadcrumb {
+  margin-left: 1.5rem;
+  background: white;
+  border-color: #ccc;
+  border-width: 1px;
+  border-style: solid;
   padding: 8px 15px;
   margin-bottom: 20px;
   list-style: none;
-  background-color: #f5f5f5;
   border-radius: 4px;
 }
 .breadcrumb > li {
@@ -6581,6 +6585,7 @@ button.close {
     display: none !important;
   }
 }
+
 .btn-default:hover .badge {
     color: #337ab7;
     background-color: #fff;
@@ -6596,13 +6601,41 @@ button.close {
     margin-top: -1px;
 }
 
-.btn-default:focus {
-    background-color: #337ab7;
-    border-color: #2e6da4;
-    color: white
-}
-
 * {
     outline: 0;
+}
+
+.alrt {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #eed3d7;
+    border-radius: 4px;
+    position: absolute;
+    bottom: 0px;
+    right: 21px;
+    /* Each alert has its own width */
+    float: right;
+    clear: right;
+}
+
+.alrt-red {
+    color: white;
+    background-color: #DA4453;
+}
+.alrt-green {
+    color: white;
+    background-color: #5cb85c;
+}
+.alrt-blue {
+    color: white;
+    background-color: #428bca;
+}
+.alrt-yellow {
+    color: white;
+    background-color: #F6BB42;
+}
+.alrt-orange {
+    color:white;
+    background-color: #E9573F;
 }
 /*# sourceMappingURL=bootstrap.css.map */

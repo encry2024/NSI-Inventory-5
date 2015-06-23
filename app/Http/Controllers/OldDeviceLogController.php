@@ -16,6 +16,12 @@ class OldDeviceLogController extends Controller {
 	 *
 	 * @return Response
 	 */
+
+	public function __construct()
+	{
+		$this->middleware('auth');
+	}
+
 	public function index()
 	{
 		return view('archived.old_device_log');

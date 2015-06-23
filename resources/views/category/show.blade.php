@@ -36,9 +36,8 @@
 
 	 <div class="col-lg-9 col-md-offset-center-2">
 		<div class="panel panel-default col-lg-12" style="border-color: #ccc;">
-			<div class="page-header">
-				<h3>{{ $category->name  }} Category</h3>
-			</div>
+			<h3>{{ $category->name  }} Category</h3>
+			<hr>
 			<br>
 			<table id="devices" class="table"></table>
 			<br/><br/>

@@ -19,6 +19,7 @@ class OwnerController extends Controller {
 
 	public function __construct( Owner $owner ) {
 		$this->owner = $owner;
+		$this->middleware('auth');
 	}
 
 	public function index()

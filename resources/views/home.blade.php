@@ -1,10 +1,10 @@
 @extends('app')
 
 @section('header')
-    @include('util.m-topbar')
-    <div class="container">
+	@include('util.m-topbar')
+	<div class="container">
 		<div class="col-lg-12">
-			<ol class="breadcrumb" style=" margin-left: 1.5rem; ">
+			<ol class="breadcrumb">
 				<li><label>Inventory</label>
 				<li><label>Home</label>
 			</ol>
@@ -14,17 +14,16 @@
 
 @section('content')
 <div class="container">
-    @include('util.m-sidebar')
-    <div class="col-lg-9 col-md-offset-center-2">
-        <div class="panel panel-default col-lg-12" style="border-color: #ccc;">
-           <div class="page-header">
-                <h3>Categories</h3>
-           </div>
-           <br><br>
-           <table id="ctgy" class="table"></table>
-           <br/><br/>
-        </div>
-    </div>
+	@include('util.m-sidebar')
+	<div class="col-lg-9 col-md-offset-center-2">
+		<div class="panel panel-default col-lg-12" style="border-color: #ccc;">
+			<h3>Categories</h3>
+			<hr/>
+			<br><br>
+			<table id="ctgy" class="table"></table>
+			<br/><br/>
+		</div>
+	</div>
 </div>
 @stop
 
@@ -86,8 +85,8 @@
 				{
 					"aTargets": [ 0 ], // Column to target
 					"mRender": function ( data, type, full ) {
-					    var url = '{{ route('category.show', ":slug") }}';
-					    url = url.replace(':slug', full["slug"]);
+						var url = '{{ route('category.show', ":slug") }}';
+						url = url.replace(':slug', full["slug"]);
 						// 'full' is the row's data object, and 'data' is this column's data
 						// e.g. 'full[0]' is the comic id, and 'data' is the comic title
 						return "<a href='" + url + "' class='size-14 text-left'>" + data + "</a>";
@@ -96,7 +95,7 @@
 				{
 					"aTargets": [ 1 ], // Column to target
 					"mRender": function ( data, type, full ) {
-					    
+						
 						// 'full' is the row's data object, and 'data' is this column's data
 						// e.g. 'full[0]' is the comic id, and 'data' is the comic title
 						return "<label class='size-14 text-left'>" + data + "</label>";
@@ -115,7 +114,7 @@
 				{
 					"aTargets": [ 3 ], // Column to target
 					"mRender": function ( data, type, full ) {
-					    var url = '{{ route('avail_device', ":slug") }}';
+						var url = '{{ route('avail_device', ":slug") }}';
 						url = url.replace(':slug', full['slug']);
 						// 'full' is the row's data object, and 'data' is this column's data
 						// e.g. 'full[0]' is the comic id, and 'data' is the comic title
@@ -125,7 +124,7 @@
 				{
 					"aTargets": [ 4 ], // Column to target
 					"mRender": function ( data, type, full ) {
-					    var url = '{{ route('defect_device', ":slug") }}';
+						var url = '{{ route('defect_device', ":slug") }}';
 						url = url.replace(':slug', full['slug']);
 						// 'full' is the row's data object, and 'data' is this column's data
 						// e.g. 'full[0]' is the comic id, and 'data' is the comic title
@@ -133,7 +132,7 @@
 					}
 				},
 				
-                //CATEGORY RECENT UPDATE
+				//CATEGORY RECENT UPDATE
 				{
 					"aTargets": [ 5 ], // Column to target
 					"mRender": function ( data, type, full ) {

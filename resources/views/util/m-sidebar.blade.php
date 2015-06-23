@@ -20,9 +20,7 @@
 		<a href="{{ route('status.index') }}" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-exclamation-sign"></span> Statuses <span class="badge right">{{ count($status) }}</span></a>
 		<a href="{{ route('all_assoc') }}" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-flag"></span> Checked Out Devices <span class="badge right">{{ count($assoc) }}</span></a>
 		<a href="#" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-ban-circle"></span> Defective Devices <span class="badge right">{{ count($defective_devices) }}</span></a>
-		<a href="{{ route('dC') }}" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-trash"></span> Deleted Categories <span class="badge right">{{ count($deleted_categories) }}</span></a>
 		<a href="" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-ok"></span> Available Devices <span class="badge right">{{ count($available_devices) }}</span></a>
-		<a href="{{ route('u_d') }}" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-asterisk"></span> Uncategorized Devices <span class="badge right">{{ count($uncategorized_devices) }}</span></a>
 		</a>
 	</div>
 </div>

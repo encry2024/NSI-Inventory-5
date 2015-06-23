@@ -7,7 +7,7 @@
 			<ol class="breadcrumb" style=" margin-left: 1.5rem; ">
 				<li><label>Inventory</label>
 				<li><a href="{{ route('home') }}" class="active">Home</a></li>
-				<li><label>Import Categories</label>
+				<li><label>Import Page</label>
 			</ol>
 		</div>
 	</div>
@@ -23,13 +23,12 @@
 
 	<div class="col-lg-9 col-md-offset-center-2">
 		<div class="panel panel-default col-lg-12" style="border-color: #ccc;">
-			<div class="page-header">
-				<h3>Import Categories</h3>
-			</div>
+			<h3>Import Categories</h3>
+			<hr/>
 			{!! Form::open(['route' => ['openFile'], 'files' => true]) !!}
-			<input type="file" name="xl" id="xl">
-			<br/>
-			<input class="btn btn-primary" type="submit" value="Upload XLS""></input>
+				<input type="file" name="xl" id="xl">
+				<br/>
+				<input class="btn btn-primary" type="submit" value="Upload XLS"></input>
 			{!! Form::close() !!}
 			<br/><br/>
 		</div>
