@@ -158,9 +158,9 @@ class DeviceController extends Controller {
 		return $return_change_status;
 	}
 
-	public function openExcel() {
+	public function openExcel(Request  $request) {
 		//return $category_id;
-		$import_excel = Device::importDevice();
+		$import_excel = Device::importDevice($request);
 
 		return $import_excel;
 	}
@@ -213,6 +213,16 @@ class DeviceController extends Controller {
 
 	public function view_uncategorizedDevices() {
 		return view('devices.uncategorized_devices');
+	}
+
+	public function viewAllAvailableDevices() {
+		return view('devices.show_all');
+	}
+
+	public function showAllAvailableDevices() {
+		$available_devices = Device::show_AllAvailableDevices();
+
+		return $available_devices;
 	}
 
 }

@@ -95,8 +95,8 @@ class FieldController extends Controller {
 		return view('import.field');
 	}
 
-	public function importFields() {
-		$import_fields = Field::importField();
+	public function importFields(Request $request) {
+		$import_fields = Field::importField($request);
 
 		return $import_fields;
 	}

@@ -29,6 +29,20 @@ class StatusSeeder extends Seeder {
 					'created_at'	=> date('Y-m-d H:i:s'),
 					'updated_at'	=> date('Y-m-d H:i:s')
 				),
+				array(
+					'status'		=> 'NOT SPECIFIED',
+					'slug'			=> 'not-specified',
+					'description'	=> 'Devices that was returned with no status provided.',
+					'created_at'	=> date('Y-m-d H:i:s'),
+					'updated_at'	=> date('Y-m-d H:i:s')
+				),
+				array(
+					'status'		=> 'INACTIVE',
+					'slug'			=> 'inactive',
+					'description'	=> 'Devices that is no longer active.',
+					'created_at'	=> date('Y-m-d H:i:s'),
+					'updated_at'	=> date('Y-m-d H:i:s')
+				),
 			)
 		);
 	}

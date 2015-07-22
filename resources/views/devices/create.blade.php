@@ -22,7 +22,6 @@
 
 @section('content')
 <div class="container">
-<br/>
 	{!! Form::open(['route' => ['device.store']]) !!}
 	<div class="col-lg-3">
 		<div class="btn-group-vertical col-lg-12" role="group">

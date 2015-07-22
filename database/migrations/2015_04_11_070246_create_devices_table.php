@@ -18,6 +18,7 @@ class CreateDevicesTable extends Migration {
             $table->integer('owner_id')->unsigned();
             $table->integer('status_id')->unsigned();
             $table->integer('category_id')->unsigned();
+			$table->integer('user_id')->unsigned();
             $table->string('slug')->unique();
             $table->string('name');
             $table->string('availability');

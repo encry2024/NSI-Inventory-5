@@ -35,4 +35,16 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
 		return $this->hasMany('App\DeviceStatus');
 	}
 
+	public function audits() {
+		return $this->hasMany('App\Audit');
+	}
+
+	public function proccessed() {
+		return $this->morphTo();
+	}
+
+	public static function getUserCount() {
+		return count(User::where('type', 'user')->get());
+	}
+	
 }

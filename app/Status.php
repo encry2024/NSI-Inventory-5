@@ -66,4 +66,8 @@ class Status extends Eloquent implements SluggableInterface {
 		return json_encode($json);
 	}
 
+	public static function getStatusCount() {
+		return count(Status::all());
+	}
+
 }

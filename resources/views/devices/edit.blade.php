@@ -55,50 +55,44 @@
 	</div>
 
      <div class="col-lg-9 col-md-offset-center-2" >
-        <div class="panel panel-default col-lg-12" style="border-color: #ccc;">
-			<h3>{{ $device->category->name . ": " . $device->name  }}</h3>
-        </div>
+		<h3><i>{{ $device->name  }}</i></h3>
+		<hr/>
 
 		@if($device->status_id != '' || $device->status_id != 0)
 		<div class="panel panel-default col-lg-12" style="border-color: #ccc;">
-			<div class="page-header">
-				<h3>Status: {{ $device->status->status }}</h3>
-			</div>
+			<h3>Status: <span><a>{{ $device->status->status }}</a></span></h3>
+			<hr>
 			Status Description:
 			<div class="well well-sm" name="note"><i>{{ $device->status->description }}</i></div>
 		</div>
 		@endif
 
 		<div class="panel panel-default col-lg-12" style="border-color: #ccc;">
-			<div class="page-header">
-				<h3>Associate/Dissociate History</h3>
-			</div>
+			<h3>Associate/Dissociate History</h3>
+			<hr>
 			<br/>
 			<table id="assoc_history"></table>
 			<br/>
 		</div>
 
 		<div class="panel panel-default col-lg-12" style="border-color: #ccc;">
-			<div class="page-header">
-				<h3>Status History</h3>
-			</div>
+			<h3>Status History</h3>
+			<hr>
 			<br/>
 			<table id="device_status"></table>
 			<br/>
 		</div>
 
         <div class="panel panel-default col-lg-12" style="border-color: #ccc;">
-			<div class="page-header">
-				<h3>Notes</h3>
-			</div>
+			<h3>Notes</h3>
+			<hr>
 			<label for="">Recent Note:</label>
 			@if (count($note) > 0)
 			<div class="well well-sm" name="note"><i>{{ str_replace("&apos;", "'", $note->note) }}</i></div>
-			<br/>
 			@else
 			<div class="well well-sm" name="note"><i>There is no note to display...</i></div>
-			<br/>
 			@endif
+			<hr>
 			<table id="note_history"></table>
 			<br/>
 		</div>

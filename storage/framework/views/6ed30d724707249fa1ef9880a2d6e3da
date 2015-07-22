@@ -16,7 +16,6 @@
 	<div class="col-lg-3">
    		<div class="btn-group-vertical col-lg-12" role="group">
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="#" data-toggle='modal' data-target='#addOwner'><span class="glyphicon glyphicon-plus"></span> Create Owners</a>
-			<a href="<?php echo e(route('owner_excel')); ?>" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-share-alt"></span> Import Excel</a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="#" data-toggle='modal' data-target='#addStatus'><span class="glyphicon glyphicon-trash"></span> Deleted Owners <span class="badge right"><?php echo e(count($deletedOwners)); ?></span></a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="<?php echo e(route('home')); ?>"><span class="glyphicon glyphicon-chevron-left"></span> Return to Home</a>
 		</div>

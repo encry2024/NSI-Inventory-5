@@ -56,22 +56,10 @@ class Category extends Eloquent implements SluggableInterface {
 		return redirect()->route('category.create')->with('success_msg', 'Category :: '.$ctg_name.' is successfully saved.');
 	}
 
-	public function importCategory() {
-		$file = Input::file( 'xl' );
-
-		$file->move(storage_path() . '/uploads', $file->getClientOriginalName());
-
-		$sheet = Excel::load( storage_path() . '/uploads/' . $file->getClientOriginalName())->toArray();
-
-		foreach ($sheet as $row) {
-			$new_information = new Information();
-			$new_information->device_id = $row['device_id'];
-			$new_information->field_id = $row['field_id'];
-			$new_information->value = $row['value'];
-			$new_information->save();
-		}
-
-		return redirect()->back();
+	public static function importCategory($request) {
+		$new_category = new Category;
+		$new_category->name = $request->get("name");
+		$new_category->save();
 	}
 
 	public static function fetchCategories() {

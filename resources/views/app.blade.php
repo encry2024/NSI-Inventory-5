@@ -35,7 +35,7 @@
 	<script src="{{ URL::to('/') }}/packages/jquery-dropdown/demo/jquery.tmpl.min.js"></script>
 	<script src="{{ URL::to('/') }}/packages/jquery-dropdown/source/js/multilist.js"></script>
 	<script src="{{ URL::to('/') }}/packages/autocomplete/js/tag-it.min.js"></script>
-
+	<script src="{{ URL::to('/') }}/jquery-ui-1.11.4/papaparse.js"></script>
 
 
 	@yield('content')

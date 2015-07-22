@@ -63,4 +63,8 @@ class DeviceLog extends Eloquent {
 
 		return redirect()->back()->with('success_msg', $device->name . ' was DISASSOCIATED to '.$owner->fullName());
 	}
+
+	public static function getCountDeviceLog() {
+		return count(DeviceLog::all());
+	}
 }

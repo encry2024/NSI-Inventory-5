@@ -34,6 +34,8 @@ get('category/{category_slug}/available_devices', ['as' => 'availdev', 'uses' =>
 get('{category_slug}/available_devices', ['as' => 'avail_device', 'uses' => 'DeviceController@showAvailDev']);
 get('category/{category_slug}/defective_devices', ['as' => 'defectdev', 'uses' => 'DeviceController@defectDev']);
 get('{category_slug}/defective_devices', ['as' => 'defect_device', 'uses' => 'DeviceController@showDefectDev']);
+get('available_devices', ['as' => 'a_a_d', 'uses' => 'DeviceController@viewAllAvailableDevices']);
+get('fetch_available_devices', ['as' => 'r_a_a_d', 'uses' => 'DeviceController@showAllAvailableDevices']);
 // POST
 post('device/associate/{device_id}', ['as' => 'device_associate', 'uses' => 'DeviceController@associateDevice']);
 post('device/disassociate/{device_id}', ['as' => 'device_disassociate', 'uses' => 'DeviceController@disassociateDevice']);
@@ -82,20 +84,21 @@ get('archived_data', ['as' => 'a_d', 'uses' => 'AuditController@viewOld']);
 get('device_logs/old', ['as' => 'o_d_l', 'uses' => 'OldDeviceLogController@oldDeviceLog']);
 get('old_device_logs', ['as' => 'odl', 'uses' => 'OldDeviceLogController@index']);
 
-# IMPORT EXCELS
 
+# IMPORT EXCELS
 // CATEGORIES
 get('import_excel/categories', ['as' => 'category_excel', 'uses' => 'CategoryController@excelIndex']);
-post('open_excel', ['as' => 'openFile', 'uses' => 'CategoryController@openExcel']);
+post('open_excel', ['as' => 'import_categories', 'uses' => 'CategoryController@openExcel']);
 // DEVICES
 get('import_excel/devices', ['as' => 'device_excel', 'uses' => 'DeviceController@deviceIndex']);
-post('import_devices', ['as' => 'importDevice', 'uses' => 'DeviceController@openExcel']);
+post('import_devices', ['as' => 'import_devices', 'uses' => 'DeviceController@openExcel']);
 // OWNERS
 get('import_excel/owner', ['as' => 'owner_excel', 'uses' => 'OwnerController@ownerIndex']);
-post('open_owner', ['as' => 'importOwner', 'uses' => 'OwnerController@openExcel']);
+post('open_owner', ['as' => 'import_owners', 'uses' => 'OwnerController@openExcel']);
 // FIELDS
 get('import_excel/fields', ['as' => 'import_field', 'uses' => 'FieldController@showImport']);
-post('import_fields', ['as' => 'importField', 'uses' => 'FieldController@importFields']);
+post('import_fields', ['as' => 'import_fields', 'uses' => 'FieldController@importFields']);
+
 
 # ROUTE FILTERING
 Route::filter('csrf', function() {
@@ -103,3 +106,9 @@ Route::filter('csrf', function() {
 	if (Session::token() != $token)
 		throw new Illuminate\Session\TokenMismatchException;
 });
+
+
+# FUNCTION TESTER ROUTE
+post('function_save', ['as' => 't', 'uses' => 'CategoryController@testImport']);
+get('view_tester', ['as' => 'vt', 'uses' => 'CategoryController@viewTester']);
+get('get_count', ['as' => 'gc', 'uses' => 'CategoryController@fetchCount']);

@@ -7,8 +7,7 @@
 			<ol class="breadcrumb" style=" margin-left: 1.5rem; ">
 				<li><label>Inventory</label>
 				<li><a href="{{ route('home') }}" class="active">Home</a></li>
-				<li><a href="{{ route('category.show', [$category->slug])  }}" class="active">{{ $category->name }}</a></li>
-				<li><label>History</label>
+				<li><label>Available Devices</label>
 			</ol>
 		</div>
 	</div>
@@ -17,19 +16,18 @@
 @section('content')
 <div class="container">
 	<div class="col-lg-3">
-   		<div class="btn-group-vertical col-lg-12" role="group">
+		<div class="btn-group-vertical col-lg-12" role="group">
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('home')  }}"><span class="glyphicon glyphicon-chevron-left"></span> Return to Home</a>
 		</div>
 	</div>
 
 	<div class="col-lg-9 col-md-offset-center-2" >
 		<div class="panel panel-default col-lg-12" style="border-color: #ccc;">
-		   <div class="page-header">
-				<h3>{{ $category->name }} History</h3>
-		   </div>
-		   <br>
-		   <table id="category_history"></table>
-		   <br>
+			<h3>Available Devices</h3>
+			<hr/>
+			<br>
+			<table id="all_avail_dev"></table>
+			<br>
 		</div>
 	</div>
 </div>
@@ -37,8 +35,8 @@
 
 @section('script')
 <script type="text/javascript">
-$.getJSON("{{ route('c_h', $category->slug) }}", function(data) {
-	$('#category_history').dataTable({
+$.getJSON("{{ route('r_a_a_d') }}", function(data) {
+	$('#all_avail_dev').dataTable({
 		"aaData": data,
 		"lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
 		"oLanguage": {
@@ -55,17 +53,33 @@ $.getJSON("{{ route('c_h', $category->slug) }}", function(data) {
 		//MDATAPROP - TBODY
 		"aoColumns":
 		[
-			{"sTitle": "Devices", "mDataProp": "device_name"},
-			{"sTitle": "Owner", "mDataProp": "owner_name"},
-			{"sTitle": "Action", "mDataProp": "action"},
-			{"sTitle": "Assigned By", "mDataProp": "assigned_by"},
-			{"sTitle": "Date Assigned", "mDataProp": "date_assigned"}
+			{"sTitle": "#", 'width':'5%',"mDataProp": "id"},
+			{"sTitle": "Category", 'width':'25%',"mDataProp": "category_name"},
+			{"sTitle": "Device", 'width':'25%',"mDataProp": "device_name"},
+			{"sTitle": "Recent Updated", 'width':'25%',"mDataProp": "updated_at"}
 		],
 		"aoColumnDefs":
 		[
 			// REDIRECT TO HEADSET PROFILE
+			{ "bSortable": false, "aTargets": [ 0 ] },
 			{
 				"aTargets": [ 0 ], // Column to target
+				"mRender": function ( data, type, full ) {
+					return "<label class='size-14 text-left'>" + data + "</label>";
+				}
+			},
+			{
+				"aTargets": [ 1 ], // Column to target
+				"mRender": function ( data, type, full ) {
+				    var url = '{{ route('category.edit', ":slug") }}';
+				    url = url.replace(':slug', full["category_slug"]);
+					// 'full' is the row's data object, and 'data' is this column's data
+					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
+					return "<a href='" + url + "' class='size-14 text-left'>" + data + "</a>";
+				}
+			},
+			{
+				"aTargets": [ 1 ], // Column to target
 				"mRender": function ( data, type, full ) {
 					var url = '{{ route('device.edit', ":slug") }}';
 					url = url.replace(':slug', full["device_slug"]);
@@ -77,38 +91,22 @@ $.getJSON("{{ route('c_h', $category->slug) }}", function(data) {
 			{
 				"aTargets": [ 1 ], // Column to target
 				"mRender": function ( data, type, full ) {
-					var url = '{{ route('owner.edit', ":slug") }}';
-					url = url.replace(':slug', full["owner_slug"]);
 					// 'full' is the row's data object, and 'data' is this column's data
 					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return "<a href='" + url + "' class='size-14 text-left'>" + data + "</a>";
-				}
-			},
-			{
-				"aTargets": [ 2 ], // Column to target
-				"mRender": function ( data, type, full ) {
 					return "<label class='size-14 text-left'>" + data + "</label>";
 				}
-			},
+			}
+		],
+		"fnDrawCallback": function( oSettings ) {
+			/* Need to redo the counters if filtered or sorted */
+			if ( oSettings.bSorted || oSettings.bFiltered )
 			{
-				"aTargets": [ 3 ], // Column to target
-				"mRender": function ( data, type, full ) {
-					var url = '{{ route('user.edit', ":slug") }}';
-					url = url.replace(':slug', full["slug"]);
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return '<a href="'+url+'" class="size-14 text-left">' + data + '</a>';
+				for ( var i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ )
+				{
+					$('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( "<label>" + (i+1) + "</label>" );
 				}
-			},
-			{
-				"aTargets": [ 4 ], // Column to target
-				"mRender": function ( data, type, full ) {
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return '<label class="text-center size-14"> ' + data + ' </label>';
-				}
-			},
-		]
+			}
+		}
 	});
 	$('div.dataTables_filter input').attr('placeholder', 'Filter Devices');
 });

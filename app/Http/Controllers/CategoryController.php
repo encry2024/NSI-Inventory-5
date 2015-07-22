@@ -11,6 +11,9 @@ use App\Category;
 use App\Field;
 use App\DeviceLog;
 use App\Device;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Response;
+
 
 class CategoryController extends Controller {
 
@@ -19,6 +22,9 @@ class CategoryController extends Controller {
 	 *
 	 * @return Response
 	 */
+
+	public $total_rows;
+
 	public function __construct(Category $category) {
 		$this->category = $category;
 		$this->middleware('auth');
@@ -123,8 +129,8 @@ class CategoryController extends Controller {
 		return redirect('/')->with('success_msg', 'Category was successfully deleted');
 	}
 
-	public function openExcel(Category $category) {
-		$import_excel = $category->importCategory();
+	public function openExcel(Request $request) {
+		$import_excel = Category::importCategory($request);
 
 		return $import_excel;
 	}
@@ -173,4 +179,14 @@ class CategoryController extends Controller {
 		return $return_fetch;
 	}
 
+	public function viewTester() {
+		return view('function_tester.test');
+	}
+
+	public function testImport(Request $request) {
+		$new_category = new Field;
+		$new_category->category_id = $request->get("category_id");
+		$new_category->category_label = $request->get("category_label");
+		$new_category->save();
+	}
 }

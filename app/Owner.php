@@ -37,34 +37,21 @@ class Owner extends Eloquent implements SluggableInterface{
 		return $this->firstName . ' ' . $this->lastName;
 	}
 
-	public static function importOwner() {
-		set_time_limit(0);
-
-		$file = Input::file( 'xl' );
-
-		//move the file to storage/uploads folder with its original file name
-		$file->move(storage_path() . '/uploads', $file->getClientOriginalName());
-
-		//Load the sheet and convert it into array
-		$sheet = Excel::load( storage_path() . '/uploads/' . $file->getClientOriginalName())->toArray();
-
-		foreach ($sheet as $row) {
-			if ($row['firstname'] === "") {
-				$new_owner = new Owner();
-				$new_owner->firstName = "-";
-				$new_owner->lastName = "-";
-				$new_owner->location = "-";
-				$new_owner->save();
-			} else {
-				$new_owner = new Owner();
-				$new_owner->firstName = $row['firstname'];
-				$new_owner->lastName = $row['lastname'];
-				$new_owner->location = $row['name'];
-				$new_owner->save();
-			}
+	public static function importOwner($request) {
+		if ($request->get('firstname') == "") {
+			$new_owner = new Owner();
+			$new_owner->firstName = "-";
+			$new_owner->lastName = "-";
+			$new_owner->location = "-";
+			$new_owner->save();
+		} else {
+			$new_owner = new Owner();
+			$new_owner->firstName = $request->get('firstname');
+			$new_owner->lastName = $request->get('lastname');
+			$new_owner->location = $request->get('name');
+			$new_owner->save();
 		}
 
-		return redirect()->back()->with('success_msg', 'Files has been successfully imported.');
 	}
 
 	public static function editOwner($slug) {
@@ -77,6 +64,11 @@ class Owner extends Eloquent implements SluggableInterface{
 
 		return redirect('owner')->with('success_msg', 'Owner has been updated');
 
+	}
+
+
+	public static function getOwnerCount() {
+		return count(Owner::all());
 	}
 
 }

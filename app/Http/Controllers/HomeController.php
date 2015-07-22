@@ -37,15 +37,8 @@ class HomeController extends Controller {
 	 */
 	public function index()
 	{
-        $owners = Owner::all();
-        $users = User::where('type', 'user')->get();
-        $information = Information::all();
-		$status = Status::all();
-		$assoc = Device::where('owner_id', '!=', '')->get();
-		$available_devices = Device::where('owner_id', 0)->get();;
-		$defective_devices = Device::where('status_id', '!=', 1)->get();
 
-		return view('home', compact('owners', 'users', 'information', 'status', 'assoc', 'available_devices', 'deleted_categories', 'defective_devices'));
+		return view('home');
 	}
 
 }

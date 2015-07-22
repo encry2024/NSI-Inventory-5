@@ -3,6 +3,7 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Http\Request;
 
 class AuditController extends Controller {
@@ -35,12 +36,14 @@ class AuditController extends Controller {
 
 	/**
 	 * Store a newly created resource in storage.
-	 *
+	 * @GET("auth/login")
 	 * @return Response
 	 */
-	public function store()
+	public function store(Dispatcher $event)
 	{
-		//
+		$event->fire('UserLoggedIn');
+
+		return "User logged in";
 	}
 
 	/**

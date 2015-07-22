@@ -162,9 +162,9 @@ class OwnerController extends Controller {
 		return json_encode($json);
 	}
 
-	public function openExcel() {
+	public function openExcel(Request $request) {
 		//return $category_id;
-		$import_excel = Owner::importOwner();
+		$import_excel = Owner::importOwner($request);
 
 		return $import_excel;
 	}

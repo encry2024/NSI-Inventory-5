@@ -22,14 +22,15 @@ class CreateDeviceRequest extends Request {
 	public function rules()
 	{
 		return [
-			'name'  =>  'required'
+			'name'  =>  'required|unique:devices,name'
 		];
 	}
 
 	public function messages()
 	{
 		return [
-			'name.required' => "Device Description is Required."
+			'name.required' => "Device Description is Required.",
+			'name.unique' => "Device is already in the inventory"
 		];
 	}
 

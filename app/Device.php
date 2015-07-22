@@ -6,6 +6,8 @@ use Cviebrock\EloquentSluggable\SluggableInterface;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Audit;
+use Illuminate\Support\Facades\Auth;
 
 class Device extends Eloquent implements SluggableInterface {
 
@@ -63,23 +65,27 @@ class Device extends Eloquent implements SluggableInterface {
 		$new_device->category_id = $category_id;
 		$new_device->availability = 'AVAILABLE';
 		$new_device->status_id = 1;
-		$new_device->save();
 
-		foreach ($inputs as $key => $value) {
+		if ($new_device->save()) {
+			foreach ($inputs as $key => $value) {
+				//return $devices;
+				if (strpos($key, 'field') !== false) {
+					$field = explode('-', $key);
+					$field_id = $field[1];
 
-			//return $devices;
-			if (strpos($key, 'field') !== false) {
-				$field = explode('-', $key);
-				$field_id = $field[1];
-
-				$information = new Information();
-				$information->device_id = $new_device->id;
-				$information->field_id = $field_id;
-				$information->value = $value;
-				$information->save();
+					$information = new Information();
+					$information->device_id = $new_device->id;
+					$information->field_id = $field_id;
+					$information->value = $value;
+					$information->save();
+				}
 			}
+
+			$audit = new Audit();
+			$audit->auditUserEvent(Auth::user()->id, 'create', $update_category->name, $new_device->name);
 		}
-		return redirect()->back()->with('success_msg', 'Device ::'.$new_device->name.' was successfully saved.');
+
+		return redirect()->back()->with('success_msg', 'Device :: '.$new_device->name.' was successfully saved.');
 	}
 
 	# CHANGE DEVICE STATUS
@@ -90,12 +96,16 @@ class Device extends Eloquent implements SluggableInterface {
 		$device = Device::find($device_id);
 
 		Device::find($device_id)->update(['status_id' => $status_id]);
+		$status = Status::find($status_id);
 
 		$deviceStatus = new DeviceStatus();
 		$deviceStatus->status_id = $status_id;
 		$deviceStatus->device_id = $device_id;
 		$deviceStatus->user_id = \Auth::user()->id;
 		$deviceStatus->save();
+		$audit = new Audit();
+		$audit->auditUserEvent(Auth::user()->id, 'changed status', $device->name, $status->status);
+
 
 		$category = Category::find($device->category_id);
 		$category->touch();
@@ -149,25 +159,24 @@ class Device extends Eloquent implements SluggableInterface {
 	# FETCH ALL ASSOCIATION AND DISSOCIATION HISTORY
 	public static function fetchAllAssoc() {
 		$json = array();
-		$device_logs = DeviceLog::all();
+		$device_logs = DeviceLog::with(['deviceOwner', 'user', 'device', 'owner'])->get();
 
 		foreach ($device_logs as $device_log) {
-			foreach ($device_log->deviceOwner as $d_o) {
-				$json[] = [
-					'name' => $d_o->owner->fullName(),
-					'fullname' => $d_o->owner->fullName(),
-					'owner_slug' => $d_o->owner->slug,
-					'device_slug' => $device_log->device->slug,
-					'user_slug' => $device_log->user->slug,
-					'campaign' => $d_o->owner->location,
-					'category_name' => $d_o->category->name,
-					'user_id' => $device_log->user->id,
-					'device_name' => $device_log->device->name,
-					'user_name' => $device_log->user->name,
-					'action' => $device_log->action,
-					'created_at' => date('m/d/Y h:i A', strtotime($device_log->created_at))
-				];
-			}
+			$json[] = [
+				'name' => $device_log->owner->fullName(),
+				'fullname' => $device_log->owner->fullName(),
+				'owner_slug' => $device_log->owner->slug,
+				'device_slug' => $device_log->device->slug,
+				'user_slug' => $device_log->user->slug,
+				'campaign' => $device_log->owner->location,
+				'category_name' => $device_log->device->category->name,
+				'user_id' => $device_log->user->id,
+				'device_name' => $device_log->device->name,
+				'user_name' => $device_log->user->name,
+				'action' => $device_log->action,
+				'created_at' => date('m/d/Y h:i A', strtotime($device_log->created_at))
+			];
+
 		}
 		return json_encode($json);
 	}
@@ -177,7 +186,7 @@ class Device extends Eloquent implements SluggableInterface {
 		$tag = "";
 		$brand = "";
 		$json = array();
-		$devices = Device::where('category_id', $category_id)->get();
+		$devices = Device::with(['information', 'owner'])->where('category_id', $category_id)->get();
 		foreach ($devices as $device) {;
 			foreach ($device->information as $dev_info) {
 				if ($dev_info->field->category_label == "Brand") {
@@ -216,29 +225,15 @@ class Device extends Eloquent implements SluggableInterface {
 		return json_encode($json);
 	}
 
-	public static function importDevice() {
-		set_time_limit(0);
-
-		$file = Input::file( 'xl' );
-
-		//move the file to storage/uploads folder with its original file name
-		$file->move(storage_path() . '/uploads', $file->getClientOriginalName());
-
-		//Load the sheet and convert it into array
-		$sheet = Excel::load( storage_path() . '/uploads/' . $file->getClientOriginalName())->toArray();
-
-		foreach ($sheet as $row) {
-			$new_device = Device::firstOrNew([
-				'name' => $row['name'],
-				'category_id' => $row['category_id'],
-				'owner_id' => $row['owner_id'],
-				'status_id' => $row['status_id'],
-				'availability' => $row['availability']
-			]);
-			$new_device->save();
-		}
-
-		return redirect()->back()->with('success_msg', 'Files has been successfully imported.');
+	public static function importDevice($request) {
+		$new_device = new Device();
+		$new_device->name = $request->get("name");
+		$new_device->category_id = $request->get('category_id');
+		$new_device->owner_Id = $request->get('location_id');
+		$new_device->status_id = $request->get('status');
+		$new_device->comment = $request->get('comment');
+		$new_device->availability = $request->get('availability');
+		$new_device->save();
 	}
 
 	public static function getInformation() {
@@ -312,6 +307,31 @@ class Device extends Eloquent implements SluggableInterface {
 		}
 
 		return json_encode($json);
+	}
+
+	public static function show_AllAvailableDevices() {
+		$json = [];
+		$devices = Device::with('category')->where('status_id', 1)->where('owner_id', 0)->get();
+
+		foreach($devices as $device) {
+			$json[] = [
+				'category_name' => $device->category->name,
+				'category_slug' => $device->category->slug,
+				'device_name' => $device->name,
+				'device_slug' => $device->slug,
+				'updated_at' => date('F d, Y h:i A', strtotime($device->updated_at))
+			];
+		}
+
+		return json_encode($json);
+	}
+
+	public static function getCountOfAvailableDevices() {
+		return count(Device::where('status_id', 1)->where('owner_id', 0)->get());
+	}
+
+	public static function getCountOfDefectiveDevices() {
+		return count(Device::where('status_id', '!=', 1)->get());
 	}
 
 }

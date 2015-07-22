@@ -21,7 +21,6 @@
 
 <?php $__env->startSection('content'); ?>
 <div class="container">
-<br/>
 	<?php echo Form::open(['route' => ['device.store']]); ?>
 
 	<div class="col-lg-3">

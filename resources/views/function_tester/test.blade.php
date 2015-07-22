@@ -1,8 +1,8 @@
 @extends('app')
 
 @section('header')
-    @include('util.m-topbar')
-    <div class="container">
+	@include('util.m-topbar')
+	<div class="container">
 		<div class="col-lg-12">
 			<ol class="breadcrumb" style=" margin-left: 1.5rem; ">
 				<li><label>Inventory</label>
@@ -39,6 +39,7 @@
 			</div>
 		</div>
 	</div>
+
  </div>
 @stop
 
@@ -50,6 +51,7 @@
 
 	$(document).on('submit', 'form', function() {
 		var size = $("#xl")[0].files[0].size;
+		var percent = 0;
 		var progress = 0;
 		var newPercent = 0;
 		var data_failed_import = 0;
@@ -63,7 +65,7 @@
 				var csvData = row.data[0];
 				$.ajax({
 					type: 'POST',
-					url: "{{ route('import_categories') }}",
+					url: "{{ route('t') }}",
 					data: csvData,
 					success: function() {
 						progress = row.meta.cursor;

@@ -33,32 +33,15 @@ class Information extends Eloquent {
 		return redirect()->back();
 	}
 
-	public function importInformation() {
-		set_time_limit(0);
-		$file = Input::file( 'xl' );
-		# Send the file to the dispatcher
-		$file->move(storage_path() . '/uploads', $file->getClientOriginalName());
+	public static function importInformation($request) {
+		$new_information = new Information();
+		$new_information->device_id = $request->get('device_id');
+		$new_information->field_id = $request->get('field_id');
+		$new_information->value = $request->get('value');
+		$new_information->save();
+	}
 
-		//Load the sheet and convert it into array
-		$sheet = Excel::load( storage_path() . '/uploads/' . $file->getClientOriginalName())->toArray();
-		//
-		$this->dispatch(new ImportInformationCommand($sheet));
-		$file = Input::file( 'xl' );
-
-		//move the file to storage/uploads folder with its original file name
-		$file->move(storage_path() . '/uploads', $file->getClientOriginalName());
-
-		//Load the sheet and convert it into array
-		$sheet = Excel::load( storage_path() . '/uploads/' . $file->getClientOriginalName())->toArray();
-
-		foreach ($sheet as $row) {
-			$new_information = new Information();
-			$new_information->device_id = $row['device_id'];
-			$new_information->field_id = $row['field_id'];
-			$new_information->value = $row['value'];
-			$new_information->save();
-		}
-
-		return redirect()->back()->with('success_msg', 'Files has been successfully imported.');
+	public static function getInformationCount() {
+		return count(Information::all());
 	}
 }
