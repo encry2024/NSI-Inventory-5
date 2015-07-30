@@ -25,7 +25,7 @@
     <div class="col-lg-3">
    		<div class="btn-group-vertical col-lg-12" role="group">
    			<a role="button" class="btn btn-default col-lg-12 text-left" href="#"  data-toggle='modal' data-target='#noteStore' ><span class="glyphicon glyphicon-pencil"></span> Make a Note</a>
-			@if ($device->owner_id != NULL)
+			@if ($device->owner_id != 0)
 				<a role="button" class="btn btn-default col-lg-12 text-left" data-toggle='modal' data-target='#disassociate_device' href="#"><span class="glyphicon glyphicon-remove"></span> Disassociate</a>
 			@else
 				<a role="button" id="grp" class="btn btn-default col-lg-12 text-left cli" data-toggle='modal' data-target='#associate_device' href="#"><span class="glyphicon glyphicon-tag"></span> Associate</a>
@@ -37,7 +37,7 @@
 
     	<div class="btn-group-vertical col-lg-12" role="group" style="top: 1rem;">
 			<a role="button" id="grp" class="btn btn-default col-lg-12 text-left" href="{{ route('status.index') }}">Status: <span class="right">{{ $device->status->status }}</span></a>
-			@if ($device->owner_id != NULL)
+			@if ($device->owner_id != 0)
 				<a role="button" id="grp" class="btn btn-default col-lg-12 text-left" data-toggle='modal' title="{{ $device->owner->firstName . ' ' . $device->owner->lastName }}" href="{{ route('owner.show', [$device->owner->slug]) }}">Owner: <span class="right">{{ str_limit($device->owner->firstName . ' '. $device->owner->lastName, $limit = 16, $end = '...') }}</span></a>
 			@else
 				<a role="button" id="grp" class="btn btn-default col-lg-12 text-left" data-toggle='modal' data-target='#associate_device' href="#">Owner: <span class="right">{{ $device->availability }}</span></a>
@@ -54,8 +54,8 @@
 		</div>
 	</div>
 
-     <div class="col-lg-9 col-md-offset-center-2" >
-		<h3><i>{{ $device->name  }}</i></h3>
+    <div class="col-lg-9 col-md-offset-center-2" >
+		<h3><i>{{ $device->name  }}</i><span class="right"><label for="" class="size-15">Category: {{ $device->category->name }}</label></span></h3>
 		<hr/>
 
 		@if($device->status_id != '' || $device->status_id != 0)
@@ -96,7 +96,6 @@
 			<table id="note_history"></table>
 			<br/>
 		</div>
-
     </div>
  </div>
 
@@ -224,8 +223,8 @@
 							<div class="form-group">
 								<label class="col-md-4 control-label">Owner</label>
 								<div class="col-md-6">
-									@if ($device->owner_id != '' || $device->owner_id != 0)
-									<label for="">{{ $device->owner->firstName . ' ' . $device->owner->lastName }}</label>
+									@if ($device->owner_id != 0)
+									<label for="">{{ $device->owner->fullName() }}</label>
 									@endif
 								</div>
 							</div>

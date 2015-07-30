@@ -12,7 +12,7 @@ class AddColumnUserIdInDeviceTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('devices', function($table){
+		Schema::table('devices', function($table) {
 			$table->integer('user_id')->after('category_id');
 		});
 	}

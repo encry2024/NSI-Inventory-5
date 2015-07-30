@@ -12,6 +12,7 @@ return array(
     'AddColumnDeviceIdInNotesTable' => $baseDir . '/database/migrations/2015_05_20_215201_AddColumnDeviceIdInNotesTable.php',
     'AddColumnPastInNotesTable' => $baseDir . '/database/migrations/2015_05_20_214725_AddColumnPastInNotesTable.php',
     'AddColumnUserIdInDeviceTable' => $baseDir . '/database/migrations/2015_07_23_011538_AddColumnUserIdInDeviceTable.php',
+    'CreateActivitiesTable' => $baseDir . '/database/migrations/2015_07_28_182232_create_activities_table.php',
     'CreateAuditsTable' => $baseDir . '/database/migrations/2015_04_11_070242_create_audits_table.php',
     'CreateCategoriesTable' => $baseDir . '/database/migrations/2015_04_11_070140_create_categories_table.php',
     'CreateDeviceLogsTable' => $baseDir . '/database/migrations/2015_04_11_070313_create_device_logs_table.php',

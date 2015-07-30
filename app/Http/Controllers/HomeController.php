@@ -1,12 +1,8 @@
 <?php namespace App\Http\Controllers;
 
-use App\Owner;
-use App\User;
-use App\Information;
-use App\Status;
-use App\Device;
-use App\Category;
 
+use App\Category;
+use Illuminate\Http\Request;
 class HomeController extends Controller {
 
 	/*
@@ -35,10 +31,10 @@ class HomeController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index(Request $request)
 	{
-
-		return view('home');
+		$viewCategory = Category::viewCategories($request);
+		return $viewCategory;
 	}
 
 }

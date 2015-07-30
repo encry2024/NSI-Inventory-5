@@ -2,8 +2,10 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 use App\User;
 class UserController extends Controller {
@@ -23,6 +25,16 @@ class UserController extends Controller {
 	public function __construct()
 	{
 		$this->middleware('auth');
+	}
+
+	public function index(Request $request) {
+		$users = User::where('name', 'LIKE', '%'.$request->get('filter').'%')->latest();
+		$users = $users->where('email', 'LIKE', '%'.$request->get('filter').'%');
+		$users = $users->whereType('user')->paginate(25);
+
+
+		$users->setPath('/user');
+		return view('user.index', compact('users'));
 	}
 
 	public function create()
@@ -82,6 +94,20 @@ class UserController extends Controller {
 	public function destroy($id)
 	{
 		//
+	}
+
+	public function viewChangePassword()
+	{
+		return view('auth.change_password');
+	}
+
+	public function changePass( Request $request )
+	{
+		User::find(Auth::user()->id)->update(['password' => bcrypt($request->get('password'))]);
+
+		Auth::logout();
+
+		return redirect('auth/login')->with('success_msg', 'Your password was successfully changed');
 	}
 
 }

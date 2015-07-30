@@ -10,7 +10,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class Owner extends Eloquent implements SluggableInterface{
 
 	//
-	use SoftDeletes;
+	use SoftDeletes, RecordsActivity;
 	use SluggableTrait;
 
 	protected $table = 'owners';
@@ -38,7 +38,7 @@ class Owner extends Eloquent implements SluggableInterface{
 	}
 
 	public static function importOwner($request) {
-		if ($request->get('firstname') == "") {
+		if ($request->get('firstname') == "" || $request->get('lastname') == "") {
 			$new_owner = new Owner();
 			$new_owner->firstName = "-";
 			$new_owner->lastName = "-";

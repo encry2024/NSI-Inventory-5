@@ -41,7 +41,15 @@
 	@yield('content')
 	@yield('script')
 	@yield('style')
-
+	@if (Request::path() != "auth/login")
+	<div class="container">
+		<div class="col-lg-12">
+			<hr/>
+			<label class="size-12 app-info-label" for=""><span class=""><kbd>© 2015 Northstar Solutions, Inc.</kbd></span></label>
+			<label class="right size-12 app-info-label" for=""><kbd>Inventory `5 &mdash; Version: 1.0.1.1</kbd></label>
+		</div>
+	</div>
+	@endif
 	<style>
 		body {
 			/*background-color: #ddd;*/
