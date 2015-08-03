@@ -11,7 +11,7 @@
 				<li><label>{{ $device->name }}</label>
 			</ol>
 			@if (Session::has('success_msg'))
-				<div class="alert alert-success" role="alert" style=" margin-left: 1.5rem; ">
+				<div class="alert {{ Session::get('message_label') }}" role="alert" style=" margin-left: 1.5rem; ">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					{{ Session::get('success_msg')  }}
 				</div>
@@ -38,7 +38,7 @@
     	<div class="btn-group-vertical col-lg-12" role="group" style="top: 1rem;">
 			<a role="button" id="grp" class="btn btn-default col-lg-12 text-left" href="{{ route('status.index') }}">Status: <span class="right">{{ $device->status->status }}</span></a>
 			@if ($device->owner_id != 0)
-				<a role="button" id="grp" class="btn btn-default col-lg-12 text-left" data-toggle='modal' title="{{ $device->owner->firstName . ' ' . $device->owner->lastName }}" href="{{ route('owner.show', [$device->owner->slug]) }}">Owner: <span class="right">{{ str_limit($device->owner->firstName . ' '. $device->owner->lastName, $limit = 16, $end = '...') }}</span></a>
+				<a role="button" id="grp" class="btn btn-default col-lg-12 text-left" data-toggle='modal' title="{{ $device->owner->fullName() }}" href="{{ route('owner.show', [$device->owner->slug]) }}">Owner: <span class="right">{{ str_limit($device->owner->fullName(), $limit = 16, $end = '...') }}</span></a>
 			@else
 				<a role="button" id="grp" class="btn btn-default col-lg-12 text-left" data-toggle='modal' data-target='#associate_device' href="#">Owner: <span class="right">{{ $device->availability }}</span></a>
 			@endif

@@ -28,22 +28,32 @@ class DeviceLog extends Eloquent {
 	}
 
 	public static function createLog($owner_id, $id) {
+		$success_msg = "";
+		$message_label = "";
 
-		$device = Device::find($id);
-		$device->owner_id = $owner_id;
-		$device->user_id = Auth::user()->id;
-		$device->save();
+		if ($owner_id != '') {
+			$device = Device::find($id);
+			$device->owner_id = $owner_id;
+			$device->user_id = Auth::user()->id;
+			$device->save();
 
-		$owner = Owner::find($owner_id);
+			$owner = Owner::find($owner_id);
 
-		$device_log = new DeviceLog();
-		$device_log->owner_id = $owner_id;
-		$device_log->device_id = $id;
-		$device_log->user_id = \Auth::user()->id;
-		$device_log->action = "ASSOCIATE";
-		$device_log->save();
+			$device_log = new DeviceLog();
+			$device_log->owner_id = $owner_id;
+			$device_log->device_id = $id;
+			$device_log->user_id = \Auth::user()->id;
+			$device_log->action = "ASSOCIATE";
+			$device_log->save();
 
-		return redirect()->back()->with('success_msg', $device->name .' was ASSOCIATED with ' . $owner->fullName());
+			$success_msg = $device->name .' was ASSOCIATED with ' . $owner->fullName();
+			$message_label = "alert-success";
+		} else {
+			$success_msg = 'Owner doesn\'t exist or Owner was not provided';
+			$message_label = "alert-danger";
+		}
+
+		return redirect()->back()->with('success_msg', $success_msg)->with('message_label', $message_label);
 	}
 
 	public static function disassocLog($id) {
@@ -63,7 +73,7 @@ class DeviceLog extends Eloquent {
 		$device->owner_id = 0;
 		$device->save();
 
-		return redirect()->back()->with('success_msg', $device->name . ' was DISASSOCIATED to '.$owner->fullName());
+		return redirect()->back()->with('success_msg', $device->name . ' was DISASSOCIATED to '.$owner->fullName())->with('message_label', 'alert-success');
 	}
 
 	public static function getCountDeviceLog() {

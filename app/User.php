@@ -52,5 +52,9 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
 	{
 		return $related->recordActivity($name);
 	}
+
+    public function devices(){
+        return $this->hasMany('App\Devices');
+    }
 	
 }

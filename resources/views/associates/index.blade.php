@@ -22,103 +22,74 @@
 	</div>
 	<div class="col-lg-9 col-md-offset-center-2" >
 		<div class="panel panel-default col-lg-12" style="border-color: #ccc;">
-			<div class="page-header">
-				<h3>Current Associates</h3>
-			</div>
-			<br/>
-			<table id="current_assoc"></table>
+            <h3>Current Associates</h3>
+			<hr/>
+			@if (Request::has('filter'))
+                    <div class="alert alert-success" role="alert">Entered Query: "{{ Request::get('filter') }}" Filter Result: {{ $devices->firstItem() }} to {{ $devices->lastItem() }} out of {{$devices->total()}} {{ Request::get('categoryLabel') }}</div>
+                @endif
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="left" for="" style="margin-top: 0.5rem; margin-left: 1.5rem;">Filter By: </label>
+                        <div class="col-lg-4">
+                            <input type="search" class="form-control" id="filter" name="filter" placeholder="Enter your query">
+                        </div>
+                        <button type="submit" class="btn btn-default">Filter</button>
+                        <a role="button" class="btn btn-default" href="{{ route('all_assoc') }}">Clear filter</a>
+                    </div>
+                </form>
+                <hr/>
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <td>Category</td>
+                            <td>Device</td>
+                            <td>Owner</td>
+                            <td>Released By</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($devices as $device)
+                        <tr>
+                            <td>
+                                <a href="{{ route('category.show', $device->category_slug) }}">{{ $device->category_name }}</a>
+                            </td>
+                            <td>
+                                <a href="{{ route('device.edit', $device->device_slug) }}">{{ $device->device_name }}</a>
+                            </td>
+                            <td>
+                                <a href="{{ route('owner.show', $device->owner_slug) }}">{{ $device->owner_fName }} {{ $device->owner_lName }}</a>
+                            </td>
+                            <td>
+                                {!! $device->user_id != 0 ? '<a href="'. route('user.show', $device->user_id).'">'. $device->user_name .'</a>' : 'Not provided' !!}
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+                @if (Request::has('filter'))
+                <form class="form-inline">
+                    <div class="form-group left" style=" margin-top: 2.55rem; ">
+                        <label class="" for="">Showing {{ count($devices) == 0 ? count($devices) . ' to '.  $devices->lastItem() . ' out of ' . $devices->total() : $devices->firstItem() . ' to ' . $devices->lastItem() . ' out of ' . $devices->total() . ' Associates'}}</label>
+                    </div>
+                    <div class="form-group right">
+                        <span class="right">{!! $devices->appends(['filter' => Request::get('filter')])->render() !!}</span>
+                    </div>
+                </form>
+                @else
+                    <form class="form-inline">
+                        <div class="form-group left" style=" margin-top: 2.55rem; ">
+                            <label class="" for="">Showing {!! $devices->firstItem() !!} to {!! $devices->lastItem() !!} out of {!! $devices->total() !!} Associates</label>
+                        </div>
+                        <div class="form-group right">
+                            <span class="right">{!! $devices->appends(['filter' => Request::get('filter')])->render() !!}</span>
+                        </div>
+                    </form>
+                @endif
 			<br/>
 		</div>
 	</div>
 </div>
-@stop
-
-@section('script')
-<script>
-$.getJSON("{{ route('assoc') }}", function(data) {
-	$('#current_assoc').dataTable({
-		"aaData": data,
-		"lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
-		"oLanguage": {
-		"sEmptyTable": "No Associate History to be shown...",
-			"sLengthMenu": "No. of Associate _MENU_",
-			"oPaginate": {
-			"sFirst": "First ", // This is the link to the first
-			"sPrevious": "&#8592; Previous", // This is the link to the previous
-			"sNext": "Next &#8594;", // This is the link to the next
-			"sLast": "Last " // This is the link to the last
-			}
-		},
-		//DISPLAYS THE VALUE
-		//sTITLE - HEADER
-		//MDATAPROP - TBODY
-		"aoColumns":
-		[
-			{"sTitle": "Category", "mDataProp": "category_name", "sClass": "size-14"},
-			{"sTitle": "Device", "mDataProp": "device_name", "sClass": "size-14"},
-			{"sTitle": "Owner", "mDataProp": "name"},
-			{"sTitle": "Assigned By", "mDataProp": "user_name"},
-			{"sTitle": "Date Assigned", "width":"20%", "mDataProp": "created_at"}
-
-		],
-		"aoColumnDefs":
-		[
-			//FORMAT THE VALUES THAT IS DISPLAYED ON mDataProp
-			//ID
-			{ "bSortable": false, "aTargets": [ 0 ] },
-			{
-				"aTargets": [ 0 ], // Column to target
-				"mRender": function ( data, type, full ) {
-					var url = '{{ route('category.show', ":slug") }}';
-					url = url.replace(':slug', full["category_slug"]);
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return "<a href='"+url+"' class='size-14 text-left'  >" + data + "</a>";
-				}
-			},
-			{
-				"aTargets": [ 1 ], // Column to target
-				"mRender": function ( data, type, full ) {
-				var url = '{{ route('device.edit', ":slug") }}';
-				url = url.replace(':slug', full["device_slug"]);
-				// 'full' is the row's data object, and 'data' is this column's data
-				// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-				return "<a href='"+url+"' class='size-14 text-left'  data-popover='true' data-html='true' data-trigger='hover' data-content='Name: <a>" + full['fullname'] + "</a> <br/> Campaign: <a>" + full['campaign'] + "</a>'>" + data + "</a>";
-				}
-			},
-			//CATEGORY SLUG
-			{
-				"aTargets": [ 2 ], // Column to target
-				"mRender": function ( data, type, full ) {
-					var url = '{{ route('owner.show', ":slug") }}';
-					url = url.replace(':slug', full["owner_slug"]);
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return "<a href='"+url+"' class='size-14 text-left'  >" + data + "</a>";
-				}
-			},
-			//CATEGORY RECENT UPDATE
-			{
-				"aTargets": [ 3 ], // Column to target
-				"mRender": function ( data, type, full ) {
-				// 'full' is the row's data object, and 'data' is this column's data
-				// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-				return '<label class="text-center size-14"> ' + data + ' </label>';
-				}
-			},
-			{
-				"aTargets": [ 4 ], // Column to target
-				"mRender": function ( data, type, full ) {
-				// 'full' is the row's data object, and 'data' is this column's data
-				// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-				return '<label class="text-center size-14"> ' + data + ' </label>';
-				}
-			},
-		]
-	});
-$('div.dataTables_filter input').attr('placeholder', 'Filter Associate/Dissociate');
-});
-</script>
 @stop
 
 @section('style')

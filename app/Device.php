@@ -4,6 +4,7 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 use Cviebrock\EloquentSluggable\SluggableTrait;
 use Cviebrock\EloquentSluggable\SluggableInterface;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Audit;
@@ -49,6 +50,10 @@ class Device extends Eloquent implements SluggableInterface {
 		return $this->hasManyThrough('DeviceLog', 'Device', 'item_id', 'device_id');
 	}
 
+    public function user() {
+        return $this->belongsTo('App\User');
+    }
+
 	# FUNCTIONS
 
 	public static function store_device($device, $inputs) {
@@ -79,9 +84,6 @@ class Device extends Eloquent implements SluggableInterface {
 					$information->save();
 				}
 			}
-
-			$audit = new Audit();
-			$audit->auditUserEvent(Auth::user()->id, 'create', $update_category->name, $new_device->name);
 		}
 
 		return redirect()->back()->with('success_msg', 'Device :: '.$new_device->name.' was successfully saved.');
@@ -102,10 +104,6 @@ class Device extends Eloquent implements SluggableInterface {
 		$deviceStatus->device_id = $device_id;
 		$deviceStatus->user_id = \Auth::user()->id;
 		$deviceStatus->save();
-
-		$audit = new Audit();
-		$audit->auditUserEvent(Auth::user()->id, 'changed status', $device->name, $status->status);
-
 
 		$category = Category::find($device->category_id);
 		$category->touch();

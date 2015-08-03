@@ -1,17 +1,12 @@
 <?php namespace App\Http\Controllers;
 
 use App\Http\Requests;
-//use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Http\Requests\CreateFieldRequest;
-//use Illuminate\Support\Facades\Input;
 use App\Category;
 use App\Field;
-//use App\DeviceLog;
 use App\Device;
-//use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Response;
 
 
