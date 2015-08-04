@@ -22,7 +22,7 @@
 	</div>
 	<div class="col-lg-9 col-md-offset-center-2" >
 		<div class="panel panel-default col-lg-12" style="border-color: #ccc;">
-            <h3>Current Associates</h3>
+            <h3><kbd>{{ $devices->total() }}</kbd> Current Associates</h3>
 			<hr/>
 			@if (Request::has('filter'))
                     <div class="alert alert-success" role="alert">Entered Query: "{{ Request::get('filter') }}" Filter Result: {{ $devices->firstItem() }} to {{ $devices->lastItem() }} out of {{$devices->total()}} {{ Request::get('categoryLabel') }}</div>
