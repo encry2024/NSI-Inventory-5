@@ -165,15 +165,8 @@ class DeviceController extends Controller {
             $devices = $devices->latest('devices.created_at')
             ->paginate(25);
 
-        /*$devices = Device::with(['category', 'user'])->latest();
-        $devices = $devices->where('name', 'LIKE','%'.$request->get('filter').'%');
-        $devices = $devices->with(['owner' => function ($query) use ($request) {
-            $query->where('firstName', 'LIKE', '%'.$request->get('filter').'%');
-        }])->where('owner_id','!=','0')->paginate(25);*/
-
         $devices->setPath('all');
 		return view('associates.index', compact('devices'));
-
 	}
 
 	public function disassociateDevice( $id ) {
