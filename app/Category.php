@@ -9,9 +9,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class Category extends Eloquent implements SluggableInterface {
 
-	//
-	use SoftDeletes;
-	use SluggableTrait;
+	use SoftDeletes, SluggableTrait, RecordsActivity;
 
 	protected $softDelete = true;
 	protected $dates = ['deleted_at'];
@@ -40,6 +38,10 @@ class Category extends Eloquent implements SluggableInterface {
 		return $this->hasManyThrough('DeviceLog', 'Device', 'item_id', 'device_id');
 	}
 
+	public function informations(){
+		return $this->hasManyThrough('App\Information', 'App\Device');
+	}
+
 	public static function storeCategory( $f_requests, $request , $category) {
 		$category->name = $request['name'];
 		$category->save();
@@ -59,26 +61,17 @@ class Category extends Eloquent implements SluggableInterface {
 	public static function importCategory($request) {
 		$new_category = new Category;
 		$new_category->name = $request->get("name");
+		//$new_category->deleted_at = $request->get('deleted_at');
 		$new_category->save();
 	}
 
-	public static function fetchCategories() {
-		$json = array();
-		$categories = Category::all();
-		foreach ($categories as $category) {
-			$json[] = array(
-				'id' 				=> $category->id,
-				'slug'				=> $category->slug,
-				'name' 				=> $category->name,
-				'assoc_device'		=> count($category->associated_devices()),
-				'av_device'			=> count($category->av_device()),
-				'total_devices'		=> count($category->devices),
-				'def_device'		=> count($category->def_device()),
-				'updated_at' 		=> date('F d, Y', strtotime($category->updated_at)),
-				'time_updated'		=> date('[ h:i A D ]', strtotime($category->updated_at))
-			);
-		}
-		return json_encode($json);
+	public static function viewCategories($request) {
+		$categories = Category::with(['devices'])->latest('updated_at');
+
+		$categories = $categories->where('name', 'LIKE', '%'.$request->get('filter').'%')->paginate(25);
+
+		$categories->setPath('/');
+		return view('home', compact('categories'));
 	}
 
 	public static function fetch_history( $category_slug ) {

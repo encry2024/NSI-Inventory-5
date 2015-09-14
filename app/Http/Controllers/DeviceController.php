@@ -13,6 +13,7 @@ use App\Owner;
 use App\DeviceLog;
 use App\Note;
 use App\Http\Requests\CreateDeviceRequest;
+use Illuminate\Support\Facades\DB;
 
 class DeviceController extends Controller {
 
@@ -141,8 +142,31 @@ class DeviceController extends Controller {
 		return $all_assoc;
 	}
 
-	public function viewAssoc() {
-		return view('associates.index');
+	public function viewAssoc(Request $request) {
+
+        $devices = DB::table('devices')
+            ->select('owners.*', DB::raw('inv_owners.firstName as "owner_fName"'), DB::raw('inv_owners.lastName as "owner_lName"'), DB::raw('inv_owners.slug as "owner_slug"'), 'devices.*', DB::raw('inv_devices.name as "device_name"'), DB::raw('inv_devices.slug as "device_slug"'), 'categories.*', DB::raw('inv_categories.name as "category_name"'), DB::raw('inv_categories.slug as "category_slug"'), 'users.*', DB::raw('inv_users.name as "user_name"'), DB::raw('inv_users.id as "user_id"'))
+            ->join('owners', function ($join) use ($request) {
+                $join->on('devices.owner_id', '=','owners.id');
+            })
+            ->leftJoin('categories', function($join) {
+                $join->on('devices.category_id', '=', 'categories.id');
+            })
+            ->leftJoin('users', function($join) {
+                $join->on('devices.user_id', '=', 'users.id');
+            });
+
+            if ($request->has('filter')) {
+                $devices = $devices->where('owners.firstName', 'LIKE', '%'.$request->get('filter').'%')
+                    ->orWhere('owners.lastName', 'LIKE', '%'.$request->get('filter').'%')
+                    ->orWhere('devices.name', 'LIKE', '%'.$request->get('filter').'%');
+            }
+
+            $devices = $devices->latest('devices.created_at')
+            ->paginate(25);
+
+        $devices->setPath('all');
+		return view('associates.index', compact('devices'));
 	}
 
 	public function disassociateDevice( $id ) {

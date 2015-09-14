@@ -7,7 +7,7 @@
 			<ol class="breadcrumb" style=" margin-left: 1.5rem; ">
 				<li><label>Inventory</label>
 				<li><a href="{{ route('home') }}" class="active">Home</a></li>
-				<li><label>Fields & Information</label>
+				<li><label>Device Information</label>
 			</ol>
 		</div>
 	</div>
@@ -21,108 +21,118 @@
 		</div>
 	</div>
 
-     <div class="col-lg-9 col-md-offset-center-2">
+    <div class="col-lg-9 col-md-offset-center-2">
         <div class="panel panel-default col-lg-12" style="border-color: #ccc;">
-           <div class="page-header">
-                <h3>Fields</h3>
-           </div>
-           <table id="fields" class="table"></table>
-           <br/><br/>
+        <br/>
+			@if (Request::has('filter') || Request::has('categoryLabel'))
+				<div class="alert alert-success" role="alert">Entered Query: "{{ Request::get('filter') }}" Filter Result: {{ $information->firstItem() }} to {{ $information->lastItem() }} out of {{$information->total()}} {{ Request::get('categoryLabel') }}</div>
+			@endif
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label class="left" for="" style="margin-top: 0.5rem; margin-left: 1.5rem;">Filter By: </label>
+					<select name="categoryLabel" class="btn btn-default left" style="margin-left: 1.5rem;">
+						@foreach($fields as $field)
+							<option value="{{ $field->category_label }}">{{ $field->category_label }}</option>
+						@endforeach
+					</select>
+					<div class="col-lg-4">
+						<input type="search" class="form-control" id="filter" name="filter" placeholder="Enter your query">
+					</div>
+					<button type="submit" class="btn btn-default">Filter</button>
+					<a role="button" class="btn btn-default" href="{{ route('information.index') }}">Clear filter</a>
+				</div>
+			</form>
+			<hr/>
+			@if (Request::has('filter') || Request::has('categoryLabel'))
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<td>Category</td>
+							<td>Device</td>
+							<td>Device Information</td>
+							<td>Category Label</td>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach ($information as $info)
+						<tr>
+							<td>
+								<a href="{{ route('category.show', $info->category_slug) }}">{{ $info->category_name }}</a>
+							</td>
+							<td>
+								<a href="{{ route('device.edit', $info->device_slug) }}">{{ $info->device_name }}</a>
+							</td>
+							<td>
+								{!! $info->value == '' ? "<code>information not provided</code>" : "<kbd>".$info->value."</kbd>" !!}
+							</td>
+							<td>
+								<kbd>{{ $info->category_label }}</kbd>
+							</td>
+						</tr>
+						@endforeach
+					</tbody>
+				</table>
+
+				@if (Request::has('filter') || Request::has('categoryLabel'))
+				<form class="form-inline">
+					<div class="form-group left" style=" margin-top: 2.55rem; ">
+						<label class="" for="">Showing {{ count($information) == 0 ? count($information) . ' to '.  $information->lastItem() . ' out of ' . $information->total() : $information->firstItem() . ' to ' . $information->lastItem() . ' out of ' . $information->total() . ' ' . Request::get('categoryLabel')  }}</label>
+					</div>
+					<div class="form-group right">
+						<span class="right">{!! $information->appends(['filter' => Request::get('filter'), 'categoryLabel' => Request::get('categoryLabel')])->render() !!}</span>
+					</div>
+				</form>
+				@else
+					<form class="form-inline">
+						<div class="form-group left" style=" margin-top: 2.55rem; ">
+							<label class="" for="">Showing {!! $information->firstItem() !!} to {!! $information->lastItem() !!} out of {!! $information->total() !!} Information</label>
+						</div>
+						<div class="form-group right">
+							<span class="right">{!! $information->appends(['filter' => Request::get('filter'), 'categoryLabel' => Request::get('categoryLabel')])->render() !!}</span>
+						</div>
+					</form>
+				@endif
+			@endif
         </div>
     </div>
  </div>
 
 @stop
 
-@section('script')
-<script type="text/javascript">
-	$.getJSON("{{ route('fetch_devices_information') }}", function(data) {
-		$('#fields').dataTable({
-			"aaData": data,
-			"lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
-			"aaSorting": [[ 1, 'asc' ]],
-			"oLanguage": {
-				"sLengthMenu": "No. of Devices _MENU_",
-				"oPaginate": {
-				"sFirst": "First ", // This is the link to the first
-				"sPrevious": "&#8592; Previous", // This is the link to the previous
-				"sNext": "Next &#8594;", // This is the link to the next
-				"sLast": "Last " // This is the link to the last
-				}
-			},
-			//DISPLAYS THE VALUE
-			//sTITLE - HEADER
-			//MDATAPROP - TBODY
-			"aoColumns":
-			[
-				{"sTitle": "#", "mDataProp": "id", "sClass": "size-14"},
-				{"sTitle": "Device", "mDataProp": "device_name"},
-				{"sTitle": "Field", "mDataProp": "field"},
-				{"sTitle": "Information", "mDataProp": "information"}
-			],
-			"aoColumnDefs":
-			[
-				//FORMAT THE VALUES THAT IS DISPLAYED ON mDataProp
-				//ID
 
-				{ "bSortable": false, "aTargets": [ 0 ] },
-				{
-					"aTargets": [ 0 ], // Column to target
-					"mRender": function ( data, type, full ) {
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return '<label class="text-center size-14">' + data + '</label>';
-					}
-				},
-				//CATEGORY SLUG
-				{
-					"aTargets": [ 1 ], // Column to target
-					"mRender": function ( data, type, full ) {
-						var url = '{{ route('device.edit', ":slug") }}';
-						url = url.replace(':slug', full["slug"]);
-						// 'full' is the row's data object, and 'data' is this column's data
-						// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-						return "<a href='"+url+"' class='size-14 text-left'>" + data + "</a>";
-					}
-				},
-                //CATEGORY RECENT UPDATE
-				{
-					"aTargets": [ 2 ], // Column to target
-					"mRender": function ( data, type, full ) {
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return '<label class="text-center size-14"> ' + data + ' </label>';
-					}
-				},
-				{
-					"aTargets": [ 3 ], // Column to target
-					"mRender": function ( data, type, full ) {
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return '<label class="text-center size-14"> ' + data + ' </label>';
-					}
-				},
-				{
-					"aTargets": [ 3 ], // Column to target
-					"mRender": function ( data, type, full ) {
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return '<label class="text-center size-14"> ' + data + ' </label>';
-					}
-				}
-			],
-			"fnDrawCallback": function( oSettings ) {
-				/* Need to redo the counters if filtered or sorted */
-				if ( oSettings.bSorted || oSettings.bFiltered )
-				{
-					for ( var i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ )
-					{
-						$('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( "<label>" + (i+1) + "</label>" );
-					}
-				}
-			}
-		});
-	$('div.dataTables_filter input').attr('placeholder', 'Filter Devices');
-});
-</script>
-@stop
+{{--
+<tr>
+	@foreach ($information as $info)
+		<td>{!! $info->value == '' ? "<code>information not provided</code>" : "<kbd>".$info->value."</kbd>" !!}</td>
+	@endforeach
+</tr>
+<tr>
+	@foreach ($information as $info)
+		<td><kbd>{{ $info->field->category_label }}</kbd></td>
+	@endforeach
+</tr>
+--}}
+
+
+
+{{--<form class="form-horizontal">
+	@foreach ($information as $info)
+	<div class="form-group">
+		<div class="col-lg-2" style="width: 14.6%;">
+			<a href="{{ route('category.show', $info->device->category->slug) }}">{{ $info->device->category->name }}</a>
+		</div>
+
+		<div class="col-lg-3">
+			<a href="{{ route('device.edit', $info->device->slug) }}">{{ $info->device->name }}</a>
+		</div>
+
+		<div class="col-lg-4" style="width: 35%;">
+			{!! $info->value == '' ? "<code>information not provided</code>" : "<kbd>".$info->value."</kbd>" !!}
+		</div>
+
+		<div class="col-lg-3">
+			<kbd>{{ $info->field->category_label }}</kbd>
+		</div>
+	</div>
+	@endforeach
+</form>--}}

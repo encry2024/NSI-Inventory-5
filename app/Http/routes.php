@@ -9,10 +9,12 @@ Route::bind('user', 		function( $id )		{ return App\User::find($id); });
 Route::bind('note', 		function( $id )		{ return App\Note::find($id); });
 Route::bind('information', 	function( $id )  	{ return App\Information::find($id); });
 Route::bind('field',		function( $id )		{ return App\Field::find($id); });
+Route::bind('activity', 		function( $id )		{ return App\Activity::find($id); });
 # ROUTE RESOURCE
 
 # CATEGORY RESOURCE
 Route::resource('category', 'CategoryController');
+Route::get('change_password', [	'as' => 'change_password', 'uses' => 'UserController@viewChangePassword']);
 // GET
 get('{category_slug}/category_history', ['as' => 'c_h', 'uses' => 'CategoryController@categoryHistory']);
 get('{category_slug}/associate-dissociate-history', ['as' => 'ch', 'uses' => 'CategoryController@viewCategoryHistory']);
@@ -76,6 +78,9 @@ Route::controllers([
     'password' => 'Auth\PasswordController',
 ]);
 
+# ACTIVITY RESOURCE
+Route::resource('activity', 'ActivityController', ['only' => ['index']]);
+
 # GET
 get('/', ['as' => 'home' , 'uses' => 'HomeController@index']);
 get('associates', ['as' => 'assoc', 'uses' => 'DeviceController@allAssoc']);
@@ -107,8 +112,11 @@ Route::filter('csrf', function() {
 		throw new Illuminate\Session\TokenMismatchException;
 });
 
-
 # FUNCTION TESTER ROUTE
 post('function_save', ['as' => 't', 'uses' => 'CategoryController@testImport']);
 get('view_tester', ['as' => 'vt', 'uses' => 'CategoryController@viewTester']);
 get('get_count', ['as' => 'gc', 'uses' => 'CategoryController@fetchCount']);
+
+
+# POST
+Route::post('user/changed_password', ['as' => 'auth_cp', 'uses' => 'UserController@changePass']);

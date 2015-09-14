@@ -24,7 +24,6 @@
 	<div class="col-lg-3">
 		<div class="btn-group-vertical col-lg-12" role="group" id="btnGrp">
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('create_device', [$category->slug])  }}"><span class="glyphicon glyphicon-plus"></span> Create {{ str_limit($category->name, $limit='10', $end='...') }}</a>
-			<a href="{{ route('device_excel', [$category->slug]) }}" class="btn btn-default text-left col-lg-12" role="button"><span class="glyphicon glyphicon-share-alt"></span> Import {{ str_limit($category->name, $limit='10', $end='...') }} Devices</a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('category.edit', [$category->slug])  }}"><span class="glyphicon glyphicon-info-sign"></span> {{str_limit($category->name, $limit='10', $end='...')}} Profile</a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="#"><span class="glyphicon glyphicon-trash"></span> Deleted {{str_limit($category->name, $limit='10', $end='...')}} <span class="badge right"> {{ count($deleted_device)}} </span></a>
 			<a href="{{ route('ch', [$category->slug]) }}" class="btn btn-default col-lg-12 text-left" role="button"><span class="glyphicon glyphicon-book"></span> Associate & Dissociate Log</a>
@@ -33,13 +32,75 @@
 		</div>
 	</div>
 
-	 <div class="col-lg-9 col-md-offset-center-2">
+	<div class="col-lg-9 col-md-offset-center-2">
 		<div class="panel panel-default col-lg-12" style="border-color: #ccc;">
 			<h3>{{ $category->name  }} Category</h3>
-			<hr>
-			<br>
-			<table id="devices" class="table"></table>
-			<br/><br/>
+			<hr/>
+			@if (Request::has('filter'))
+				<div class="alert alert-success" role="alert">Entered Query: "{{ Request::get('filter') }}" Filter Result: {{ $devices->firstItem() }} to {{ $devices->lastItem() }} out of {{$devices->total()}} Devices</div>
+			@endif
+			<form class="form-horizontal">
+				<div class="form-group">
+					<div class="col-lg-4">
+						<input type="search" class="form-control" id="filter" name="filter" placeholder="Search Device" style="margin-left: 38.5rem;">
+					</div>
+					<button type="submit" class="btn btn-default" style="margin-left: 38rem;">Filter</button>
+					<a role="button" class="btn btn-default" href="{{ route('category.show', $category->slug) }}" style="margin-left: 0rem !important;">Clear filter</a>
+				</div>
+			</form>
+			<table class="table table-condensed">
+				<thead>
+					<tr>
+						<td>Owner</td>
+						<td>Description</td>
+						<td>Brand</td>
+						<td>NSI Tag</td>
+						<td>Status</td>
+						<td>Recent Updates</td>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach ($devices as $device)
+						@foreach ($device->information as $device_information)
+							@if ($device_information->field->category_label == "Brand")
+								<?php $brand = $device_information->value ?>
+							@endif
+
+							@if ($device_information->field->category_label == "NSI Tag")
+								<?php $tag = $device_information->value ?>
+							@endif
+						@endforeach
+						<tr>
+							<td>
+								{!! $device->owner_id!=0 ? '<a class="label label-danger" href="'. route('owner.show', $device->owner->slug) .'">'. $device->owner->fullName() .'</a>' : '<span class="label label-success">Ready to Deploy</span>' !!}
+							</td>
+							<td>
+								<a href="{{ route('device.edit', $device->slug) }}">{{ $device->name }}</a>
+							</td>
+							<td>
+								{!! $brand != '' ? '<label for="">'. $brand .'</label>' : '<label class="label label-warning">Not Provided</label>' !!}
+							</td>
+							<td>
+								<label for="">{{ $tag }}</label>
+							</td>
+							<td>
+								<label for="">{{ $device->status->status }}</label>
+							</td>
+							<td>
+								<label title="{{ date('F d, Y h:i A', strtotime($category->updated_at)) }}">{{ date('F d, Y h:i A', strtotime($category->updated_at)) }}</label>
+							</td>
+						</tr>
+					@endforeach
+				</tbody>
+			</table>
+			<form class="form-inline">
+				<div class="form-group left" style=" margin-top: 2.55rem; ">
+					<label class="" for="">Showing {!! $devices->firstItem() !!} to {!! $devices->lastItem() !!} out of {!! $devices->total() !!} Categories</label>
+				</div>
+				<div class="form-group right">
+					<span class="right">{!! $devices->appends(['filter' => Request::get('filter')])->render() !!}</span>
+				</div>
+			</form>
 		</div>
 	</div>
  </div>
@@ -74,111 +135,4 @@
 	</div>
 	{!! Form::close() !!}
 </div>
-@stop
-
-@section('script')
-<script type="text/javascript">
-
-	$.getJSON("{{ route('fetch_devices', [$category->id]) }}", function(data) {
-		$('#devices').dataTable({
-			"aaData": data,
-			"lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
-			"aaSorting": [[ 5, 'desc' ]],
-			"oLanguage": {
-				"sLengthMenu": "No. of Devices _MENU_",
-				"oPaginate": {
-				"sFirst": "First ", // This is the link to the first
-				"sPrevious": "&#8592; Previous", // This is the link to the previous
-				"sNext": "Next &#8594;", // This is the link to the next
-				"sLast": "Last " // This is the link to the last
-				}
-			},
-			//DISPLAYS THE VALUE
-			//sTITLE - HEADER
-			//MDATAPROP - TBODY
-			"aoColumns":
-			[
-				{"sTitle": "Owner", "mDataProp": "owner", "sClass": "size-14"},
-				{"sTitle": "Description", "mDataProp": "name"},
-				{"sTitle": "Brand", "mDataProp": "brand"},
-				{"sTitle": "NSI Tag", "mDataProp": "tag"},
-				{"sTitle": "Status", "mDataProp": "status", "sClass": "size-14"},
-				{"sTitle": "Recent Update", "width":"20%" ,"mDataProp": "updated_at"}
-
-			],
-			"aoColumnDefs":
-			[
-				//FORMAT THE VALUES THAT IS DISPLAYED ON mDataProp
-				//ID
-				{
-					"aTargets": [ 0 ], // Column to target
-					"mRender": function ( data, type, full ) {
-					var url = '{{ route('owner.show', ":slug") }}';
-						url = url.replace(':slug', full["owner_slug"]);
-						// 'full' is the row's data object, and 'data' is this column's data
-						// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-						if (data != "No Owner") {
-							return "<a href='"+url+"' class='size-14 text-left'>" + data + "</a>";
-						} else {
-							return "<label class='size-14 text-left'>" + data + "</label>";
-						}
-					}
-				},
-				//CATEGORY SLUG
-				{
-					"aTargets": [ 1 ], // Column to target
-					"mRender": function ( data, type, full ) {
-						var url = '{{ route('device.edit', ":slug") }}';
-						url = url.replace(':slug', full["slug"]);
-						// 'full' is the row's data object, and 'data' is this column's data
-						// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-						return "<a href='"+url+"' class='size-14 text-left'>" + data + "</a>";
-					}
-				},
-				//CATEGORY RECENT UPDATE
-				{
-					"aTargets": [ 2 ], // Column to target
-					"mRender": function ( data, type, full ) {
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return '<label class="text-center size-14"> ' + data + ' </label>';
-					}
-				},
-				{
-					"aTargets": [ 3 ], // Column to target
-					"mRender": function ( data, type, full ) {
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return '<label class="text-center size-14"> ' + data + ' </label>';
-					}
-				},
-				{
-					"aTargets": [ 3 ], // Column to target
-					"mRender": function ( data, type, full ) {
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return '<label class="text-center size-14"> ' + data + ' </label>';
-					}
-				},
-				{
-					"aTargets": [ 4 ], // Column to target
-					"mRender": function ( data, type, full ) {
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return '<label class="text-center size-14"> ' + data + ' </label>';
-					}
-				},
-				{
-					"aTargets": [ 5 ], // Column to target
-					"mRender": function ( data, type, full ) {
-					// 'full' is the row's data object, and 'data' is this column's data
-					// e.g. 'full[0]' is the comic id, and 'data' is the comic title
-					return '<label class="text-center size-14"> <!--' + full["updated_at_2"]  + '-->' + data + ' </label>';
-					}
-				}
-			]
-		});
-	$('div.dataTables_filter input').attr('placeholder', 'Filter Devices');
-});
-</script>
 @stop

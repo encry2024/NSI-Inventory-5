@@ -1,21 +1,22 @@
 <?php namespace App\Http\Controllers;
 
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
 use App\Information;
+use Illuminate\Http\Request;
 
-class InformationController extends Controller {
+class InformationController extends Controller
+{
 
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index(Request $request)
 	{
-		return view('field.index');
+		$information_view = Information::viewInformation($request);
+
+		return $information_view;
 	}
 
 	/**

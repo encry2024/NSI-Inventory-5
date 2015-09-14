@@ -8,12 +8,16 @@ use Maatwebsite\Excel\Facades\Excel;
 class Field extends Eloquent {
 
 	//
-    use SoftDeletes;
+    use SoftDeletes, RecordsActivity;
     protected $softDelete = true;
     protected $dates = ['deleted_at'];
 
 
     protected $fillable = ['category_id', 'category_label'];
+
+	public function category() {
+		return $this->belongsTo('App\Category');
+	}
 
 	public static function importField($request) {
 		$new_field = new Field;

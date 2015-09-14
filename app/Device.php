@@ -4,6 +4,7 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 use Cviebrock\EloquentSluggable\SluggableTrait;
 use Cviebrock\EloquentSluggable\SluggableInterface;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Audit;
@@ -12,8 +13,7 @@ use Illuminate\Support\Facades\Auth;
 class Device extends Eloquent implements SluggableInterface {
 
 	//
-	use SoftDeletes;
-	use SluggableTrait;
+	use SoftDeletes, SluggableTrait, RecordsActivity;
 
 	protected $softDelete = true;
 	protected $dates = ['deleted_at'];
@@ -50,6 +50,10 @@ class Device extends Eloquent implements SluggableInterface {
 		return $this->hasManyThrough('DeviceLog', 'Device', 'item_id', 'device_id');
 	}
 
+    public function user() {
+        return $this->belongsTo('App\User');
+    }
+
 	# FUNCTIONS
 
 	public static function store_device($device, $inputs) {
@@ -80,9 +84,6 @@ class Device extends Eloquent implements SluggableInterface {
 					$information->save();
 				}
 			}
-
-			$audit = new Audit();
-			$audit->auditUserEvent(Auth::user()->id, 'create', $update_category->name, $new_device->name);
 		}
 
 		return redirect()->back()->with('success_msg', 'Device :: '.$new_device->name.' was successfully saved.');
@@ -103,9 +104,6 @@ class Device extends Eloquent implements SluggableInterface {
 		$deviceStatus->device_id = $device_id;
 		$deviceStatus->user_id = \Auth::user()->id;
 		$deviceStatus->save();
-		$audit = new Audit();
-		$audit->auditUserEvent(Auth::user()->id, 'changed status', $device->name, $status->status);
-
 
 		$category = Category::find($device->category_id);
 		$category->touch();
@@ -183,11 +181,7 @@ class Device extends Eloquent implements SluggableInterface {
 
 	# FETCH ALL DEVICE
 	public static function fetchAllDevice( $category_id ) {
-		$tag = "";
-		$brand = "";
-		$json = array();
-		$devices = Device::with(['information', 'owner'])->where('category_id', $category_id)->get();
-		foreach ($devices as $device) {;
+		/*foreach ($devices as $device) {;
 			foreach ($device->information as $dev_info) {
 				if ($dev_info->field->category_label == "Brand") {
 					$brand 	= $dev_info->value;
@@ -202,7 +196,7 @@ class Device extends Eloquent implements SluggableInterface {
 					'id' 				=> $device->id,
 					'brand'				=> $brand,
 					'owner'				=> str_limit($device->owner->fullName(), $limit='10', $end='...'),
-					'status'			=> $device->status->status,
+					'status'			=> $device->status->status = 0 ? 4 : 1,
 					'tag'				=> str_limit($tag, $limit = '10', $end = '...'),
 					'slug'              => $device->slug,
 					'owner_slug'		=> $device->owner->slug,
@@ -214,7 +208,7 @@ class Device extends Eloquent implements SluggableInterface {
 					'id' 				=> $device->id,
 					'brand'				=> $brand,
 					'owner'				=> 'No Owner',
-					'status'			=> $device->status->status,
+					'status'			=> $device->status->status = 0 ? 4 : 1,
 					'tag'				=> str_limit($tag, $limit = '10', $end = '...'),
 					'slug'              => $device->slug,
 					'name' 				=> $device->name,
@@ -222,15 +216,16 @@ class Device extends Eloquent implements SluggableInterface {
 				);
 			}
 		}
-		return json_encode($json);
+		return json_encode($json);*/
 	}
 
 	public static function importDevice($request) {
 		$new_device = new Device();
+		$new_device->id = $request->get('id');
 		$new_device->name = $request->get("name");
 		$new_device->category_id = $request->get('category_id');
-		$new_device->owner_Id = $request->get('location_id');
-		$new_device->status_id = $request->get('status');
+		$new_device->owner_id = $request->get('owner_id');
+		$new_device->status_id = $request->get('status_id');
 		$new_device->comment = $request->get('comment');
 		$new_device->availability = $request->get('availability');
 		$new_device->save();

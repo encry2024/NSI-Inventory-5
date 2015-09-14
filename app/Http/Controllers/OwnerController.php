@@ -56,7 +56,7 @@ class OwnerController extends Controller {
 		$new_owner->location = $location;
 		$new_owner->save();
 
-		return $new_owner;
+		return redirect()->back()->with('success_msg', 'Owner :: '. $new_owner->firstName . ' ' . $new_owner->lastName .' has been successfuly created');
 
 	}
 
@@ -102,9 +102,13 @@ class OwnerController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy($owner)
 	{
 		//
+		$ownerName = $owner->fullname();
+		Owner::whereSlug($owner->slug)->delete();
+
+		return redirect(route('owner.index'))->with('success_msg', 'Owner :: ' .$ownerName.' was successfully deleted');
 	}
 
 	public function fetchOwners(){

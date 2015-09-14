@@ -1,17 +1,12 @@
 <?php namespace App\Http\Controllers;
 
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Http\Requests\CreateFieldRequest;
-use Illuminate\Support\Facades\Input;
 use App\Category;
 use App\Field;
-use App\DeviceLog;
 use App\Device;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Response;
 
 
@@ -30,12 +25,9 @@ class CategoryController extends Controller {
 		$this->middleware('auth');
 	}
 
-	public function index()
+	public function index(Request $request)
 	{
-		//
-	   $fetch_categories = Category::fetchCategories();
 
-		return $fetch_categories;
 	}
 
 	/**
@@ -55,9 +47,7 @@ class CategoryController extends Controller {
 	 * @return Response
 	 */
 	public function store(CreateFieldRequest $f_requests, CreateCategoryRequest $request,
-						  Category $category )
-	{
-		//
+						  Category $category ) {
 		$store_category = Category::storeCategory($f_requests, $request, $category);
 
 		return $store_category;
@@ -69,11 +59,15 @@ class CategoryController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show(Category $category)
+	public function show(Category $category, Request $request)
 	{
 		$deleted_device = Device::onlyTrashed()->where('category_id', $category->id)->get();
-		
-		return view('category.show', compact('category', 'deleted_device'));
+		$devices = Device::with(['information.field', 'owner', 'status'])->where('category_id', $category->id)->latest('updated_at');
+
+		$devices = $devices->where('name', 'LIKE', '%'.$request->get('filter').'%')->paginate(25);
+		$devices->setPath($category->slug);
+
+		return view('category.show', compact('category', 'deleted_device', 'devices'));
 	}
 
 	/**

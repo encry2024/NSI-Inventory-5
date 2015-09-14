@@ -1,11 +1,11 @@
 @extends('app')
 
 @section('content')
-<div class="container-fluid">
-	<div class="row">
+<div class="container-fluid" style="background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dd4f14), to(#9b1f03)) no-repeat;">
+	<div class="row" style="margin-bottom: -15rem;">
 		<div class="col-md-7 center">
 		    <br><br><br><br>
-		    <p class="size-40 text-center">NORTHSTAR SOLUTIONS INC</p>
+		    <p class="size-40 text-center" style="color: white;">NORTHSTAR SOLUTIONS INC</p>
 		    <br/>
 			<div class="panel panel-default" style="-webkit-box-shadow: 0px 0px 9px 1px rgba(0,0,0,0.75);
                                                     -moz-box-shadow: 0px 0px 9px 1px rgba(0,0,0,0.75);
@@ -67,7 +67,7 @@
 		</div>
 	</div>
 </div>
-@endsection
+@stop
 
 @section('style')
 <style>

@@ -6586,7 +6586,7 @@ button.close {
   }
 }
 
-.btn-default:hover .badge {
+/*.btn-default:hover .badge {
     color: #337ab7;
     background-color: #fff;
 }
@@ -6594,7 +6594,7 @@ button.close {
     color: #fff;
     background-color: #337ab7;
     border-color: #2e6da4;
-}
+}*/
 
 .btn-group-vertical > .tooltip + .btn,
 .btn-group-vertical > .popover + .btn{

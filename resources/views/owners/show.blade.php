@@ -4,7 +4,7 @@
 	@include('util.m-topbar')
 	<div class="container">
     	<div class="col-lg-12">
-    		<ol class="breadcrumb" style=" margin-left: 1.5rem; ">
+    		<ol class="breadcrumb" style=" margin-left: 1.5rem; margin-right: -1.5rem;">
     			<li><label>Inventory</label>
     			<li><a href="{{ route('home') }}" class="active">Home</a></li>
     			<li><a href="{{ route('owner.index') }}" class="active">Owners</a></li>
@@ -19,14 +19,14 @@
 	<div class="col-lg-3">
 		<div class="btn-group-vertical col-lg-12" role="group">
 			<a role="button" data-toggle="modal" data-target="#editInfo" class="btn btn-default col-lg-12 text-left" href="#"><span class="glyphicon glyphicon-pencil"></span> Edit Owner</a>
-			<a role="button" class="btn btn-default col-lg-12 text-left" href="#"><span class="glyphicon glyphicon-trash"></span> Delete Owner</a>
+			<a role="button" data-toggle="modal" data-target="#confirmDelete" class="btn btn-default col-lg-12 text-left" href="#"><span class="glyphicon glyphicon-trash"></span> Delete Owner</a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('owner.index') }}"><span class="glyphicon glyphicon-chevron-left"></span> Back to Owner Page</a>
 		</div>
 		<br><br><br><br><br><br>
 		<div class="btn-group-vertical col-lg-12" role="group">
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="#">Associated Devices</a>
 			@foreach ($owner->devices as $owner_device)
-				<a role="button" class="btn btn-default col-lg-12 text-left" href="#">{{ $owner_device->name }}</a>
+				<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('device.edit', $owner_device->slug) }}">{{ $owner_device->name }}</a>
 			@endforeach
 		</div>
 	</div>
@@ -49,49 +49,74 @@
 </div>
 
 {{-- CHANGE STATUS MODAL --}}
- <div class="modal fade" id="editInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	{!! Form::open(['method'=>'PATCH', 'route' => ['owner.update', $owner->slug]]) !!}
-	<div class="modal-dialog">
-		<div class="modal-content ">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel">Edit {{ $owner->fullName() }}</h4>
-			</div>
-			<div class="modal-body">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-md-12 center col-lg-offset-1">
-							<div class="form-group">
-								<label class="col-md-4 control-label" style=" margin-top: 0.4rem; ">Firstname</label>
-								<div class="col-md-6">
-									{!! Form::text('firstName', $owner->firstName,['class'=>'form-control']) !!}
-								</div>
+<div class="modal fade" id="editInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+{!! Form::open(['method'=>'PATCH', 'route' => ['owner.update', $owner->slug]]) !!}
+<div class="modal-dialog">
+	<div class="modal-content ">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel">Edit {{ $owner->fullName() }}</h4>
+		</div>
+		<div class="modal-body">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12 center col-lg-offset-1">
+						<div class="form-group">
+							<label class="col-md-4 control-label" style=" margin-top: 0.4rem; ">Firstname</label>
+							<div class="col-md-6">
+								{!! Form::text('firstName', $owner->firstName,['class'=>'form-control']) !!}
 							</div>
-							<br/><br/>
-							<div class="form-group">
-								<label class="col-md-4 control-label" style=" margin-top: 0.4rem; ">Lastname</label>
-								<div class="col-md-6">
-									{!! Form::text('lastName', $owner->lastName,['class'=>'form-control']) !!}
-								</div>
+						</div>
+						<br/><br/>
+						<div class="form-group">
+							<label class="col-md-4 control-label" style=" margin-top: 0.4rem; ">Lastname</label>
+							<div class="col-md-6">
+								{!! Form::text('lastName', $owner->lastName,['class'=>'form-control']) !!}
 							</div>
-							<br/><br/>
-							<div class="form-group" style=" margin-top: -1.5rem; ">
-								<label class="col-md-4 control-label" style=" margin-top: 0.6rem; ">Campaign</label>
-								<div class="col-md-6">
-									{!! Form::text('campaign', $owner->campaign,['class'=>'form-control']) !!}
-								</div>
+						</div>
+						<br/><br/>
+						<div class="form-group" style=" margin-top: -1.5rem; ">
+							<label class="col-md-4 control-label" style=" margin-top: 0.6rem; ">Campaign</label>
+							<div class="col-md-6">
+								{!! Form::text('campaign', $owner->campaign,['class'=>'form-control']) !!}
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<br/>
-			<div class="modal-footer">
-				<button type="submit" class="btn btn-primary">Save Changes</button>
-			</div>
+		</div>
+		<br/>
+		<div class="modal-footer">
+			<button type="submit" class="btn btn-primary">Save Changes</button>
 		</div>
 	</div>
-	{!! Form::close() !!}
+</div>
+{!! Form::close() !!}
+</div>
+
+{{--confirmDelete--}}
+<div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+{!! Form::open(['method'=>'DELETE', 'route' => ['owner.destroy', $owner->slug]]) !!}
+<div class="modal-dialog">
+	<div class="modal-content ">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel">Deleting {{ $owner->fullName() }}</h4>
+		</div>
+		<div class="modal-body">
+			<div class="container-fluid">
+				<div class="row">
+					<label for="">Are you sure you want to delete <code>{{ $owner->fullName() }}</code>?</label>
+				</div>
+			</div>
+		</div>
+		<br/>
+		<div class="modal-footer">
+			<button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+		</div>
+	</div>
+</div>
+{!! Form::close() !!}
 </div>
 @stop
 
