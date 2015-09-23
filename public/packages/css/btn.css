@@ -53,8 +53,8 @@
 }*/
 
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus, .dropdown-submenu:hover > a, .dropdown-submenu:focus > a {
-    /*background: rgb(60, 91, 121) !important;*/
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dd4f14), to(#9b1f03)) no-repeat;
+    background: rgb(60, 91, 121) !important;
+    /*background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dd4f14), to(#9b1f03)) no-repeat;*/
 }
 
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {

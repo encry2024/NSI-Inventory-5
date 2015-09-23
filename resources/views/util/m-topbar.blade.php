@@ -9,7 +9,7 @@
             	<span>
             		<label class="size-20" style="margin-top: -2rem; top: 3rem;">Inventory `5</label>
             	</span>
-            </a>
+            </a>git rm -r --cached <file name>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
