@@ -22,30 +22,58 @@
 			<a role="button" data-toggle="modal" data-target="#confirmDelete" class="btn btn-default col-lg-12 text-left" href="#"><span class="glyphicon glyphicon-trash"></span> Delete Owner</a>
 			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('owner.index') }}"><span class="glyphicon glyphicon-chevron-left"></span> Back to Owner Page</a>
 		</div>
-		<br><br><br><br><br><br>
-		<div class="btn-group-vertical col-lg-12" role="group">
-			<a role="button" class="btn btn-default col-lg-12 text-left" href="#">Associated Devices</a>
-			@foreach ($owner->devices as $owner_device)
-				<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('device.edit', $owner_device->slug) }}">{{ $owner_device->name }}</a>
-			@endforeach
-		</div>
 	</div>
 
 	<div class="panel panel-default col-lg-9" style="border-color: #ccc;">
-		<div class="page-header">
-			<h3>{{ $owner->fullName() }}</h3>
-			<label for="">campaign: {{ $owner->location }}</label>
-		</div>
-	</div>
+		<h3>{{ $owner->fullName() }}</h3>
+		<br><br>
+		<label for="">campaign: {{ $owner->location }}</label>
+        <br><br>
+        <div class="alert alert-info col-lg-12" role="alert">
+            <strong>Current Owned Devices</strong>
+        </div>
+        <br><br><br><br>
+        <div class="list-group">
+            @foreach ($owner->devices as $owner_device)
+                <a class="list-group-item" href="{{ route('device.edit', $owner_device->slug) }}">{{ $owner_device->name }}</a>
+            @endforeach
+        </div>
 
-	<div class="panel panel-default col-lg-9" style="border-color: #ccc;">
-		<div class="page-header">
-			<h3>Associate/Dissociate History</h3>
-		</div>
-		<br/>
-		<table id="dispatchDevices"></table>
-		<br/>
-	</div>
+        <br><br><br>
+        <div class="alert alert-info col-lg-12" role="alert">
+            <strong>Ownership History</strong>
+        </div>
+        <table class="table table-condensed table-hover">
+            <thead>
+                <tr>
+                    <td></td>
+                    <td>Device</td>
+                    <td>Category</td>
+                    <td>Admin</td>
+                    <td>Action</td>
+                    <td>Date</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($device_logs as $device_log)
+                <tr>
+                    <td style="font-weight: normal; font-size: 12px;">{{ $ctr++ + $device_logs->firstItem() }}</td>
+
+                    <td style="font-weight: normal; font-size: 12px;"><a href="{{ route('device.edit', $device_log->device->slug) }}">{{ $device_log->device->name }}</a></td>
+
+                    <td style="font-weight: normal; font-size: 12px;">{{ $device_log->device->category->name }}</td>
+
+                    <td style="font-weight: normal; font-size: 12px;">{{ $device_log->user->name }}</td>
+
+                    <td style="font-weight: normal; font-size: 12px;">{{ $device_log->action }}</td>
+
+                    <td style="font-weight: normal; font-size: 12px;">{{ date('F d, Y h:i A', strtotime($device_log->created_at)) }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <br><br>
+    </div>
 </div>
 
 {{-- CHANGE STATUS MODAL --}}

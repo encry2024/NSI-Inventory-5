@@ -24,7 +24,7 @@
 			<form class="form-horizontal">
 				<div class="form-group">
 					<div class="col-lg-4">
-						<input type="search" class="form-control" id="filter" name="filter" placeholder="Enter your query" style="margin-left: 38.5rem;">
+						<input type="search" class="form-control" id="filter" name="filter" placeholder="Enter your query" style="margin-left: 38.5rem;" autocomplete="off">
 					</div>
 					<button type="submit" class="btn btn-default" style="margin-left: 38rem;">Filter</button>
 					<a role="button" class="btn btn-default" href="{{ route('home') }}" style="margin-left: 0rem !important;">Clear filter</a>
@@ -47,22 +47,22 @@
 					<tr>
 
 						<td>
-							<a href="{{ route('category.show', $category->slug) }}">{{ $category->name }}</a>
+							<a class="control-label" href="{{ route('category.show', $category->slug) }}">{{ $category->name }}</a>
 						</td>
 						<td>
-							<label>{{ count($category->devices) }}</label>
+							<label class="control-label">{{ count($category->devices) }}</label>
 						</td>
 						<td>
-							<a href="{{ route('assoc_dev', $category->slug) }}">{{ count($category->associated_devices()) }}</a>
+							<a class="control-label" href="{{ route('assoc_dev', $category->slug) }}">{{ count($category->associated_devices()) }}</a>
 						</td>
 						<td>
-							<a href="{{ route('defect_device', $category->slug) }}">{{ count($category->def_device()) }}</a>
+							<a class="control-label" href="{{ route('defect_device', $category->slug) }}">{{ count($category->def_device()) }}</a>
 						</td>
 						<td>
-							<a href="{{ route('avail_device', $category->slug) }}">{{ count($category->av_device()) }}</a>
+							<a class="control-label" href="{{ route('avail_device', $category->slug) }}">{{ count($category->av_device()) }}</a>
 						</td>
 						<td>
-							<label title="{{ date('F d, Y h:i A', strtotime($category->updated_at)) }}">{{ date('F d, Y h:i A', strtotime($category->updated_at)) }}</label>
+							<label class="control-label" title="{{ date('F d, Y h:i A', strtotime($category->updated_at)) }}">{{ date('M d, Y h:i A', strtotime($category->updated_at)) }}</label>
 						</td>
 					</tr>
 					@endforeach

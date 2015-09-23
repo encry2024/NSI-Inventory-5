@@ -2,9 +2,7 @@
 
 use App\Http\Requests;
 use Illuminate\Support\Facades\Input;
-
 use Illuminate\Http\Request;
-
 use App\Device;
 use App\Category;
 use App\DeviceStatus;
@@ -13,240 +11,270 @@ use App\Owner;
 use App\DeviceLog;
 use App\Note;
 use App\Http\Requests\CreateDeviceRequest;
-use Illuminate\Support\Facades\DB;
 
-class DeviceController extends Controller {
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-    public function __construct( Device $device ) {
+class DeviceController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function __construct(Device $device)
+    {
         $this->device = $device;
-		$this->middleware('auth');
+        $this->middleware('auth');
     }
 
 
-	public function index() {
-		//code...
+    public function index()
+    {
+        //code...
+    }
 
-	}
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function create($category_slug)
+    {
+        $category = Category::where('slug', $category_slug)->first();
+        $ctr = 0;
+        if (count($category) > 0) {
+            return view('devices.create', compact('category', 'ctr'));
+        }
+    }
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create($category_slug) {
-		$category = Category::where('slug', $category_slug)->first();
-		$ctr = 0;
-		if (count($category) > 0) {
-			return view('devices.create', compact('category', 'ctr'));
-		}
-	}
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return Response
+     */
+    public function store(CreateDeviceRequest $create_request)
+    {
+        //store device
+        $store_device = Device::store_device($create_request, Input::all());
+        return $store_device;
+    }
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store(CreateDeviceRequest $create_request) {
-		//store device
-		$store_device = Device::store_device($create_request, Input::all());
-		return $store_device;
-	}
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function show($device)
+    {
+        //
+    }
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($device)
-	{
-		//
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function edit($device)
+    {
+        //
+        $note = Note::where('device_id', $device->id)->where('past', 0)->first();
+        return view('devices.edit', compact('device', 'note'));
+    }
 
-	}
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function update($id)
+    {
+        //
+    }
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($device)
-	{
-		//
-		$note = Note::where('device_id', $device->id)->where('past', 0)->first();
-		return view('devices.edit', compact('device', 'note'));
-	}
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function destroy($device, Request $request)
+    {
+        $return_device = Device::find($device->id);
+        $device = $return_device->name;
+        $return_device->delete();
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id) {
-		//
-	}
+        $category_slug = $request->get('category_slug');
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($device, Request $request)
-	{
-		//
+        return redirect(route('category.show', [$category_slug]))->with('success_msg', 'Device :: ' .$device.' was successfully deleted');
+    }
 
-		$return_device = Device::find($device->id);
-		$device = $return_device->name;
-		$return_device->delete();
+    public function fetch($category_id)
+    {
+        $all_device = Device::fetchAllDevice($category_id);
 
-		$category_slug = $request->get('category_slug');
+        return $all_device;
+    }
 
-		return redirect(route('category.show', [$category_slug]))->with('success_msg', 'Device :: ' .$device.' was successfully deleted');
-	}
+    public function fetchStatus($id)
+    {
+        $fetch_status = Device::fetch_Status($id);
 
-	public function fetch( $category_id ) {
-		$all_device = Device::fetchAllDevice( $category_id );
+        return $fetch_status;
+    }
 
-		return $all_device;
-	}
+    public function associateDevice(Request $request, $id)
+    {
+        $owner_id = $request->get('owner_id');
+        $log = Device::cLog($owner_id, $id);
 
-	public function fetchStatus( $id ) {
-		$fetch_status = Device::fetch_Status( $id );
+        return $log;
+    }
 
-		return $fetch_status;
-	}
+    public function assocHistory($id)
+    {
+        $return_assocHistory = Device::fetch_assocHistory($id);
 
-	public function associateDevice( Request $request, $id ) {
-		$owner_id = $request->get('owner_id');
-		$log = DeviceLog::createLog($owner_id, $id);
+        return $return_assocHistory;
+    }
 
-		return $log;
-	}
+    public function allAssoc()
+    {
+        $all_assoc = Device::fetchAllAssoc();
 
-	public function assocHistory( $id ) {
-		$return_assocHistory = Device::fetch_assocHistory($id);
+        return $all_assoc;
+    }
 
-		return $return_assocHistory;
-	}
+    public function viewAssoc(Request $request)
+    {
+        $view_associations = Device::viewAssociation($request);
 
-	public function allAssoc() {
-		$all_assoc = Device::fetchAllAssoc();
+        return $view_associations;
+    }
 
-		return $all_assoc;
-	}
+    public function disassociateDevice($id)
+    {
+        $log = Device::disassocLog($id);
 
-	public function viewAssoc(Request $request) {
+        return $log;
+    }
 
-        $devices = DB::table('devices')
-            ->select('owners.*', DB::raw('inv_owners.firstName as "owner_fName"'), DB::raw('inv_owners.lastName as "owner_lName"'), DB::raw('inv_owners.slug as "owner_slug"'), 'devices.*', DB::raw('inv_devices.name as "device_name"'), DB::raw('inv_devices.slug as "device_slug"'), 'categories.*', DB::raw('inv_categories.name as "category_name"'), DB::raw('inv_categories.slug as "category_slug"'), 'users.*', DB::raw('inv_users.name as "user_name"'), DB::raw('inv_users.id as "user_id"'))
-            ->join('owners', function ($join) use ($request) {
-                $join->on('devices.owner_id', '=','owners.id');
-            })
-            ->leftJoin('categories', function($join) {
-                $join->on('devices.category_id', '=', 'categories.id');
-            })
-            ->leftJoin('users', function($join) {
-                $join->on('devices.user_id', '=', 'users.id');
-            });
+    public function changeStatus(Request $request, $id)
+    {
+        $return_change_status = Device::change_status($request, $id);
 
-            if ($request->has('filter')) {
-                $devices = $devices->where('owners.firstName', 'LIKE', '%'.$request->get('filter').'%')
-                    ->orWhere('owners.lastName', 'LIKE', '%'.$request->get('filter').'%')
-                    ->orWhere('devices.name', 'LIKE', '%'.$request->get('filter').'%');
-            }
+        return $return_change_status;
+    }
 
-            $devices = $devices->latest('devices.created_at')
-            ->paginate(25);
+    public function openExcel(Request  $request)
+    {
+        $import_excel = Device::importDevice($request);
 
-        $devices->setPath('all');
-		return view('associates.index', compact('devices'));
-	}
+        return $import_excel;
+    }
 
-	public function disassociateDevice( $id ) {
-		//return $id;
-		$log = DeviceLog::disassocLog($id);
+    public function deviceIndex()
+    {
+        return view('import.device');
+    }
 
-		return $log;
-	}
+    public function deviceInformation()
+    {
+        $device_info = Device::getInformation();
 
-	public function changeStatus( Request $request, $id ) {
-		$return_change_status = Device::change_status($request, $id);
+        return $device_info;
+    }
 
-		return $return_change_status;
-	}
+    public function assocDev($category_slug)
+    {
+        $associted_devices = Device::assoc_device($category_slug);
 
-	public function openExcel(Request  $request) {
-		//return $category_id;
-		$import_excel = Device::importDevice($request);
+        return $associted_devices;
+    }
 
-		return $import_excel;
-	}
+    public function showAssocDev($category_slug)
+    {
+        $category = Category::whereSlug($category_slug)->first();
 
-	public function deviceIndex() {
-		return view('import.device');
-	}
+        return view('devices.associated_devices', compact('category'));
+    }
 
-	public function deviceInformation() {
-		$device_info = Device::getInformation();
+    public function availDev($category_slug)
+    {
+        $available_devices = Device::avail_device($category_slug);
 
-		return $device_info;
-	}
+        return $available_devices;
+    }
 
-	public function assocDev( $category_slug ) {
-		$associted_devices = Device::assoc_device( $category_slug );
+    public function showAvailDev($category_slug, Request $request)
+    {
+        $showAvailableDevices = Device::retrieveAvailableDevices($category_slug, $request);
 
-		return $associted_devices;
-	}
+        return $showAvailableDevices;
+    }
 
-	public function showAssocDev($category_slug) {
-		$category = Category::whereSlug($category_slug)->first();
+    public function showDefectDev($category_slug)
+    {
+        $category = Category::whereSlug($category_slug)->first();
 
-		return view('devices.associated_devices', compact('category'));
-	}
+        return view('devices.defective_devices', compact('category'));
+    }
 
-	public function availDev( $category_slug ) {
-		$available_devices = Device::avail_device( $category_slug );
+    public function defectDev($category_slug)
+    {
+        $defect_devices = Device::defect_device($category_slug);
 
-		return $available_devices;
-	}
+        return $defect_devices;
+    }
 
-	public function showAvailDev($category_slug) {
-		$category = Category::whereSlug($category_slug)->first();
+    public function view_uncategorizedDevices()
+    {
+        return view('devices.uncategorized_devices');
+    }
 
-		return view('devices.available_devices', compact('category'));
-	}
+    public function viewAllAvailableDevices()
+    {
+        return view('devices.show_all');
+    }
 
-	public function showDefectDev($category_slug) {
-		$category = Category::whereSlug($category_slug)->first();
+    public function showAllAvailableDevices()
+    {
+        $available_devices = Device::show_AllAvailableDevices();
 
-		return view('devices.defective_devices', compact('category'));
-	}
+        return $available_devices;
+    }
 
-	public function defectDev( $category_slug ) {
-		$defect_devices = Device::defect_device( $category_slug );
+    public function massDelete(Request $request)
+    {
+        $deleteDevices = Device::deleteAll($request->get('selectedDevices'));
 
-		return $defect_devices;
-	}
+        return $deleteDevices;
+    }
 
-	public function view_uncategorizedDevices() {
-		return view('devices.uncategorized_devices');
-	}
+    public function showDeviceInformation($device_slug)
+    {
+        $device = Device::whereSlug($device_slug)->with(['information', 'category'])->first();
 
-	public function viewAllAvailableDevices() {
-		return view('devices.show_all');
-	}
+        return view('devices.device_tab.information', compact('device'));
+    }
 
-	public function showAllAvailableDevices() {
-		$available_devices = Device::show_AllAvailableDevices();
+    public function showDeviceStatus($device_slug)
+    {
+        $device = Device::show_device_status($device_slug);
 
-		return $available_devices;
-	}
+        return $device;
+    }
+    
+    public function showDeviceNote( $device_slug, Request $request ) {
+        $device = Device::show_device_note($device_slug, $request);
 
+        return $device;
+    }
+
+    public function showDeviceOwnership( $device_slug) {
+        $device = Device::show_device_ownership($device_slug);
+
+        return $device;
+    }
 }

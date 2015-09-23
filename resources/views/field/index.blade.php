@@ -96,43 +96,4 @@
         </div>
     </div>
  </div>
-
 @stop
-
-
-{{--
-<tr>
-	@foreach ($information as $info)
-		<td>{!! $info->value == '' ? "<code>information not provided</code>" : "<kbd>".$info->value."</kbd>" !!}</td>
-	@endforeach
-</tr>
-<tr>
-	@foreach ($information as $info)
-		<td><kbd>{{ $info->field->category_label }}</kbd></td>
-	@endforeach
-</tr>
---}}
-
-
-
-{{--<form class="form-horizontal">
-	@foreach ($information as $info)
-	<div class="form-group">
-		<div class="col-lg-2" style="width: 14.6%;">
-			<a href="{{ route('category.show', $info->device->category->slug) }}">{{ $info->device->category->name }}</a>
-		</div>
-
-		<div class="col-lg-3">
-			<a href="{{ route('device.edit', $info->device->slug) }}">{{ $info->device->name }}</a>
-		</div>
-
-		<div class="col-lg-4" style="width: 35%;">
-			{!! $info->value == '' ? "<code>information not provided</code>" : "<kbd>".$info->value."</kbd>" !!}
-		</div>
-
-		<div class="col-lg-3">
-			<kbd>{{ $info->field->category_label }}</kbd>
-		</div>
-	</div>
-	@endforeach
-</form>--}}

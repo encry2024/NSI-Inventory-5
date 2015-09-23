@@ -9,178 +9,187 @@ use App\Field;
 use App\Device;
 use Illuminate\Http\Response;
 
+class CategoryController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
 
-class CategoryController extends Controller {
+    public $total_rows;
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
+    public function __construct(Category $category)
+    {
+        $this->category = $category;
+        $this->middleware('auth');
+    }
 
-	public $total_rows;
+    public function index(Request $request)
+    {
+    }
 
-	public function __construct(Category $category) {
-		$this->category = $category;
-		$this->middleware('auth');
-	}
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        //
+        return view('category.create');
+    }
 
-	public function index(Request $request)
-	{
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return Response
+     */
+    public function store(CreateFieldRequest $f_requests, CreateCategoryRequest $request,
+                          Category $category)
+    {
+        $store_category = Category::storeCategory($f_requests, $request, $category);
 
-	}
+        return $store_category;
+    }
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-		return view('category.create');
-	}
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function show(Category $category, Request $request)
+    {
+        $deleted_device = Device::onlyTrashed()->where('category_id', $category->id)->get();
+        $devices = Device::with(['information.field', 'owner', 'status'])->where('category_id', $category->id)->latest('updated_at');
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store(CreateFieldRequest $f_requests, CreateCategoryRequest $request,
-						  Category $category ) {
-		$store_category = Category::storeCategory($f_requests, $request, $category);
+        $devices = $devices->where('name', 'LIKE', '%'.$request->get('filter').'%')->paginate(25);
+        $devices->setPath($category->slug);
 
-		return $store_category;
-	}
+        return view('category.show', compact('category', 'deleted_device', 'devices'));
+    }
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show(Category $category, Request $request)
-	{
-		$deleted_device = Device::onlyTrashed()->where('category_id', $category->id)->get();
-		$devices = Device::with(['information.field', 'owner', 'status'])->where('category_id', $category->id)->latest('updated_at');
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function edit($category)
+    {
+        return view('category.edit', compact('category'));
+    }
 
-		$devices = $devices->where('name', 'LIKE', '%'.$request->get('filter').'%')->paginate(25);
-		$devices->setPath($category->slug);
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function update($id, Request $request)
+    {
+        $category = Category::whereSlug($id->slug)->first();
+        $category->name = $request->get('category_name');
+        //if success
+        if ($category->save()) {
+            return 1;
+        }
+        //if not success
+        else {
+            return 0;
+        }
+    }
 
-		return view('category.show', compact('category', 'deleted_device', 'devices'));
-	}
+    public function fetchCatName($category)
+    {
+        $category = Category::whereSlug($category)->first();
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($category) {
-		return view('category.edit', compact('category'));
-	}
+        return $category->name;
+    }
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id, Request $request)
-	{
-		//
-		//return $id;;
-		//return $request->get('category_name');
-		$category = Category::whereSlug($id->slug)->first();
-		$category->name = $request->get('category_name');
-		//if success
-		if($category->save()){
-			return 1;
-		}
-		//if not success
-		else{
-			return 0;
-		}
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function destroy($slug)
+    {
+        $slug->delete();
 
+        return redirect('/')->with('success_msg', 'Category was successfully deleted');
+    }
 
-	}
+    public function openExcel(Request $request)
+    {
+        $import_excel = Category::importCategory($request);
 
-	public function fetchCatName($category) {
-		$category = Category::whereSlug($category)->first();
+        return $import_excel;
+    }
 
-		return $category->name;
-	}
+    public function excelIndex()
+    {
+        return view('import.excel');
+    }
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($slug) {
-		$slug->delete();
+    public function categoryHistory($category_slug)
+    {
+        $category_history = Category::fetch_history($category_slug);
 
-		return redirect('/')->with('success_msg', 'Category was successfully deleted');
-	}
+        return $category_history;
+    }
 
-	public function openExcel(Request $request) {
-		$import_excel = Category::importCategory($request);
+    public function viewCategoryHistory($category_slug)
+    {
+        $category = Category::whereSlug($category_slug)->first();
 
-		return $import_excel;
-	}
+        return view('category.history', compact('category'));
+    }
 
-	public function excelIndex() {
-		return view('import.excel');
-	}
+    public function categoryStatusHistory($category_slug)
+    {
+        $category_status_history = Category::fetch_status_history($category_slug);
 
-	public function categoryHistory( $category_slug ) {
-		$category_history = Category::fetch_history( $category_slug );
+        return $category_status_history;
+    }
 
-		return $category_history;
-	}
+    public function viewCategoryStatusesHistory($category_slug)
+    {
+        $category = Category::whereSlug($category_slug)->first();
+        
+        return view('category.device_statuses', compact('category'));
+    }
 
-	public function viewCategoryHistory( $category_slug ) {
-		$category = Category::whereSlug( $category_slug )->first();
+    public function view_deletedCategory()
+    {
+        return view('category.deleted_category');
+    }
 
-		return view('category.history', compact('category'));
-	}
+    public function fetch_deleted_categories()
+    {
+        $fetchDeletedCategories = Category::fetch_del_cat();
 
-	public function categoryStatusHistory( $category_slug ) {
-		$category_status_history = Category::fetch_status_history( $category_slug );
+        return $fetchDeletedCategories;
+    }
 
-		return $category_status_history;
-	}
+    public function fetch_devices_infoValue($info_id, $category_id)
+    {
+        $return_fetch = Category::fetch_devices_info_value($info_id, $category_id);
 
-	public function viewCategoryStatusesHistory($category_slug) {
-		$category = Category::whereSlug($category_slug)->first();
-		
-		return view('category.device_statuses', compact('category'));
-	}
+        return $return_fetch;
+    }
 
-	public function view_deletedCategory() {
-		return view('category.deleted_category');
-	}
+    public function viewTester()
+    {
+        return view('function_tester.test');
+    }
 
-	public function fetch_deleted_categories() {
-		$fetchDeletedCategories = Category::fetch_del_cat();
-
-		return $fetchDeletedCategories;
-	}
-
-	public function fetch_devices_infoValue( $info_id, $category_id ) {
-		$return_fetch = Category::fetch_devices_info_value($info_id, $category_id);
-
-		return $return_fetch;
-	}
-
-	public function viewTester() {
-		return view('function_tester.test');
-	}
-
-	public function testImport(Request $request) {
-		$new_category = new Field;
-		$new_category->category_id = $request->get("category_id");
-		$new_category->category_label = $request->get("category_label");
-		$new_category->save();
-	}
+    public function testImport(Request $request)
+    {
+        $new_category = new Field;
+        $new_category->category_id = $request->get("category_id");
+        $new_category->category_label = $request->get("category_label");
+        $new_category->save();
+    }
 }

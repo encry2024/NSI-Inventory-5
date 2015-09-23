@@ -101,24 +101,4 @@ class NoteController extends Controller {
 		//
 	}
 
-	public function fetchNotes( $id ) {
-		$json = array();
-		$notes = Note::where('device_id', $id)->orderBy('created_at','desc')->get();
-
-		foreach ($notes as $note) {
-			$stripped_note = str_replace("'", '&apos;', $note->note);
-			$json[] = [
-				'id' => $note->id,
-				'user_id' => $note->user->id,
-				'note' => str_limit($stripped_note, $limit=30, $end='...'),
-				'fullnote' => $stripped_note,
-				'user_type' => $note->user->type,
-				'name' => $note->user->name,
-				'created_at' => date('m/d/Y h:i A', strtotime($note->created_at))
-			];
-		}
-
-		return json_encode($json);
-	}
-
 }

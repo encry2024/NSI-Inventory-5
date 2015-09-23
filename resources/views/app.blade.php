@@ -57,7 +57,9 @@
 			background: linear-gradient(0deg, #5d2203, #de661d) no-repeat center center fixed;*/
 			/*background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#c6651f), to(#9b1f03)) no-repeat;*/
 			-webkit-font-smoothing: antialiased;
-			font-family:Trebuchet MS, Arial, 'Segoe UI', sans-serif;
+			/*font-family:Trebuchet MS, Arial, 'Segoe UI', sans-serif;*/
+			font-size: 13px;
+			font-weight: bold;
 		}
 	</style>
 </body>

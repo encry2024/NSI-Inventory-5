@@ -1,30 +1,30 @@
 @extends('...app')
 
 @section('header')
-	@include('util.m-topbar')
-	<div class="container">
-		<div class="col-lg-12">
-			<ol class="breadcrumb" style=" margin-left: 1.5rem; ">
-				<li><label>Inventory</label>
-				<li><a href="{{ route('home') }}" class="active">Home</a></li>
-				<li><label>Current Associates</label>
-			</ol>
-		</div>
-	</div>
+    @include('util.m-topbar')
+    <div class="container">
+        <div class="col-lg-12">
+            <ol class="breadcrumb" style=" margin-left: 1.5rem; ">
+                <li><label>Inventory</label>
+                <li><a href="{{ route('home') }}" class="active">Home</a></li>
+                <li><label>Current Associates</label>
+            </ol>
+        </div>
+    </div>
 @stop
 
 @section('content')
 <div class="container">
-	<div class="col-lg-3">
-		<div class="btn-group-vertical col-lg-12" role="group">
-			<a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('home')  }}"><span class="glyphicon glyphicon-chevron-left"></span> Return to Home</a>
-		</div>
-	</div>
-	<div class="col-lg-9 col-md-offset-center-2" >
-		<div class="panel panel-default col-lg-12" style="border-color: #ccc;">
-            <h3><kbd>{{ $devices->total() }}</kbd> Current Associates</h3>
-			<hr/>
-			@if (Request::has('filter'))
+    <div class="col-lg-3">
+        <div class="btn-group-vertical col-lg-12" role="group">
+            <a role="button" class="btn btn-default col-lg-12 text-left" href="{{ route('home')  }}"><span class="glyphicon glyphicon-chevron-left"></span> Return to Home</a>
+        </div>
+    </div>
+    <div class="col-lg-9 col-md-offset-center-2" >
+        <div class="panel panel-default col-lg-12" style="border-color: #ccc;">
+            <h3><kbd>{{ $devices->total() }}</kbd> Associate Log</h3>
+            <hr/>
+            @if (Request::has('filter'))
                     <div class="alert alert-success" role="alert">Entered Query: "{{ Request::get('filter') }}" Filter Result: {{ $devices->firstItem() }} to {{ $devices->lastItem() }} out of {{$devices->total()}} {{ Request::get('categoryLabel') }}</div>
                 @endif
                 <form class="form-horizontal">
@@ -86,9 +86,9 @@
                         </div>
                     </form>
                 @endif
-			<br/>
-		</div>
-	</div>
+            <br/>
+        </div>
+    </div>
 </div>
 @stop
 
