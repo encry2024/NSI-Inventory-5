@@ -12,7 +12,7 @@
             </ol>
             @if (Session::has('success_msg'))
                 <div class="alert {{ Session::get('message_label') }}" role="alert" style=" margin-left: 1.5rem; ">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     {{ Session::get('success_msg')  }}
                 </div>
             @endif
@@ -38,14 +38,8 @@
                     <li><a href="" class="size-13"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit</a></li>
                 </ul>
             </div>
-            <li role="presentation"><a href="{{ route('device.edit', $device->slug) }}">Basic Details</a></li>
-            <li role="presentation" class="active"><a href="#">Information</a></li>
-            <li role="presentation"><a href=" {{ route('dn', $device->slug) }} ">Notes</a></li>
-            <li role="presentation"><a href=" {{ route('ds', $device->slug) }}">Status</a></li>
-            <li role="presentation"><a href=" {{ route('dadh', $device->slug) }}">Ownership</a></li>
         </ul>
         <br/>
-
         <div class="col-lg-12">
             <form class="form-horizontal">
                 @foreach ($device->information as $key=>$device_field)
@@ -63,6 +57,4 @@
 @stop
 
 @section('script')
-<script>
-</script>
 @stop

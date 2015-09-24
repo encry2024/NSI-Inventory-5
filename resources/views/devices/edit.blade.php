@@ -30,6 +30,21 @@
 
     <div class="col-lg-9 col-md-offset-center-2" >
         <ul class="nav nav-tabs">
+            <div class="btn-group right">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Action <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a role="button" class=" col-lg-12 text-left size-13" href="#"  data-toggle='modal' data-target='#noteStore' ><span class="glyphicon glyphicon-pencil"></span> Make a Note</a></li>
+                    @if ($device->owner_id != 0)
+                        <li><a role="button" class=" col-lg-12 text-left size-13" data-toggle='modal' data-target='#disassociate_device' href="#"><span class="glyphicon glyphicon-remove"></span> Disassociate</a></li>
+                    @else
+                        <li><a role="button" id="grp" class=" col-lg-12 text-left size-13 cli" data-toggle='modal' data-target='#associate_device' href="#"><span class="glyphicon glyphicon-tag"></span> Associate</a></li>
+                    @endif
+                    <li><a role="button" class=" col-lg-12 text-left size-13" href="#" data-toggle='modal' data-target='#change_status'><span class="glyphicon glyphicon-repeat"></span> Change Status</a></li>
+                    <li><a role="button" class=" col-lg-12 text-left size-13" href="#" data-toggle="modal" data-target="#deleteDevice"><span class="glyphicon glyphicon-trash"></span> Delete</a></li>
+                </ul>
+            </div>
             <li role="presentation" class="active"><a href="#">Basic Details</a></li>
             <li role="presentation"><a href="{{ route('dInfo', $device->slug) }}">Information</a></li>
             <li role="presentation"><a href=" {{ route('dn', $device->slug) }} ">Notes</a></li>
@@ -37,35 +52,19 @@
             <li role="presentation"><a href=" {{ route('dadh', $device->slug) }}">Ownership</a></li>
         </ul>
         <br/>
-        <div class="btn-group right">
-            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Action <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a role="button" class=" col-lg-12 text-left size-13" href="#"  data-toggle='modal' data-target='#noteStore' ><span class="glyphicon glyphicon-pencil"></span> Make a Note</a></li>
-                @if ($device->owner_id != 0)
-                    <li><a role="button" class=" col-lg-12 text-left size-13" data-toggle='modal' data-target='#disassociate_device' href="#"><span class="glyphicon glyphicon-remove"></span> Disassociate</a></li>
-                @else
-                    <li><a role="button" id="grp" class=" col-lg-12 text-left size-13 cli" data-toggle='modal' data-target='#associate_device' href="#"><span class="glyphicon glyphicon-tag"></span> Associate</a></li>
-                @endif
-                <li><a role="button" class=" col-lg-12 text-left size-13" href="#" data-toggle='modal' data-target='#change_status'><span class="glyphicon glyphicon-repeat"></span> Change Status</a></li>
-                <li><a role="button" class=" col-lg-12 text-left size-13" href="#" data-toggle="modal" data-target="#deleteDevice"><span class="glyphicon glyphicon-trash"></span> Delete</a></li>
-            </ul>
-        </div>
+
         <div class="col-lg-12">
             <form class="form-horizontal">
                 <div class="form-group">
                     <label class="col-lg-2 control-label">Device:</label>
                     <div class="col-lg-10">
                         <label class="control-label" style="font-weight: normal;">{{ $device->name }}</label>
-                        <!-- <input type="text" class="form-control" id="device_name" name="device_name" placeholder="Availability" value="{{ $device->name }}" readonly="true"> -->
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-2 control-label">Category:</label>
                     <div class="col-lg-10">
                         <label class="control-label" style="font-weight: normal;">{{ $device->category->name }}</label>
-                        <!-- <input type="text" class="form-control" id="device_name" name="device_name" placeholder="Availability" value="{{ $device->category->name }}" readonly="true"> -->
                     </div>
                 </div>
                 <div class="form-group">
@@ -73,10 +72,8 @@
                     <div class="col-lg-10">
                         @if ($device->owner_id != 0)
                             <label class="control-label" style="font-weight: normal;">{{ $device->owner->fullName() }}</label>
-                            <!-- <input type="text" class="form-control" id="device_owner" name="device_owner" placeholder="Availability" value="{{ $device->owner->fullName() }}" readonly="true"> -->
                         @else
                             <label class="control-label" style="font-weight: normal;">{{ $device->availability }}</label>
-                            <!-- <input type="text" class="form-control" id="device_owner" name="device_owner" placeholder="Availability" value="{{ $device->availability }}" readonly="true"> -->
                         @endif
                     </div>
                 </div>
@@ -85,7 +82,6 @@
                     <div class="col-lg-10">
                     @if($device->status_id != '' || $device->status_id != 0)
                         <label class="control-label" style="font-weight: normal;">{{ $device->status->status }}</label>
-                        <!-- <input type="text" class="form-control" id="device_status" name="device_status" placeholder="Status" value="{{ $device->status->status }}" readOnly> -->
                     @endif
                     </div>
                 </div>

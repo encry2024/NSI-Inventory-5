@@ -1,4 +1,6 @@
-<?php namespace App;
+<?php
+
+namespace App;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Cviebrock\EloquentSluggable\SluggableTrait;
@@ -12,7 +14,6 @@ use Illuminate\Support\Facades\DB;
 
 class Device extends Eloquent implements SluggableInterface
 {
-    //
     use SoftDeletes, SluggableTrait, RecordsActivity;
 
     protected $softDelete = true;
@@ -105,7 +106,6 @@ class Device extends Eloquent implements SluggableInterface
         $device = Device::find($device_id);
 
         Device::find($device_id)->update(['status_id' => $status_id]);
-        $status = Status::find($status_id);
 
         $deviceStatus = new DeviceStatus();
         $deviceStatus->status_id = $status_id;
@@ -262,8 +262,8 @@ class Device extends Eloquent implements SluggableInterface
 
         if ($request->has('filter')) {
             $devices = $devices->where('owners.firstName', 'LIKE', '%'.$request->get('filter').'%')
-                    ->orWhere('owners.lastName', 'LIKE', '%'.$request->get('filter').'%')
-                    ->orWhere('devices.name', 'LIKE', '%'.$request->get('filter').'%');
+                               ->orWhere('owners.lastName', 'LIKE', '%'.$request->get('filter').'%')
+                               ->orWhere('devices.name', 'LIKE', '%'.$request->get('filter').'%');
         }
 
         $devices = $devices->latest('devices.created_at')->paginate(25);
@@ -285,7 +285,6 @@ class Device extends Eloquent implements SluggableInterface
 
     public static function cLog($owner_id, $id)
     {
-        //ini_set('xdebug.max_nesting_level', 200);
         $success_msg = "";
         $message_label = "";
 

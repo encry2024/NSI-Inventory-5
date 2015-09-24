@@ -9,26 +9,26 @@
             	<span>
             		<label class="size-20" style="margin-top: -2rem; top: 3rem;">Inventory `5</label>
             	</span>
-            </a>git rm -r --cached <file name>
+            </a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class="collapse navbar-collapse" id="">
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle m-top-nav-hover" data-toggle="dropdown" role="button" aria-expanded="false">
                     Logged in as :: {{ Auth::user()->name }} <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                     	@if (Auth::user()->type == 'admin')
-                        <li><a href="{!! URL::to('/') !!}/auth/register"><span class="glyphicon glyphicon-user"></span> Register User</a></li>
+                        <li><a href="{!! URL::to('/') !!}/auth/register" class="size-13"><span class="glyphicon glyphicon-user"></span> Register User</a></li>
                         @endif
-                        <li><a href="{{ route('activity.index') }}"><span class="glyphicon glyphicon-book"></span> History</a></li>
-                        <li><a href="{{ route('change_password') }}"><span class="glyphicon glyphicon-refresh"></span> Change Password</a></li>
+                        <li><a href="{{ route('activity.index') }}" class="size-13"><span class="glyphicon glyphicon-book"></span> History</a></li>
+                        <li><a href="{{ route('change_password') }}" class="size-13"><span class="glyphicon glyphicon-refresh"></span> Change Password</a></li>
                         <li class="divider"></li>
-                        <li><a href="{!! URL::to('/') !!}/auth/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                        <li><a href="{!! URL::to('/') !!}/auth/logout" class="size-13"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
                     </ul>
                 </li>
-                 <li><a href="{!! URL::to('/') !!}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+                 <li><a href="{!! URL::to('/') !!}" class="size-13"><span class="glyphicon glyphicon-home"></span> Home</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
