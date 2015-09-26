@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="{!! URL::to('/') !!}/packages/css/panel.css"/>
 	<link rel="stylesheet" href="{!! URL::to('/') !!}/packages/css/separators.css"/>
 	<link rel="stylesheet" href="{!! URL::to('/') !!}/packages/jquery-dropdown/source/css/multilist.css"/>
+	<link rel="stylesheet" type="text/css" href="{!! URL::to('/') !!}/bootstrap/css/bootstrap-datepicker.min.css">
 	<link href="{{ asset('packages/css/app.css') }}" rel="stylesheet">
 	<link rel="stylesheet" href="{{ URL::to('/') }}/bootstrap/bootstrap-3.3.4/css/bootstrap.css"/>
 	<link rel="stylesheet" href="{{ URL::to('/') }}/packages/DataTables-1.10.4/media/css/jquery.dataTables.min.css"/>
@@ -23,13 +24,13 @@
 	@yield('header')
 </head>
 <body>
-	<script src="{{ URL::to('/') }}/packages/ohsnap-notification/ohsnap.js"></script>
 	<script src="{{ URL::to('/') }}/bootstrap/bootstrap-3.3.4/js/jquery-1.11.2.min.js"></script>
 	<script src="{{ URL::to('/') }}/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+	<script src="{{ URL::to('/') }}/packages/ohsnap-notification/ohsnap.js"></script>
 	<script>
 		$(document).off('.data-api');
 	</script>
-
+	<script src="{{ URL::to('/') }}/bootstrap/js/bootstrap-datepicker.min.js"></script>
 	<script src="{{ URL::to('/') }}/packages/DataTables-1.10.4/media/js/jquery.dataTables.min.js"></script>
 	<script src="{{ URL::to('/') }}/bootstrap/bootstrap-3.3.4/js/bootstrap.min.js"></script>
 	<script src="{{ URL::to('/') }}/packages/jquery-dropdown/demo/jquery.tmpl.min.js"></script>

@@ -348,6 +348,22 @@ class Device extends Eloquent implements SluggableInterface
         return view('devices.device_tab.note', compact('device', 'notes', 'ctr'));
     }
 
+    public static function editInformation($device_slug)
+    {
+        $device = Device::with(['information'])->whereSlug($device_slug)->first();
+
+        return view('devices.edit_information', compact('device'));
+    }
+
+    public static function update_information($device_slug, $request, $user, $information)
+    {
+        $device = Device::whereSlug($device_slug)->first();
+
+        $user->recordActivity('updates',  $information);
+
+        return redirect()->back()->with('message', $device->name . '\'s information was successfully updated')->with('message_label', 'alert-success');
+    }
+
     /**
      * Device getcounts
      *

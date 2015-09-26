@@ -43,11 +43,13 @@ get('device/{device_slug}/notes', ['as' => 'dn', 'uses' => 'DeviceController@sho
 get('device/{device_slug}/status', ['as' => 'ds', 'uses' => 'DeviceController@showDeviceStatus']);
 get('device/{device_slug}/ownerships', ['as' => 'dadh', 'uses' => 'DeviceController@showDeviceOwnership']);
 get('device/{device_slug}/information', ['as' => 'dInfo', 'uses' => 'DeviceController@showDeviceInformation']);
+get('device/{device_slug}/edit/information', ['as' => 'edit_info', 'uses' => 'DeviceController@editDeviceInformation']);
 // POST
 post('device/associate/{device_id}', ['as' => 'device_associate', 'uses' => 'DeviceController@associateDevice']);
 post('device/disassociate/{device_id}', ['as' => 'device_disassociate', 'uses' => 'DeviceController@disassociateDevice']);
 post('change/status/{device_id}', ['as' => 'change_status', 'uses' => 'DeviceController@changeStatus']);
 Route::any('deleteall', ['as' => 'da', 'uses' => 'DeviceController@massDelete']);
+post('device/{device_slug}/updateinfo', ['as' => 'update_info', 'uses' => 'DeviceController@updateInformation']);
 
 # STATUS RESOURCE
 post('status/delete', ['as' => 'delete_status', 'uses' => 'StatusController@deleteStatus']);

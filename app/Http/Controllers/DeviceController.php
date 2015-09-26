@@ -10,6 +10,7 @@ use App\Information;
 use App\Owner;
 use App\DeviceLog;
 use App\Note;
+use App\User;
 use App\Http\Requests\CreateDeviceRequest;
 
 
@@ -274,6 +275,20 @@ class DeviceController extends Controller
 
     public function showDeviceOwnership( $device_slug) {
         $device = Device::show_device_ownership($device_slug);
+
+        return $device;
+    }
+
+    public function editDeviceInformation($device_slug)
+    {
+        $device = Device::editInformation($device_slug);
+
+        return $device;
+    }
+
+    public function updateInformation($device_slug, Request $request, User $user, Information $information)
+    {
+        $device = Device::update_information($device_slug, $request, $user, $information);
 
         return $device;
     }
