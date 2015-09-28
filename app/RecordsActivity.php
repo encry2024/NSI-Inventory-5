@@ -69,7 +69,7 @@ trait RecordsActivity
                 $this->phone_number = Input::get('name');
                 $this->save();
             } elseif ($model == "information") {
-                foreach (Input::except('_token') as $key => $value) {
+                foreach (Input::all() as $key => $value) {
                     if (strpos($key, 'info') !== false) {
                         $key = explode('-', $key);
                         $info_id = $key[1];
@@ -81,15 +81,13 @@ trait RecordsActivity
                         $activity->subject_type = get_class($information);
                         $activity->name = $information->getActivityName($information, $event);
                         $activity->old_value = $information->value;
-                        $activity->user_id = Auth::guest()?0:Auth::user()->id;
+                        $activity->user_id = Auth::guest() ? 0 : Auth::user()->id;
                         $activity->save();
 
                         $information->value = $value;
                         $information->save();
 
-                        $act = Activity::find($activity->id);
-                        $act->new_value = $information->value;
-                        $act->save();
+                        $act = Activity::find($activity->id)->update(['new_value' => $information->value]);
                     }
                 }
             }

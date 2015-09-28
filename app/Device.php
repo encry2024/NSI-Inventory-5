@@ -68,7 +68,6 @@ class Device extends Eloquent implements SluggableInterface
         $device_name = $device['name'];
         $category_id = $inputs['category_id'];
 
-        //return $device;
         $update_category = Category::find($category_id);
         $update_category->touch();
 
@@ -80,7 +79,6 @@ class Device extends Eloquent implements SluggableInterface
 
         if ($new_device->save()) {
             foreach ($inputs as $key => $value) {
-                //return $devices;
                 if (strpos($key, 'field') !== false) {
                     $field = explode('-', $key);
                     $field_id = $field[1];
