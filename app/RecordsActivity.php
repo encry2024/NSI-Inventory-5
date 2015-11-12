@@ -87,7 +87,9 @@ trait RecordsActivity
                         $information->value = $value;
                         $information->save();
 
-                        $act = Activity::find($activity->id)->update(['new_value' => $information->value]);
+                        $act = Activity::find($activity->id);
+                        $act->new_value = $information->value;
+                        $act->save();
                     }
                 }
             }

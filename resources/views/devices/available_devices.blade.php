@@ -44,7 +44,7 @@
                     <button type="submit" class="btn btn-default">Filter</button>
                     <a role="button" class="btn btn-default" href="{{ route('avail_device', $category->slug) }}" style="margin-left: 0rem !important;">Clear filter</a>
                 </div>
-                <a class="right btn btn-danger btn-xs disabled" onclick="getDevices()" id="delBtn" data-toggle="modal" data-target="#deleteModal"><span class="glyphicon glyphicon-trash"></span> Delete All</a>
+                <a class="right btn btn-danger btn-xs disabled" onclick="getDevices()" id="delBtn" data-toggle="modal" data-target="#deleteModal"><span class="glyphicon glyphicon-trash"></span> Delete</a>
                 <br/><br/>
                 <table class="table table-condensed ">
                     <thead>
@@ -56,9 +56,6 @@
                             <td>Recent Update</td>
                             <td>
                             <input type="checkbox" id="select_all" name="selector" value="Select All">
-                            <!-- <span>
-                                <a class="right btn btn-success btn-xs" style="margin-right: 0.235rem;"><span class="glyphicon glyphicon-pencil"></span></a>
-                            </span> -->
                             </td>
                         </tr>
                     </thead>
@@ -91,7 +88,6 @@
                             </td>
                             <td>
                                 <input type="checkbox" class="sel_dev" name="dvcs[]" value="{{ $device->name.'/'.$device->slug }}">
-                                <a class="right btn btn-danger btn-xs" id="deleteBtn" data-toggle="modal" data-target="#deleteModal"><span class="glyphicon glyphicon-trash"></span></a>
                             </td>
                         </tr>
                         @endforeach
@@ -191,8 +187,6 @@ function getDevices() {
     $("#deviceList").empty();
     for (i = 0; i < e.length; i++) {
         dev = e[i].value.split("/");
-        //var url = "{{ route('device.edit', ':slug') }}";
-        //url = url.replace(':slug', dev[1]);
         $("#deviceList").append("<input type='hidden' name='selectedDevices[]' value='"+dev[1]+"' /><li class='list-group-item'><input type='text' class='form-control' value='"+dev[0]+"' readOnly/></li>");
         document.getElementById("totalDevices").innerHTML = "<span class='glyphicon glyphicon-trash'></span> "+ (i+1) + " Selected Devices to be Deleted";
     }

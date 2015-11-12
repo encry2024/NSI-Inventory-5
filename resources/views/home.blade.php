@@ -34,12 +34,12 @@
 			<table class="table table-condensed">
 				<thead>
 					<tr>
-						<td>Category</td>
-						<td>No. of Device</td>
-						<td>No. of Associates</td>
-						<td>No. of Defectives</td>
-						<td>No. of Available</td>
-						<td>Recent Updates</td>
+						<th>Category</th>
+						<th>No. of Device</th>
+						<th>No. of Associates</th>
+						<th>No. of Defectives</th>
+						<th>No. of Available</th>
+						<th>Recent Updates</th>
 					</tr>
 				</thead>
 				<tbody>
